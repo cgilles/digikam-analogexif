@@ -3,6 +3,7 @@
 
 #include <QAbstractItemModel>
 #include <QSqlDatabase>
+#include <QSettings>
 
 // Exiv2 includes
 #include <exiv2/image.hpp>
@@ -16,11 +17,16 @@ class ExifTreeModel : public QAbstractItemModel
 	Q_OBJECT
 
 public:
-	ExifTreeModel(QObject *parent);
+	ExifTreeModel(QSqlDatabase& db, QObject *parent);
 	~ExifTreeModel();
 
 	// open file for metadata manipulation
 	bool openFile(QString filename);
+	// save current metatada set in to the specified file
+	bool saveFile(QString filename);
+
+	// clear data
+	void clear();
 
 	/// item model methods
 	QVariant data(const QModelIndex &index, int role) const;
@@ -41,22 +47,41 @@ public:
      /*bool insertRows(int position, int rows, const QModelIndex &parent = QModelIndex());
      bool removeRows(int position, int rows, const QModelIndex &parent = QModelIndex());*/
 
+	 static const int GetTypeRole = Qt::UserRole + 1;
+
+	 // reload data from file
+	 void reload();
+
+	 // repopulate model with tags
+	 void repopulate();
+
+	 // get meta tag values from the list
+	 void setValues(QVariantList& values);
+
 private:
 	// return item by index
 	ExifItem* getItem(const QModelIndex &index) const;
 
-	// number of model items
-	const static int ModelItemsMax = 5;
-
 	// db to hold app settings
-	QSqlDatabase db;
+	QSqlDatabase& dataBase;
 
-	// read metatags
+	// create data structure
 	void populateModel();
+
+	// read exif values into the model
+	bool readMetaValues();
+
+	bool editable;
 
 	Exiv2::Image::AutoPtr exifHandle;
 
+	Exiv2::ExifData curExifData;
+	Exiv2::IptcData curIptcData;
+	Exiv2::XmpData curXmpData;
+
 	ExifItem* rootItem;
+
+	QSettings settings;
 };
 
 #endif // EXIFTREEMODEL_H

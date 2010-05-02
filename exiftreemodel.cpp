@@ -4,10 +4,13 @@
 #include <QSqlQuery>
 #include <QStringList>
 #include <QVariantList>
+#include <QDateTime>
 #include <QFont>
 #include <QBrush>
 
 #include <cmath>
+
+#define CUSTOM_XMP_NAMESPACE_URI	("http://www.c41bytes.com/analogexif/ns")
 
 ExifTreeModel::ExifTreeModel(QSqlDatabase& db, QObject *parent) : QAbstractItemModel(parent), dataBase(db)
 {
@@ -30,13 +33,17 @@ void ExifTreeModel::clear()
 	reset();
 	editable = false;
 	rootItem->reset();
+
+	curExifData.clear();
+	curIptcData.clear();
+	curXmpData.clear();
 }
 
 // open file and read metadata
 bool ExifTreeModel::openFile(QString filename)
 {
 	// invalidate the model
-	reset();
+	clear();
 
 	try
 	{
@@ -227,6 +234,11 @@ QVariant ExifTreeModel::data(const QModelIndex &index, int role) const
 
 			break;
 		}
+	case ExifItem::TagDateTime:
+		{
+			return QDateTime::fromString(item->value().toString(), "yyyy:MM:dd HH:mm:ss");
+		}
+		break;
 	default:
 		break;
 	}
@@ -304,6 +316,9 @@ bool ExifTreeModel::setData(const QModelIndex &index, const QVariant &value, int
 	case ExifItem::TagShutter:
 		item->setValue(value.toList(), true);
 		break;
+	case ExifItem::TagDateTime:
+		item->setValue(value.toDateTime().toString("yyyy:MM:dd HH:mm:ss"));
+		break;
 	default:
 		return false;
 		break;
@@ -318,8 +333,7 @@ bool ExifTreeModel::setData(const QModelIndex &index, const QVariant &value, int
 void ExifTreeModel::populateModel()
 {
 	// connect to internal database
-	// QSqlQuery query("SELECT b.id, b.Description, a.TagName, a.TagText, a.PrintFormat, a.TagType FROM MetaTags a, MetaCategories b where a.CategoryId=b.id ORDER BY b.OrderBy, a.OrderBy");
-	QSqlQuery query("SELECT a.GearType, b.TagName, b.TagText, b.PrintFormat, b.TagType FROM GearTemplate a, MetaTags b WHERE b.id=a.TagId ORDER BY a.GearType, a.OrderBy, b.OrderBy");
+	QSqlQuery query("SELECT a.GearType, b.TagName, b.TagText, b.PrintFormat, b.TagType, b.Flags FROM GearTemplate a, MetaTags b WHERE b.id=a.TagId ORDER BY a.GearType, a.OrderBy");
 
 	int curCategoryId = -1, nRows = 0;
 	ExifItem* headerItem = NULL;
@@ -342,18 +356,26 @@ void ExifTreeModel::populateModel()
 				categoryTitle = tr("Lens");
 				break;
 			case 2:
+				categoryTitle = tr("Film");
+				break;
 			case 3:
-				categoryTitle = tr("Frame");
+				categoryTitle = tr("Developer");
+				break;
+			case 4:
+				categoryTitle = tr("Author");
+				break;
+			case 5:
+				categoryTitle = tr("Photo");
 				break;
 			}
 
-			headerItem = rootItem->insertChild("", "", curCategoryId);
+			headerItem = rootItem->insertChild("", "", categoryTitle);
 			nRows++;
 			
 		}
 
 		// insert a tag
-		headerItem->insertChild(query.value(2).toString(), query.value(3).toString(), QVariant(), query.value(4).toString(), query.value(5).toInt());
+		headerItem->insertChild(query.value(1).toString(), query.value(2).toString(), QVariant(), query.value(3).toString(), query.value(4).toInt(), query.value(5).toInt());
 		nRows++;
 	}
 	beginInsertRows(QModelIndex(), 0, nRows);
@@ -362,7 +384,36 @@ void ExifTreeModel::populateModel()
 
 bool ExifTreeModel::readMetaValues()
 {
-	Exiv2::ExifData &exifData = exifHandle->exifData();
+	QString exifComments;
+
+	// read comments for extra tags
+	try
+	{
+		curExifData = exifHandle->exifData();
+
+		int etagsStorageOptions = settings.value("extraTagsStorage", 0x03).toInt();
+
+		if(etagsStorageOptions & 0x01)
+		{
+			Exiv2::Exifdatum tagValue = curExifData["Exif.Photo.UserComment"];
+
+			if(tagValue.count() != 0)
+				exifComments = QString::fromStdString(tagValue.toString());
+		}
+
+		if((etagsStorageOptions & 0x02) && (exifComments != ""))
+		{
+			Exiv2::Exifdatum tagValue = curExifData["Exif.Image.XPComment"];
+
+			if(tagValue.count() != 0)
+				exifComments = QString::fromStdString(tagValue.toString());
+		}
+
+	}
+	catch(Exiv2::AnyError&)
+	{
+		return false;
+	}
 
 	// browse through all categories
 	for(int i = 0; i < rootItem->childCount(); i++)
@@ -372,57 +423,101 @@ bool ExifTreeModel::readMetaValues()
 		{
 			ExifItem* tag = category->child(j);
 
-			try
+#if 0
+			if(tag->tagFlags() & ExifItem::TagFlagExtra)
 			{
-				QString tagType = tag->tagName().split(".").at(0);
-				if(tagType == "Exif")
+				// special care for extra tags
+				int tagPos = exifComments.indexOf(tag->tagText() + ": ");
+				if(tagPos != -1)
 				{
-					// Exif data
-					Exiv2::Exifdatum tagValue = exifData[tag->tagName().toStdString()];
+					// get value
+					QString val = exifComments.mid(tagPos + tag->tagText().length() + 2, exifComments.indexOf(QChar('\n'), tagPos));
+					tag->setValueFromString(val);
+				}
+				else
+				{
+					// TODO: Xmp schema etc.?
+				}
+				continue;
+			}
+#endif
 
-					Exiv2::TypeId typId = tagValue.typeId();
-					switch(typId)
+			QStringList tags = tag->tagName().remove(QChar(' ')).split(",", QString::SkipEmptyParts);
+
+			foreach(QString tagName, tags)
+			{
+				try
+				{
+					QString tagType = tagName.split(".").at(0);
+					if(tagType == "Exif")
 					{
-					case Exiv2::asciiString:
-					case Exiv2::comment:
-						tag->setValue(QString::fromStdString(exifData[tag->tagName().toStdString()].toString()));
-						break;
-					case Exiv2::unsignedByte:
-					case Exiv2::unsignedShort:
-					case Exiv2::unsignedLong:
-					case Exiv2::signedByte:
-					case Exiv2::signedShort:
-					case Exiv2::signedLong:
-						tag->setValue(exifData[tag->tagName().toStdString()].toLong());
-						break;
-					case Exiv2::unsignedRational:
-					case Exiv2::signedRational:
+						// Exif data
+						
+						Exiv2::Exifdatum tagValue = curExifData[tagName.toStdString()];
+
+						if(tagValue.count() == 0)
+							continue;
+
+						Exiv2::TypeId typId = tagValue.typeId();
+						switch(typId)
 						{
-							Exiv2::Rational val = exifData[tag->tagName().toStdString()].toRational();
-							QVariantList rational;
-							rational << val.first << val.second;
-							tag->setValue(rational);
+						case Exiv2::asciiString:
+						case Exiv2::comment:
+							tag->setValue(QString::fromStdString(tagValue.toString()));
+							break;
+						case Exiv2::unsignedByte:
+						case Exiv2::unsignedShort:
+						case Exiv2::unsignedLong:
+						case Exiv2::signedByte:
+						case Exiv2::signedShort:
+						case Exiv2::signedLong:
+							tag->setValue(curExifData[tagName.toStdString()].toLong());
+							break;
+						case Exiv2::unsignedRational:
+						case Exiv2::signedRational:
+							{
+								Exiv2::Rational val = curExifData[tagName.toStdString()].toRational();
+								QVariantList rational;
+								rational << val.first << val.second;
+								tag->setValue(rational);
+								break;
+							}
+						default:
+							tag->setValue(QVariant());
 							break;
 						}
-					default:
+					}
+					else if(tagType == "Iptc")
+					{
+						// IPTC tags
+
+						curIptcData = exifHandle->iptcData();
+
+						Exiv2::Iptcdatum tagValue = curIptcData[tagName.toStdString()];
+
+						if(tagValue.count() == 0)
+							continue;
+
 						tag->setValue(QVariant());
-						break;
+					}
+					else if(tagType == "Xmp")
+					{
+						// XMP tags
+
+						curXmpData = exifHandle->xmpData();
+
+						Exiv2::Xmpdatum tagValue = curXmpData[tagName.toStdString()];
+
+						if(tagValue.count() == 0)
+							continue;
+
+						tag->setValue(QVariant());
 					}
 				}
-				else if(tagType == "Iptc")
+				catch(Exiv2::AnyError&)
 				{
-					// IPTC tags
-					tag->setValue(QVariant());
+					return false;
 				}
-				else if(tagType == "Xmp")
-				{
-					// XMP tags
-					tag->setValue(QVariant());
-				}
-			}
-			catch(Exiv2::AnyError&)
-			{
-				return false;
 			}
 		}
 	}
@@ -432,7 +527,7 @@ bool ExifTreeModel::readMetaValues()
 
 void ExifTreeModel::reload()
  {
-	 reset();
+	 clear();
 
 	 if(readMetaValues())
 		editable = true;
@@ -448,4 +543,113 @@ void ExifTreeModel::setValues(QVariantList& values)
 		if(rootItem->findSetTagValueFromString(values.takeAt(i).toString(), values.takeAt(i+1).toString(), true))
 			emit dataChanged(QModelIndex(), QModelIndex());
 	}
+}
+
+void ExifTreeModel::repopulate()
+{
+	rootItem->removeChildren();
+	reset();
+	populateModel();
+	// reload information if file was open
+	if(editable)
+		reload();
+}
+
+bool ExifTreeModel::saveFile(QString filename)
+{
+	// register custom AnalogExif XMP namespace
+	Exiv2::XmpProperties::registerNs(CUSTOM_XMP_NAMESPACE_URI, "AnalogExif");
+
+	// browse through all categories
+	for(int i = 0; i < rootItem->childCount(); i++)
+	{
+		ExifItem* category = rootItem->child(i);
+		for(int j = 0; j < category->childCount(); j++)
+		{
+			ExifItem* tag = category->child(j);
+
+			if(tag->isDirty())
+			{
+				QStringList tags = tag->tagName().remove(QChar(' ')).split(",", QString::SkipEmptyParts);
+
+				foreach(QString tagName, tags)
+				{
+					try
+					{
+						QString tagType = tagName.split(".").at(0);
+						if(tagType == "Exif")
+						{
+							// Exif data
+							
+							Exiv2::Exifdatum tagValue = curExifData[tagName.toStdString()];
+
+							if(tagValue.count() == 0)
+								continue;
+
+							Exiv2::TypeId typId = tagValue.typeId();
+							switch(typId)
+							{
+							case Exiv2::asciiString:
+							case Exiv2::comment:
+								tag->setValue(QString::fromStdString(tagValue.toString()));
+								break;
+							case Exiv2::unsignedByte:
+							case Exiv2::unsignedShort:
+							case Exiv2::unsignedLong:
+							case Exiv2::signedByte:
+							case Exiv2::signedShort:
+							case Exiv2::signedLong:
+								tag->setValue(curExifData[tagName.toStdString()].toLong());
+								break;
+							case Exiv2::unsignedRational:
+							case Exiv2::signedRational:
+								{
+									Exiv2::Rational val = curExifData[tagName.toStdString()].toRational();
+									QVariantList rational;
+									rational << val.first << val.second;
+									tag->setValue(rational);
+									break;
+								}
+							default:
+								tag->setValue(QVariant());
+								break;
+							}
+						}
+						else if(tagType == "Iptc")
+						{
+							// IPTC tags
+
+							curIptcData = exifHandle->iptcData();
+
+							Exiv2::Iptcdatum tagValue = curIptcData[tagName.toStdString()];
+
+							if(tagValue.count() == 0)
+								continue;
+
+							tag->setValue(QVariant());
+						}
+						else if(tagType == "Xmp")
+						{
+							// XMP tags
+
+							curXmpData = exifHandle->xmpData();
+
+							Exiv2::Xmpdatum tagValue = curXmpData[tagName.toStdString()];
+
+							if(tagValue.count() == 0)
+								continue;
+
+							tag->setValue(QVariant());
+						}
+					}
+					catch(Exiv2::AnyError&)
+					{
+						return false;
+					}
+				}
+			}
+		}
+	}
+
+
 }

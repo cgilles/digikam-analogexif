@@ -1,5 +1,11 @@
 #include "analogexif.h"
 #include <QtGui/QApplication>
+#include <QtPlugin>
+
+
+Q_IMPORT_PLUGIN(qjpeg)
+Q_IMPORT_PLUGIN(qsqlite)
+
 
 int main(int argc, char *argv[])
 {

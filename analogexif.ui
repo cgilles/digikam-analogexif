@@ -6,12 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>603</height>
+    <width>909</width>
+    <height>633</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Analog Exif</string>
+   <string/>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="analogexif.qrc">
+    <normaloff>:/images/icons/film_edit.png</normaloff>:/images/icons/film_edit.png</iconset>
+  </property>
+  <property name="statusTip">
+   <string/>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="sizePolicy">
@@ -56,7 +63,11 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QLineEdit" name="directoryLine"/>
+         <widget class="QLineEdit" name="directoryLine">
+          <property name="statusTip">
+           <string>Current directory</string>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QTreeView" name="fileView">
@@ -65,6 +76,9 @@
             <horstretch>0</horstretch>
             <verstretch>75</verstretch>
            </sizepolicy>
+          </property>
+          <property name="statusTip">
+           <string>File system view</string>
           </property>
           <property name="uniformRowHeights">
            <bool>true</bool>
@@ -141,25 +155,297 @@
        <property name="title">
         <string>Details</string>
        </property>
-       <layout class="QGridLayout" name="gridLayout_2">
-        <item row="0" column="0">
-         <widget class="QTreeView" name="metadataView">
-          <property name="showDropIndicator" stdset="0">
-           <bool>false</bool>
+       <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="70,30">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <property name="spacing">
+           <number>2</number>
           </property>
-          <property name="alternatingRowColors">
-           <bool>true</bool>
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Current image</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTreeView" name="metadataView">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>8</pointsize>
+             </font>
+            </property>
+            <property name="statusTip">
+             <string>Current image properties</string>
+            </property>
+            <property name="showDropIndicator" stdset="0">
+             <bool>false</bool>
+            </property>
+            <property name="alternatingRowColors">
+             <bool>true</bool>
+            </property>
+            <property name="rootIsDecorated">
+             <bool>true</bool>
+            </property>
+            <property name="uniformRowHeights">
+             <bool>true</bool>
+            </property>
+            <attribute name="headerVisible">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="headerCascadingSectionResizes">
+             <bool>true</bool>
+            </attribute>
+            <attribute name="headerCascadingSectionResizes">
+             <bool>true</bool>
+            </attribute>
+            <attribute name="headerVisible">
+             <bool>false</bool>
+            </attribute>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="applyChangesBtn">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="statusTip">
+               <string>Apply changes</string>
+              </property>
+              <property name="text">
+               <string>Save</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="revertBtn">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="statusTip">
+               <string>Revert changes</string>
+              </property>
+              <property name="text">
+               <string>Revert</string>
+              </property>
+              <property name="default">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,30,0,30,0,15,0,15,0">
+          <property name="spacing">
+           <number>2</number>
           </property>
-          <property name="rootIsDecorated">
-           <bool>false</bool>
-          </property>
-          <attribute name="headerVisible">
-           <bool>false</bool>
-          </attribute>
-          <attribute name="headerVisible">
-           <bool>false</bool>
-          </attribute>
-         </widget>
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Equipment</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="GearTreeView" name="gearView">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="contextMenuPolicy">
+             <enum>Qt::ActionsContextMenu</enum>
+            </property>
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="statusTip">
+             <string>Available equipment. Double-click to apply to the current photo.</string>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">/* keep selection even when focus is lost */
+QTreeView::item:selected:!active{
+	selection-color:						palette(highlighted-text);
+	selection-background-color:	palette(highlight);
+}</string>
+            </property>
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+            <property name="showDropIndicator" stdset="0">
+             <bool>false</bool>
+            </property>
+            <property name="alternatingRowColors">
+             <bool>true</bool>
+            </property>
+            <property name="rootIsDecorated">
+             <bool>true</bool>
+            </property>
+            <property name="uniformRowHeights">
+             <bool>true</bool>
+            </property>
+            <property name="headerHidden">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_3">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Film</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="GearListView" name="filmView">
+            <property name="contextMenuPolicy">
+             <enum>Qt::ActionsContextMenu</enum>
+            </property>
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="statusTip">
+             <string>List of available films. Double-click to apply to the current photo.</string>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">/* keep selection even when focus is lost */
+QListView::item:selected:!active{
+	selection-color:						palette(highlighted-text);
+	selection-background-color:	palette(highlight);
+}</string>
+            </property>
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+            <property name="showDropIndicator" stdset="0">
+             <bool>false</bool>
+            </property>
+            <property name="alternatingRowColors">
+             <bool>true</bool>
+            </property>
+            <property name="uniformItemSizes">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Developer</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="GearListView" name="developerView">
+            <property name="contextMenuPolicy">
+             <enum>Qt::ActionsContextMenu</enum>
+            </property>
+            <property name="statusTip">
+             <string>List of the available photographic developers. Double-click to apply to the current photo.</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>Author</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="GearListView" name="authorView">
+            <property name="contextMenuPolicy">
+             <enum>Qt::ActionsContextMenu</enum>
+            </property>
+            <property name="statusTip">
+             <string>List of the defined authors. Double-click to apply to the current photo.</string>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">/* keep selection even when focus is lost */
+QListView::item:selected:!active{
+	selection-color:						palette(highlighted-text);
+	selection-background-color:	palette(highlight);
+}</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="applyGearBtn">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="toolTip">
+               <string/>
+              </property>
+              <property name="statusTip">
+               <string>Apply selected equipment to the current photo</string>
+              </property>
+              <property name="text">
+               <string>&amp;Apply</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </item>
        </layout>
       </widget>
@@ -172,7 +458,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>909</width>
      <height>20</height>
     </rect>
    </property>
@@ -180,17 +466,31 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="action_Preferences"/>
+    <addaction name="actionOpen"/>
+    <addaction name="action_Save"/>
     <addaction name="separator"/>
-    <addaction name="action_Exit"/>
+    <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menu_Help">
     <property name="title">
      <string>&amp;Help</string>
     </property>
+    <addaction name="actionHelp"/>
+    <addaction name="separator"/>
     <addaction name="action_About"/>
    </widget>
+   <widget class="QMenu" name="menu_Edit">
+    <property name="title">
+     <string>&amp;Edit</string>
+    </property>
+    <addaction name="action_Undo"/>
+    <addaction name="actionApply_gear"/>
+    <addaction name="separator"/>
+    <addaction name="actionEdit_gear"/>
+    <addaction name="actionPreferences"/>
+   </widget>
    <addaction name="menu_File"/>
+   <addaction name="menu_Edit"/>
    <addaction name="menu_Help"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -200,27 +500,241 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionOpen"/>
+   <addaction name="action_Save"/>
+   <addaction name="separator"/>
+   <addaction name="action_Undo"/>
+   <addaction name="actionApply_gear"/>
+   <addaction name="separator"/>
+   <addaction name="actionEdit_gear"/>
+   <addaction name="actionPreferences"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="action_About">
    <property name="text">
     <string>&amp;About...</string>
    </property>
+   <property name="statusTip">
+    <string>About Analog Exif...</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::AboutRole</enum>
+   </property>
   </action>
-  <action name="action_Exit">
+  <action name="actionExit">
    <property name="text">
     <string>E&amp;xit</string>
    </property>
+   <property name="statusTip">
+    <string>Exit</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::QuitRole</enum>
+   </property>
   </action>
-  <action name="action_Preferences">
+  <action name="actionPreferences">
+   <property name="icon">
+    <iconset resource="analogexif.qrc">
+     <normaloff>:/images/icons/cog.png</normaloff>:/images/icons/cog.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Preferences...</string>
+   </property>
+   <property name="statusTip">
+    <string>Edit preferences</string>
+   </property>
+  </action>
+  <action name="actionEdit_gear">
+   <property name="icon">
+    <iconset resource="analogexif.qrc">
+     <normaloff>:/images/icons/camera_edit.png</normaloff>:/images/icons/camera_edit.png</iconset>
+   </property>
+   <property name="text">
+    <string>Edit &amp;equipment</string>
+   </property>
+   <property name="toolTip">
+    <string>Edit equipment</string>
+   </property>
+   <property name="statusTip">
+    <string>Edit equipment library (camera, lens, film)</string>
+   </property>
+  </action>
+  <action name="actionOpen">
+   <property name="icon">
+    <iconset resource="analogexif.qrc">
+     <normaloff>:/images/icons/folder_camera.png</normaloff>:/images/icons/folder_camera.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Open...</string>
+   </property>
+   <property name="statusTip">
+    <string>Open file</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionApply_gear">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="analogexif.qrc">
+     <normaloff>:/images/icons/camera_go.png</normaloff>:/images/icons/camera_go.png</iconset>
+   </property>
+   <property name="text">
+    <string>Apply selection</string>
+   </property>
+   <property name="statusTip">
+    <string>Apply selected equipment to the current photo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+A</string>
+   </property>
+  </action>
+  <action name="action_Undo">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="analogexif.qrc">
+     <normaloff>:/images/icons/arrow_rotate_anticlockwise.png</normaloff>:/images/icons/arrow_rotate_anticlockwise.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Undo</string>
+   </property>
+   <property name="statusTip">
+    <string>Revert changes</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="action_Save">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="analogexif.qrc">
+     <normaloff>:/images/icons/disk.png</normaloff>:/images/icons/disk.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Save</string>
+   </property>
+   <property name="statusTip">
+    <string>Save changes to the current photo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Analog Exif help</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
    </property>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>GearTreeView</class>
+   <extends>QTreeView</extends>
+   <header>geartreeview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>GearListView</class>
+   <extends>QListView</extends>
+   <header>gearlistview.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>directoryLine</tabstop>
+  <tabstop>fileView</tabstop>
+  <tabstop>applyChangesBtn</tabstop>
+  <tabstop>revertBtn</tabstop>
+  <tabstop>applyGearBtn</tabstop>
+  <tabstop>metadataView</tabstop>
+  <tabstop>gearView</tabstop>
+  <tabstop>filmView</tabstop>
+  <tabstop>developerView</tabstop>
+  <tabstop>authorView</tabstop>
+ </tabstops>
  <resources>
   <include location="analogexif.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>actionExit</sender>
+   <signal>activated()</signal>
+   <receiver>AnalogExifClass</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>454</x>
+     <y>316</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_Undo</sender>
+   <signal>activated()</signal>
+   <receiver>revertBtn</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>851</x>
+     <y>583</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_Save</sender>
+   <signal>activated()</signal>
+   <receiver>applyChangesBtn</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>770</x>
+     <y>583</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>applyGearBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>actionApply_gear</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>850</x>
+     <y>582</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

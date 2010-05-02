@@ -1,3 +1,15 @@
 <RCC>
-    <qresource prefix="/data"/>
+    <qresource prefix="/images">
+        <file>icons/camera_edit.png</file>
+        <file>icons/film_edit.png</file>
+        <file>icons/folder_camera.png</file>
+        <file>icons/cog.png</file>
+        <file>icons/disk.png</file>
+        <file>icons/arrow_rotate_anticlockwise.png</file>
+        <file>icons/camera_go.png</file>
+        <file>icons/add.png</file>
+        <file>icons/delete.png</file>
+        <file>icons/camera_add.png</file>
+        <file>icons/page_copy.png</file>
+    </qresource>
 </RCC>
