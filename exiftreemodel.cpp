@@ -857,6 +857,11 @@ void ExifTreeModel::processTag(ExifItem* tag, Exiv2::ExifData& exifData, Exiv2::
 
 				tag->setValueFromString(commentValue.replace(" \n", "\n"));
 			}
+			else if((tagName == "Exif.Image.XPTitle") || (tagName == "Exif.Image.XPAuthor") || (tagName == "Exif.Image.XPKeywords") || (tagName == "Exif.Image.XPSubject"))
+			{
+				// special care for XP* tags - they are stored in UTF-8
+				tag->setValueFromString(ExifUtfToQString(tagValue));
+			}
 			else
 			{
 				// special care for multivalue tag
@@ -1276,8 +1281,8 @@ bool ExifTreeModel::storeTag(ExifItem* tag, Exiv2::ExifData& exifData, Exiv2::Ip
 						}
 						else if((tagName == "Exif.Image.XPTitle") || (tagName == "Exif.Image.XPAuthor") || (tagName == "Exif.Image.XPKeywords") || (tagName == "Exif.Image.XPSubject"))
 						{
-							// UTF-8, no charset markers
-							v = QStringToExifUtf(tag->getValueAsString(), false, true);
+							// UTF-16, no charset markers
+							v = QStringToExifUtf(tag->getValueAsString());
 						}
 						else
 						{
