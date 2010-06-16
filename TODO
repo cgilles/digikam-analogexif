@@ -28,7 +28,6 @@ TESTS
 * verify against metadata corruption
 * verify against multi-line TagText tags in the equipment
 * test TIFF support
-* test Unicode on XP* tags
 
 BUGS
 * When typing long user-defined XMP schema prefix the Options dialog window resizes
@@ -41,6 +40,7 @@ BUGS
 * when copying metadata and destination is one file, copied tags flicker as "dirty" for a moment
 * when auto-filling exposure number and asking for backup - metadata of the changed file may be reflected in the metadata view
 * handle all unsuccessfull returns
+* no revert after backup was cancelled
 
 LIMITATIONS
 * Unicode paths only in Windows
