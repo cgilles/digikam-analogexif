@@ -1,7 +1,27 @@
+/*
+	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+
+	This file is part of AnalogExif.
+
+    AnalogExif is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    AnalogExif is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AnalogExif.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "exifitemdelegate.h"
 #include "exiftreemodel.h"
 #include "exifutils.h"
 #include "emptyspinbox.h"
+#include "multitagvaluesdialog.h"
 
 #include <QComboBox>
 #include <QLineEdit>
@@ -9,21 +29,54 @@
 #include <QRegExpValidator>
 #include <QDateTime>
 #include <QDateTimeEdit>
+#include <QPlainTextEdit>
+#include <QApplication>
+#include <QClipboard>
 
 #include <climits>
 #include <cfloat>
+#include <cmath>
 
 QWidget* ExifItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option,
 	const QModelIndex &index) const
 {
-	int typeRole = index.model()->data(index, ExifTreeModel::GetTypeRole).toInt();
+	ExifItem::TagFlags tagFlags = (ExifItem::TagFlags)index.data(ExifTreeModel::GetFlagsRole).toInt();
+	ExifItem::TagType typeRole = (ExifItem::TagType)index.data(ExifTreeModel::GetTypeRole).toInt();
+
+	// special care for choice fields
+	if(tagFlags.testFlag(ExifItem::Choice))
+	{
+		QComboBox* combo = new QComboBox(parent);
+
+		QList<QVariantList> values = ExifItem::parseEncodedChoiceList(index.data(ExifTreeModel::GetChoiceRole).toString(), typeRole, tagFlags);
+
+		if(values != QList<QVariantList>())
+		{
+			// set the combo box items
+			foreach(QVariantList valuePair, values)
+			{
+				combo->addItem(valuePair.at(0).toString(), valuePair.at(1));
+			}
+		}
+
+		//combo->setFrame(false);
+
+		return combo;
+	}
+
+	// special care for multi-value fields
+	if(tagFlags.testFlag(ExifItem::Multi))
+	{
+		QString textFormat = index.data(ExifTreeModel::GetChoiceRole).toString();
+		return new MultiTagValuesDialog(typeRole, textFormat, tagFlags, parent);
+	}
 
 	switch(typeRole)
 	{
 	case ExifItem::TagString:
 		{
 			QLineEdit* edit = new QLineEdit(parent);
-			edit->setFrame(false);
+			//edit->setFrame(false);
 
 			return edit;
 		}
@@ -38,7 +91,7 @@ QWidget* ExifItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 			else
 				spinBox->setRange(0, INT_MAX);
 
-			spinBox->setFrame(false);
+			//spinBox->setFrame(false);
 
 			return spinBox;
 		}
@@ -54,7 +107,7 @@ QWidget* ExifItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 			isos << "4000" << "5000" << "6400" << "12800" << "25600" << "51200" << "102400";
 
 			combo->addItems(isos);
-			combo->setFrame(false);
+			//combo->setFrame(false);
 			combo->setEditable(true);
 			combo->setValidator(new QIntValidator(1, INT_MAX, combo));
 
@@ -71,7 +124,8 @@ QWidget* ExifItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 			else
 				spinBox->setRange(0.0, DBL_MAX);
 
-			spinBox->setFrame(false);
+			//spinBox->setFrame(false);
+			spinBox->setDecimals(ExifUtils::DoublePrecision);
 			
 			return spinBox;
 		}
@@ -90,7 +144,7 @@ QWidget* ExifItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 
 
 			combo->addItems(apertures);
-			combo->setFrame(false);
+			//combo->setFrame(false);
 			combo->setEditable(true);
 			combo->setValidator(new QDoubleValidator(0.0, DBL_MAX, 1, combo));
 
@@ -103,7 +157,7 @@ QWidget* ExifItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 			QLineEdit* edit = new QLineEdit(parent);
 
 			edit->setValidator(new QRegExpValidator(QRegExp("\\d+/\\d+"), edit));
-			edit->setFrame(false);
+			//edit->setFrame(false);
 
 			return edit;
 		}
@@ -139,7 +193,7 @@ QWidget* ExifItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 			combo->setEditable(true);
 			combo->setValidator(new QRegExpValidator(QRegExp("(\\d+/\\d+|\\d*\\.\\d+)"), combo));
 			combo->setCompleter(0);
-			combo->setFrame(false);
+			//combo->setFrame(false);
 
 			return combo;
 		}
@@ -150,22 +204,78 @@ QWidget* ExifItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 
 			dtEdit->setCalendarPopup(true);
 			// dtEdit->setDisplayFormat("yyyy:MM:dd HH:mm:ss");
-			dtEdit->setFrame(false);
+			//dtEdit->setFrame(false);
 
 			return dtEdit;
 		}
+		break;
+	case ExifItem::TagText:
+		{
+			QPlainTextEdit* tEdit = new QPlainTextEdit(parent);
+
+			return tEdit;
+		}
+		break;
+	case ExifItem::TagGPS:
+		{
+			QLineEdit* gpsEdit = new GpsLineEdit(parent);
+
+			return gpsEdit;
+		}
+		break;
 	}
 
-	return QItemDelegate::createEditor(parent, option, index);
+	return QStyledItemDelegate::createEditor(parent, option, index);
 }
 
 void ExifItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
-	int typeRole = index.model()->data(index, ExifTreeModel::GetTypeRole).toInt();
+	ExifItem::TagFlags tagFlags = (ExifItem::TagFlags)index.data(ExifTreeModel::GetFlagsRole).toInt();
+	ExifItem::TagType typeRole = (ExifItem::TagType)index.data(ExifTreeModel::GetTypeRole).toInt();
+
+	// special care for choice fields
+	if(tagFlags.testFlag(ExifItem::Choice))
+	{
+		QComboBox* combo = static_cast<QComboBox*>(editor);
+
+		QList<QVariantList> values = ExifItem::parseEncodedChoiceList(index.data(ExifTreeModel::GetChoiceRole).toString(), typeRole, tagFlags);
+
+		if(values != QList<QVariantList>())
+		{
+			int selIdx = 0;
+			QVariant curValue = index.data(Qt::EditRole);
+
+			// set the combo box items
+			foreach(QVariantList valuePair, values)
+			{
+				if(curValue == valuePair.at(1))
+					break;
+
+				selIdx++;				
+			}
+
+			// set current index
+			combo->setCurrentIndex(selIdx);
+		}
+
+		return;
+	}
+
+	// special care for multi-value fields
+	if(tagFlags.testFlag(ExifItem::Multi))
+	{
+		MultiTagValuesDialog* multiValDialog = static_cast<MultiTagValuesDialog*>(editor);
+
+		if(multiValDialog)
+			multiValDialog->setValues(index.data(Qt::EditRole).toList());
+
+		return;
+	}
 
 	switch(typeRole)
 	{
 	case ExifItem::TagString:
+	case ExifItem::TagGPS:
 		{
 			QLineEdit* edit = static_cast<QLineEdit*>(editor);
 			QVariant value = index.model()->data(index, Qt::EditRole);
@@ -295,15 +405,56 @@ void ExifItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
 		}
 		break;
 
+	case ExifItem::TagText:
+		{
+			QPlainTextEdit* tEdit = static_cast<QPlainTextEdit*>(editor);
+
+			QVariant value = index.model()->data(index, Qt::EditRole);
+			if(value != QVariant())
+				tEdit->setPlainText(value.toString());
+		}
+		break;
+
 	default:
-		QItemDelegate::setEditorData(editor, index);
+		QStyledItemDelegate::setEditorData(editor, index);
 		break;
 	}
 }
 void ExifItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 	const QModelIndex &index) const
 {
-	int typeRole = index.model()->data(index, ExifTreeModel::GetTypeRole).toInt();
+	ExifItem::TagFlags tagFlags = (ExifItem::TagFlags)index.data(ExifTreeModel::GetFlagsRole).toInt();
+	ExifItem::TagType typeRole = (ExifItem::TagType)index.data(ExifTreeModel::GetTypeRole).toInt();
+
+	// special care for choice fields
+	if(tagFlags.testFlag(ExifItem::Choice))
+	{
+		QComboBox* combo = static_cast<QComboBox*>(editor);
+
+		model->setData(index, combo->itemData(combo->currentIndex()));
+
+		return;
+	}
+
+	// special care for multi-value fields
+	if(tagFlags.testFlag(ExifItem::Multi))
+	{
+		MultiTagValuesDialog* multiValDialog = static_cast<MultiTagValuesDialog*>(editor);
+
+		if(multiValDialog)
+		{
+			if(multiValDialog->result() == QDialog::Accepted)
+			{
+				QVariantList values = multiValDialog->getValues();
+				if(values.count() == 0)
+					model->setData(index, QVariant());
+				else
+					model->setData(index, values);
+			}
+		}
+
+		return;
+	}
 
 	switch(typeRole)
 	{
@@ -313,9 +464,24 @@ void ExifItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 			QString text = edit->text();
 
 			if(text == "")
-				return;
+				model->setData(index, QVariant());
+			else
+			{
+				model->setData(index, text);
+			}
 
-			model->setData(index, text);
+		}
+		break;
+
+	case ExifItem::TagGPS:
+		{
+			GpsLineEdit* edit = static_cast<GpsLineEdit*>(editor);
+			QString text = edit->text();
+
+			if((text == edit->getDefaultValue()) && !edit->isModified())
+				model->setData(index, QVariant());
+			else
+				model->setData(index, text);
 		}
 		break;
 
@@ -325,7 +491,10 @@ void ExifItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 			QString text = edit->text();
 
 			if(text == "")
+			{
+				model->setData(index, QVariant());
 				return;
+			}
 
 			// parse text since therer is no way of detecting whether user typed text or selected from list
 			if(text.contains('/'))
@@ -359,7 +528,10 @@ void ExifItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 			QString text = combo->currentText();
 
 			if(text == "")
+			{
+				model->setData(index, QVariant());
 				return;
+			}
 
 			// parse text since therer is no way of detecting whether user typed text or selected from list
 			if(text.contains('/'))
@@ -413,6 +585,8 @@ void ExifItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 
 			if(!spinBox->isEmpty())
 				model->setData(index, spinBox->value());
+			else
+				model->setData(index, QVariant());
 		}
 		break;
 
@@ -422,7 +596,10 @@ void ExifItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 			QString text = combo->currentText();
 
 			if(text == "")
+			{
+				model->setData(index, QVariant());
 				return;
+			}
 
 			bool ok = false;
 			int value = text.toInt(&ok);
@@ -439,6 +616,8 @@ void ExifItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 
 			if(!spinBox->isEmpty())
 				model->setData(index, spinBox->value());
+			else
+				model->setData(index, QVariant());
 		}
 		break;
 
@@ -449,7 +628,10 @@ void ExifItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 			QString text = combo->currentText();
 
 			if(text == "")
+			{
+				model->setData(index, QVariant());
 				return;
+			}
 
 			bool ok = false;
 			double value = text.toDouble(&ok);
@@ -464,13 +646,27 @@ void ExifItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 			QDateTimeEdit* dtEdit = static_cast<QDateTimeEdit*>(editor);
 			QDateTime date = dtEdit->dateTime();
 
+			// TODO: handle empty strings
+
 			if(date.isValid())
 				model->setData(index, date);
 		}
 		break;
 
+	case ExifItem::TagText:
+		{
+			QPlainTextEdit* tEdit = static_cast<QPlainTextEdit*>(editor);
+			QString text = tEdit->toPlainText();
+
+			if(text == "")
+				model->setData(index, QVariant());
+			else
+				model->setData(index, text);
+		}
+		break;
+
 	default:
-		QItemDelegate::setModelData(editor, model, index);
+		QStyledItemDelegate::setModelData(editor, model, index);
 		break;
 	}
 }
@@ -478,14 +674,152 @@ void ExifItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 void ExifItemDelegate::updateEditorGeometry(QWidget *editor,
 	const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-	editor->setGeometry(option.rect.adjusted(0, -2, 0, 2));
+	ExifItem::TagFlags tagFlags = (ExifItem::TagFlags)index.data(ExifTreeModel::GetFlagsRole).toInt();
+	ExifItem::TagType typeRole = (ExifItem::TagType)index.data(ExifTreeModel::GetTypeRole).toInt();
 
-	//int typeRole = index.model()->data(index, ExifTreeModel::GetTypeRole).toInt();
+	// no need for resize for multi-value fields
+	if(tagFlags.testFlag(ExifItem::Multi) && !tagFlags.testFlag(ExifItem::Choice))
+		return;
 
-	//if(typeRole == ExifItem::TagFraction)
-	//{
-	//	//editor->setGeometry(option.rect.adjusted(0, -2, 0, 2));
-	//}
-	//else
-	//	QItemDelegate::updateEditorGeometry(editor, option, index);
+	switch(typeRole)
+	{
+	case ExifItem::TagText:
+		editor->setGeometry(option.rect.adjusted(0, -2, -2, option.rect.height()*4));
+		break;
+	default:
+		editor->setGeometry(option.rect.adjusted(0, -2, 0, 2));
+		break;
+	}
+}
+
+bool ExifItemDelegate::eventFilter(QObject *object, QEvent *event)
+{
+    QWidget *editor = qobject_cast<QWidget*>(object);
+    if (!editor)
+        return false;
+    if (event->type() == QEvent::KeyPress) {
+		QKeyEvent* keyEvent = static_cast<QKeyEvent *>(event);
+		switch (keyEvent->key()) {
+        case Qt::Key_Enter:
+        case Qt::Key_Return:
+            if (qobject_cast<QTextEdit *>(editor) || qobject_cast<QPlainTextEdit *>(editor))
+			{
+				// pass Shift+Enter and others down to enter newline, Enter closes the editor
+				if(keyEvent->modifiers() == Qt::NoModifier)
+				{
+		            QMetaObject::invokeMethod(this, "_q_commitDataAndCloseEditor",
+                                      Qt::QueuedConnection, Q_ARG(QWidget*, editor));
+				    return true;
+				}
+			}
+			break;
+		}
+
+		if(keyEvent == QKeySequence::Paste)
+		{
+			if(qobject_cast<GpsLineEdit*>(editor))
+			{
+				qobject_cast<GpsLineEdit*>(editor)->paste();
+				return true;
+			}
+		}
+
+	}
+
+	return QStyledItemDelegate::eventFilter(object, event);
+}
+
+GpsLineEdit::GpsLineEdit(QWidget* parent) : QLineEdit(parent)
+{
+	setFrame(false);
+	setInputMask("#99° 99' 99.999\" #999° 99' 99.999\"");
+	defaultValue = "+00° 00' 00.000\" +000° 00' 00.000\"";
+	setText(defaultValue);
+	setValidator(new QRegExpValidator(QRegExp("(\\+|\\-){1}\\d{2}° \\d{2}' \\d{2}\\.\\d{3}\" (\\+|\\-){1}\\d{3}° \\d{2}' \\d{2}\\.\\d{3}\""), this));
+}
+
+GpsLineEdit::GpsLineEdit(const QString& contents, QWidget* parent) : QLineEdit(contents, parent), defaultValue(contents)
+{
+	setFrame(false);
+	setInputMask("#99° 99' 99.999\" #999° 99' 99.999\"");
+	setValidator(new QRegExpValidator(QRegExp("(\\+|\\-){1}\\d{2}° \\d{2}' \\d{2}\\.\\d{3}\" (\\+|\\-){1}\\d{3}° \\d{2}' \\d{2}\\.\\d{3}\""), this));
+}
+
+void GpsLineEdit::paste()
+{
+	QString result = "";
+
+	// handle google maps pastes
+    QString clip = QApplication::clipboard()->text(QClipboard::Clipboard);
+    if (!clip.isEmpty() || hasSelectedText()) {
+		// "+xx° xx' xx.xxx" +xxx° xx' xx.xxx" format
+		QRegExp regEx("(\\+|\\-)?(\\d{1,2})°\\s*(\\d{1,2})'\\s*(\\d{1,2}(?:\\.\\d{1,3})?)\"\\s*\\,?\\s*(\\+|\\-)?(\\d{1,3})°\\s*(\\d{1,2})'\\s*(\\d{1,2}(?:\\.\\d{1,3})?)\"");
+		QStringList caps;
+
+		if(regEx.indexIn(clip) != -1)
+		{
+			caps = regEx.capturedTexts();
+
+			if(caps.size() == 9)
+			{
+				// North/South
+				if(regEx.cap(1) == "-")
+					result += "-";
+				else
+					result += "+";
+
+				result += QString("%1° %2' %3\" ").arg(regEx.cap(2)).arg(regEx.cap(3)).arg(regEx.cap(4));
+
+				// East/West
+				if(regEx.cap(5) == "-")
+					result += "-";
+				else
+					result += "+";
+
+				result += QString("%1° %2' %3\" ").arg(regEx.cap(6)).arg(regEx.cap(7)).arg(regEx.cap(8));
+
+				insert(result);
+				return;
+			}
+		}
+
+		// match "+xx.xxxxxx, +xxx.xxxxxx" format
+		regEx.setPattern("(\\+|\\-)?(\\d{1,2}(?:\\.\\d{1,10})?){1}\\s*\\,?\\s*(\\+|\\-)?(\\d{1,2}(?:\\.\\d{1,10})?){1}");
+		if(regEx.indexIn(clip) != -1)
+		{
+			caps = regEx.capturedTexts();
+
+			if(caps.size() == 5)
+			{
+				// North/South
+				if(regEx.cap(1) == "-")
+					result += "-";
+				else
+					result += "+";
+
+				// latitude
+				int d, m;
+				double s;
+				ExifUtils::doubleToDegrees(regEx.cap(2).toDouble(), d, m, s);
+
+				result += QString("%1° %2' %3\" ").arg(d, 2, 10, QChar('0')).arg(m, 2, 10, QChar('0')).arg(s, 2, 'f', 3, QChar('0'));
+
+				// East/West
+				if(regEx.cap(3) == "-")
+					result += "-";
+				else
+					result += "+";
+
+				// latitude
+				ExifUtils::doubleToDegrees(regEx.cap(4).toDouble(), d, m, s);
+
+				result += QString("%1° %2' %3\"").arg(d, 3, 10, QChar('0')).arg(m, 2, 10, QChar('0')).arg(s, 2, 'f', 3, QChar('0'));
+
+				insert(result);
+				return;
+			}
+		}
+    }
+
+	QLineEdit::paste();
 }

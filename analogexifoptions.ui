@@ -27,22 +27,17 @@
       <attribute name="title">
        <string>General</string>
       </attribute>
-     </widget>
-     <widget class="QWidget" name="tab">
-      <attribute name="title">
-       <string>Extra tags</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_4">
+      <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
-          <string>Storage</string>
+          <string>Tag values in comments</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
+         <layout class="QVBoxLayout" name="verticalLayout_5">
           <item>
-           <widget class="QLabel" name="label">
+           <widget class="QLabel" name="label_2">
             <property name="text">
-             <string>Store and search for extra tags in:</string>
+             <string>Store tag values also in</string>
             </property>
            </widget>
           </item>
@@ -61,8 +56,11 @@
           </item>
           <item>
            <widget class="QCheckBox" name="etagsCboxStorageXp">
-            <property name="statusTip">
+            <property name="toolTip">
              <string>Store extra tags in Microsoft Windows comment tag</string>
+            </property>
+            <property name="statusTip">
+             <string/>
             </property>
             <property name="text">
              <string>Windows photo comment</string>
@@ -73,7 +71,126 @@
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer">
+        <widget class="QGroupBox" name="userNsGBox">
+         <property name="title">
+          <string>Use user-defined XMP schema</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_3">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Schema namespace</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" colspan="2">
+           <widget class="QLineEdit" name="userNsEdit">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip">
+             <string>XMP schema namespace URI (e.g. http://purl.org/dc/elements/1.1/)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_4">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Schema prefix</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="userNsPrefix">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip">
+             <string>Schema prefix</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <property name="spacing">
+             <number>6</number>
+            </property>
+            <property name="sizeConstraint">
+             <enum>QLayout::SetMaximumSize</enum>
+            </property>
+            <item>
+             <widget class="QLabel" name="userNsLabel1">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="pixmap">
+               <pixmap resource="analogexif.qrc">:/images/icons/information.png</pixmap>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="userNsLabel2">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Enter user-defined tags as Xmp.SchemaName.&lt;Tag Name&gt;</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="createBkpCbox">
+         <property name="toolTip">
+          <string>Create file backups before modification</string>
+         </property>
+         <property name="text">
+          <string>Create backups</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -89,9 +206,76 @@
      </widget>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
-       <string>Equipment templates</string>
+       <string>Metadata tags</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="spacing">
+        <number>1</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Equipment templates</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QToolButton" name="addBtn">
+           <property name="toolTip">
+            <string>Add new tag</string>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset resource="analogexif.qrc">
+             <normaloff>:/images/icons/add.png</normaloff>:/images/icons/add.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="delBtn">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="toolTip">
+            <string>Delete</string>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset resource="analogexif.qrc">
+             <normaloff>:/images/icons/delete.png</normaloff>:/images/icons/delete.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <property name="spacing">
@@ -105,6 +289,12 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="font">
+            <font>
+             <family>MS Shell Dlg 2</family>
+             <pointsize>8</pointsize>
+            </font>
+           </property>
            <property name="editTriggers">
             <set>QAbstractItemView::NoEditTriggers</set>
            </property>
@@ -114,12 +304,18 @@
           </widget>
          </item>
          <item>
-          <widget class="QTableView" name="gearTemplateView">
+          <widget class="OptGearTemplateView" name="gearTemplateView">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>80</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <family>MS Shell Dlg 2</family>
+             <pointsize>8</pointsize>
+            </font>
            </property>
            <property name="contextMenuPolicy">
             <enum>Qt::CustomContextMenu</enum>
@@ -131,7 +327,7 @@
             <bool>true</bool>
            </property>
            <property name="selectionMode">
-            <enum>QAbstractItemView::SingleSelection</enum>
+            <enum>QAbstractItemView::ExtendedSelection</enum>
            </property>
            <property name="selectionBehavior">
             <enum>QAbstractItemView::SelectRows</enum>
@@ -246,6 +442,13 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>OptGearTemplateView</class>
+   <extends>QTableView</extends>
+   <header>optgeartemplateview.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>tabWidget</tabstop>
   <tabstop>okButton</tabstop>
@@ -257,5 +460,38 @@
  <resources>
   <include location="analogexif.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>addBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>actionAdd_new_tag</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>570</x>
+     <y>51</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>delBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>actionDelete</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>593</x>
+     <y>51</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

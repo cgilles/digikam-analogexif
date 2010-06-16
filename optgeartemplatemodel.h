@@ -1,10 +1,27 @@
+/*
+	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+
+	This file is part of AnalogExif.
+
+    AnalogExif is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    AnalogExif is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AnalogExif.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #ifndef OPTGEARTEMPLATEMODEL_H
 #define OPTGEARTEMPLATEMODEL_H
 
 #include <QSqlQueryModel>
-
-// needed to protect minimum working tag set
-#define DEVELOPMENT_VERSION
+#include "exifitem.h"
 
 class OptGearTemplateModel : public QSqlQueryModel
 {
@@ -20,12 +37,8 @@ public:
 
 	int columnCount(const QModelIndex &parent = QModelIndex()) const
 	{
-		// tag name, description, type and print format
-#ifdef DEVELOPMENT_VERSION
-		return 6;
-#else
+		// order by, tag name, description, type and print format
 		return 5;
-#endif // DEVELOPMENT_VERSION
 	}
 
 	void reload()
@@ -41,11 +54,17 @@ public:
 	void removeTag(const QModelIndex& idx);
 
 	// insert new tag and return its id
-	int insertTag(QString tagName, QString tagDesc, QString tagFormat, int tagType);
+	int insertTag(QString tagName, QString tagDesc, QString tagFormat, ExifItem::TagType tagType);
 
 	// data role to get tag id
 	static const int GetTagId = Qt::UserRole + 1;
 	static const int GetTagFlagsRole = Qt::UserRole + 2;
+
+	// Protect built-in tags
+	static const bool ProtectBuiltInTags = false;
+signals:
+	// unsupported tag
+	void unsupportedTag(const QModelIndex& idx, const QString& tagName);
 
 private:
 	int gearId;

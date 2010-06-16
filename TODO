@@ -1,0 +1,46 @@
+FUTURE FEATURES
+* database export/import (XML/CSV)
+* Linux support
+* Google Maps support
+? duplicate EXIF in XMP
+* help
+* APEX-adjustment as tag flag
+* mark dirty fields in bold when editing gear template
+* native Windows file explorer (could be impossible in Qt?)
+* check for new version online
+* completer/separate dialog and help on exif field names when editing gear templates
+* support XMP structures and LangAlt
+* show progress during backup
+* when failed to open new database and consequently fail to open previous db - ask to create new and revert to default
+* when editing equipment template change tag order with buttons (i.e. remove orderby editable field)
+? Filter shown metadata
+? Other file format support
+? set proper XMP toolkit tag
+* when disabling custom namespace warn regarding affected equipment
+* multiple custom namespaces
+
+DEVELOPMENT
+* Mac support
+* Fill-in the metatags database
+* Register all used namespaces on startup
+
+TESTS
+* verify against metadata corruption
+* verify against multi-line TagText tags in the equipment
+* test TIFF support
+* test Unicode on XP* tags
+
+BUGS
+* When typing long user-defined XMP schema prefix the Options dialog window resizes
+* Selection clears when finished editing meta data value in the gear template
+* Icon provider on the filelist sometimes caches icons
+* For selected empty directories "Auto-fill exposures" and "Copy metadata" actions are not disabled
+* memory leaks
+* for extra long comments metadataview changes appearance
+* incorrect setWindowModified() on main window
+* when copying metadata and destination is one file, copied tags flicker as "dirty" for a moment
+* when auto-filling exposure number and asking for backup - metadata of the changed file may be reflected in the metadata view
+* handle all unsuccessfull returns
+
+LIMITATIONS
+* Unicode paths only in Windows

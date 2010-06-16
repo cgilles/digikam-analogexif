@@ -1,4 +1,24 @@
+/*
+	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+
+	This file is part of AnalogExif.
+
+    AnalogExif is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    AnalogExif is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AnalogExif.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "optgeartemplatemodel.h"
+#include "exiftreemodel.h"
 #include "exifitem.h"
 
 #include <QFont>
@@ -17,22 +37,15 @@ Qt::ItemFlags OptGearTemplateModel::flags(const QModelIndex &index) const
 	if(!index.isValid())
 		return 0;
 
-#ifndef DEVELOPMENT_VERSION
-
 	// protect minimum db setup
 	if(!query().seek(index.row()))
 		return 0;
 
-	if(query().value(5).toInt() & ExifItem::TagFlagProtected)
+	if(((ExifItem::TagFlags)query().value(5).toInt()).testFlag(ExifItem::Protected))
 	{
-		if((index.column() != 0) && (index.column() != 2))
+		if((index.column() != 0) && (index.column() != 2) && (index.column() != 4))
 			return Qt::ItemIsSelectable;
 	}
-
-#endif // DEVELOPMENT_VERSION
-
-	if(index.column() == 1)
-		return Qt::ItemIsUserCheckable | Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 
 	return Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
@@ -69,16 +82,12 @@ QVariant OptGearTemplateModel::data(const QModelIndex &index, int role) const
 		return query().value(5).toInt();
 	}
 
-	if((index.column() == 1) && (role == Qt::CheckStateRole))
+	if((role == Qt::ToolTipRole) && (index.column() == 1))
 	{
-		// me does like copy-paste!
 		if(!query().seek(index.row()))
 			return QVariant();
 
-		if(query().value(5).toInt() & ExifItem::TagFlagExtra)
-			return Qt::Checked;
-		else
-			return Qt::Unchecked;
+		return query().value(1);
 	}
 
 	QVariant v = QSqlQueryModel::data(index, role);
@@ -89,7 +98,7 @@ QVariant OptGearTemplateModel::data(const QModelIndex &index, int role) const
 		if(role == Qt::DisplayRole)
 		{
 			if(v != QVariant())
-				return ExifItem::typeName((ExifItem::TagTypes)v.toInt());
+				return ExifItem::typeName((ExifItem::TagType)v.toInt());
 		}
 		else if(role == Qt::FontRole)
 		{
@@ -100,13 +109,27 @@ QVariant OptGearTemplateModel::data(const QModelIndex &index, int role) const
 		}
 	}
 
+	if(index.column() == 4)
+	{
+		ExifItem::TagFlags flags = (ExifItem::TagFlags)data(index, GetTagFlagsRole).toInt();
+
+		// special care for select values
+		if(flags.testFlag(ExifItem::Choice))
+		{
+			if(role == Qt::DisplayRole)
+			{
+				return QString("...");
+			}
+		}
+	}
+
 	return v;
 }
 
 // header information
 QVariant OptGearTemplateModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-	if(((role != Qt::DisplayRole) && (role != Qt::FontRole)) || (orientation != Qt::Horizontal))
+	if(((role != Qt::DisplayRole) && (role != Qt::FontRole) && (role != Qt::ToolTipRole)) || (orientation != Qt::Horizontal))
 		return QSqlQueryModel::headerData(section, orientation, role);
 
 	if(role == Qt::FontRole)
@@ -121,31 +144,39 @@ QVariant OptGearTemplateModel::headerData(int section, Qt::Orientation orientati
 	{
 	case 0:
 		// Tag name
-		return tr("#");
+		if(role == Qt::ToolTipRole)
+			return tr("Tag order");
+		else
+			return tr("#");
 		break;
 	case 1:
 		// Tag name
-		return tr("(Extra) Exif tag(s)");
+		if(role == Qt::ToolTipRole)
+			return tr("Tag name(s); check the item if you want to include it in the image comments.");
+		else
+			return tr("Exif tag(s)");
 		break;
 	case 2:
 		// Tag text
-		return tr("Description");
+		if(role == Qt::ToolTipRole)
+			return tr("Tag description and display name");
+		else
+			return tr("Description");
 		break;
 	case 3:
 		// Tag type
-		return tr("Type");
+		if(role == Qt::ToolTipRole)
+			return tr("Tag type; check the item if you want provide selection of the values");
+		else
+			return tr("Type");
 		break;
 	case 4:
 		// print format
-		return tr("Display format");
+		if(role == Qt::ToolTipRole)
+			return tr("For regular types - display format string, %1 will be replaced with tag value.\nFor selection types - selection text and values");
+		else
+			return tr("Display format");
 		break;
-
-#ifdef DEVELOPMENT_VERSION
-	case 5:
-		// print format
-		return tr("Flags");
-		break;
-#endif // DEVELOPMENT_VERSION
 	}
 
 	return QVariant();
@@ -153,7 +184,7 @@ QVariant OptGearTemplateModel::headerData(int section, Qt::Orientation orientati
 
 bool OptGearTemplateModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-	if ((role != Qt::EditRole) && (role != Qt::CheckStateRole))
+	if (role != Qt::EditRole)
 		return false;
 
 	if(!query().seek(index.row()))
@@ -169,18 +200,10 @@ bool OptGearTemplateModel::setData(const QModelIndex &index, const QVariant &val
 
 	if(index.column() == 0)
 	{
+		if(query().value(0).toInt() == value.toInt())
+			return false;
+
 		queryStr = QString("UPDATE GearTemplate SET OrderBy = %1 WHERE id = %2").arg(value.toInt()).arg(query().value(7).toInt());
-	}
-	else if((index.column() == 1) && (role == Qt::CheckStateRole))
-	{
-		int flags = query().value(5).toInt();
-
-		if(value.toInt() == Qt::Checked)
-			flags = flags | 0x02;
-		else
-			flags = flags & ~0x02;
-
-		queryStr = QString("UPDATE MetaTags SET Flags = %1 WHERE id = %2").arg(flags).arg(id);
 	}
 	else
 	{
@@ -189,23 +212,56 @@ bool OptGearTemplateModel::setData(const QModelIndex &index, const QVariant &val
 		switch(index.column())
 		{
 		case 1:
-			queryStr += QString("TagName = '%1'").arg(value.toString());
+			{
+				QVariantList vallist = value.toList();
+				if(vallist.count() != 2)
+					return false;
+
+				if(vallist.at(0) == QVariant())
+					return false;
+
+				// TODO: bad, should be checked in item delegate
+				if((query().value(1).toString() == vallist.at(0).toString()) && (query().value(5).toInt() == vallist.at(1).toInt()))
+					return false;
+
+				// browse through tags and verify them
+				QStringList tags = vallist.at(0).toString().remove(QRegExp("(\\s?)")).split(",", QString::SkipEmptyParts);
+				foreach(QString tag, tags)
+				{
+					if(!ExifTreeModel::tagSupported(tag))
+					{
+						emit unsupportedTag(index, tag);
+						return false;
+					}
+				}
+
+				queryStr += QString("TagName = '%1', Flags = %2").arg(vallist.at(0).toString().replace("'", "''")).arg(vallist.at(1).toInt());
+			}
 			break;
 		case 2:
-			queryStr += QString("TagText = '%1'").arg(value.toString());
+			{
+				if(query().value(2).toString() == value.toString())
+					return false;
+
+				queryStr += QString("TagText = '%1'").arg(value.toString().replace("'", "''"));
+			}
 			break;
 		case 3:
-			queryStr += QString("TagType = %1").arg(value.toInt());
+			{
+				if(query().value(3).toInt() == value.toInt())
+					return false;
+
+				queryStr += QString("TagType = %1").arg(value.toInt());
+			}
 			break;
 		case 4:
-			queryStr += QString("PrintFormat = '") + value.toString() + +"'";
-			break;
+			{
+				if(query().value(4).toString() == value.toString())
+					return false;
 
-#ifdef DEVELOPMENT_VERSION
-		case 5:
-			queryStr += QString("Flags = %1").arg(value.toInt());
+				queryStr += QString("PrintFormat = '") + value.toString().replace("'", "''") +"'";
+			}
 			break;
-#endif // DEVELOPMENT_VERSION
 		default:
 			return false;
 			break;
@@ -259,7 +315,7 @@ void OptGearTemplateModel::removeTag(const QModelIndex& idx)
 }
 
 // add new tag
-int OptGearTemplateModel::insertTag(QString tagName, QString tagDesc, QString tagFormat, int tagType)
+int OptGearTemplateModel::insertTag(QString tagName, QString tagDesc, QString tagFormat, ExifItem::TagType tagType)
 {
 	QSqlQuery query(QString("INSERT INTO MetaTags(TagName, TagText, PrintFormat, TagType) VALUES('%1', '%2', '").arg(tagName).arg(tagDesc) + tagFormat + QString("', %1)").arg(tagType));
 

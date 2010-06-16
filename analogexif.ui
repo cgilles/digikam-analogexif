@@ -64,6 +64,11 @@
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <widget class="QLineEdit" name="directoryLine">
+          <property name="font">
+           <font>
+            <family>MS Shell Dlg 2</family>
+           </font>
+          </property>
           <property name="statusTip">
            <string>Current directory</string>
           </property>
@@ -77,8 +82,36 @@
             <verstretch>75</verstretch>
            </sizepolicy>
           </property>
+          <property name="font">
+           <font>
+            <family>MS Shell Dlg 2</family>
+            <pointsize>8</pointsize>
+           </font>
+          </property>
+          <property name="contextMenuPolicy">
+           <enum>Qt::ActionsContextMenu</enum>
+          </property>
           <property name="statusTip">
            <string>File system view</string>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">/* keep selection even when focus is lost */
+QTreeView::item:selected:!active{
+	selection-color:						palette(highlighted-text);
+	selection-background-color:	palette(highlight);
+}</string>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
+          </property>
+          <property name="dragDropMode">
+           <enum>QAbstractItemView::DragDrop</enum>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::ExtendedSelection</enum>
+          </property>
+          <property name="indentation">
+           <number>10</number>
           </property>
           <property name="uniformRowHeights">
            <bool>true</bool>
@@ -175,7 +208,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QTreeView" name="metadataView">
+           <widget class="GearTreeView" name="metadataView">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -184,8 +217,12 @@
             </property>
             <property name="font">
              <font>
+              <family>MS Shell Dlg 2</family>
               <pointsize>8</pointsize>
              </font>
+            </property>
+            <property name="contextMenuPolicy">
+             <enum>Qt::ActionsContextMenu</enum>
             </property>
             <property name="statusTip">
              <string>Current image properties</string>
@@ -200,6 +237,9 @@
              <bool>true</bool>
             </property>
             <property name="uniformRowHeights">
+             <bool>true</bool>
+            </property>
+            <property name="allColumnsShowFocus">
              <bool>true</bool>
             </property>
             <attribute name="headerVisible">
@@ -290,6 +330,12 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="font">
+             <font>
+              <family>MS Shell Dlg 2</family>
+              <pointsize>8</pointsize>
+             </font>
+            </property>
             <property name="contextMenuPolicy">
              <enum>Qt::ActionsContextMenu</enum>
             </property>
@@ -314,6 +360,9 @@ QTreeView::item:selected:!active{
             </property>
             <property name="alternatingRowColors">
              <bool>true</bool>
+            </property>
+            <property name="textElideMode">
+             <enum>Qt::ElideRight</enum>
             </property>
             <property name="rootIsDecorated">
              <bool>true</bool>
@@ -341,6 +390,12 @@ QTreeView::item:selected:!active{
           </item>
           <item>
            <widget class="GearListView" name="filmView">
+            <property name="font">
+             <font>
+              <family>MS Shell Dlg 2</family>
+              <pointsize>8</pointsize>
+             </font>
+            </property>
             <property name="contextMenuPolicy">
              <enum>Qt::ActionsContextMenu</enum>
             </property>
@@ -380,11 +435,24 @@ QListView::item:selected:!active{
           </item>
           <item>
            <widget class="GearListView" name="developerView">
+            <property name="font">
+             <font>
+              <family>MS Shell Dlg 2</family>
+              <pointsize>8</pointsize>
+             </font>
+            </property>
             <property name="contextMenuPolicy">
              <enum>Qt::ActionsContextMenu</enum>
             </property>
             <property name="statusTip">
              <string>List of the available photographic developers. Double-click to apply to the current photo.</string>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">/* keep selection even when focus is lost */
+QListView::item:selected:!active{
+	selection-color:						palette(highlighted-text);
+	selection-background-color:	palette(highlight);
+}</string>
             </property>
            </widget>
           </item>
@@ -397,6 +465,12 @@ QListView::item:selected:!active{
           </item>
           <item>
            <widget class="GearListView" name="authorView">
+            <property name="font">
+             <font>
+              <family>MS Shell Dlg 2</family>
+              <pointsize>8</pointsize>
+             </font>
+            </property>
             <property name="contextMenuPolicy">
              <enum>Qt::ActionsContextMenu</enum>
             </property>
@@ -459,7 +533,7 @@ QListView::item:selected:!active{
      <x>0</x>
      <y>0</y>
      <width>909</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -483,10 +557,29 @@ QListView::item:selected:!active{
     <property name="title">
      <string>&amp;Edit</string>
     </property>
+    <widget class="QMenu" name="menuEquipment">
+     <property name="title">
+      <string>&amp;Equipment...</string>
+     </property>
+     <addaction name="actionOpen_library"/>
+     <addaction name="actionNew_library"/>
+     <addaction name="separator"/>
+     <addaction name="actionEdit_gear"/>
+    </widget>
+    <widget class="QMenu" name="menu_Batch_operation">
+     <property name="title">
+      <string>&amp;Batch operations...</string>
+     </property>
+     <addaction name="actionAuto_fill_exposure"/>
+     <addaction name="action_Copy_metadata"/>
+    </widget>
     <addaction name="action_Undo"/>
     <addaction name="actionApply_gear"/>
+    <addaction name="action_Clear_tag_value"/>
     <addaction name="separator"/>
-    <addaction name="actionEdit_gear"/>
+    <addaction name="menuEquipment"/>
+    <addaction name="menu_Batch_operation"/>
+    <addaction name="separator"/>
     <addaction name="actionPreferences"/>
    </widget>
    <addaction name="menu_File"/>
@@ -505,6 +598,9 @@ QListView::item:selected:!active{
    <addaction name="separator"/>
    <addaction name="action_Undo"/>
    <addaction name="actionApply_gear"/>
+   <addaction name="separator"/>
+   <addaction name="actionAuto_fill_exposure"/>
+   <addaction name="action_Copy_metadata"/>
    <addaction name="separator"/>
    <addaction name="actionEdit_gear"/>
    <addaction name="actionPreferences"/>
@@ -633,27 +729,131 @@ QListView::item:selected:!active{
   </action>
   <action name="actionHelp">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
-    <string>Analog Exif help</string>
+    <string>&amp;Online help</string>
    </property>
    <property name="shortcut">
     <string>F1</string>
+   </property>
+  </action>
+  <action name="action_Clear_tag_value">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Clear tag value</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WidgetShortcut</enum>
+   </property>
+  </action>
+  <action name="actionOpen_library">
+   <property name="text">
+    <string>&amp;Open library...</string>
+   </property>
+  </action>
+  <action name="actionNew_library">
+   <property name="text">
+    <string>&amp;New library...</string>
+   </property>
+  </action>
+  <action name="actionAuto_fill_exposure">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="analogexif.qrc">
+     <normaloff>:/images/icons/film_edit.png</normaloff>:/images/icons/film_edit.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Auto-fill exposure</string>
+   </property>
+   <property name="toolTip">
+    <string>Auto-fill exposure number for the photos in the same roll</string>
+   </property>
+   <property name="statusTip">
+    <string>Auto-fill exposure number for the photos in the same roll</string>
+   </property>
+  </action>
+  <action name="action_Copy_metadata">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="analogexif.qrc">
+     <normaloff>:/images/icons/film_go.png</normaloff>:/images/icons/film_go.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Copy metadata</string>
+   </property>
+   <property name="toolTip">
+    <string>Copy metadata from another file</string>
+   </property>
+   <property name="statusTip">
+    <string>Copy metadata from another file</string>
+   </property>
+  </action>
+  <action name="actionOpen_external">
+   <property name="text">
+    <string>Open...</string>
+   </property>
+   <property name="toolTip">
+    <string>Open file in external program</string>
+   </property>
+   <property name="statusTip">
+    <string>Open file in external program</string>
+   </property>
+  </action>
+  <action name="actionRemove">
+   <property name="text">
+    <string>Remove</string>
+   </property>
+   <property name="toolTip">
+    <string>Remove selected file(s) and folder(s)</string>
+   </property>
+   <property name="statusTip">
+    <string>Remove selected file(s) and folder(s)</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WidgetShortcut</enum>
+   </property>
+  </action>
+  <action name="actionRename">
+   <property name="text">
+    <string>Rename</string>
+   </property>
+   <property name="toolTip">
+    <string>Rename current file or folder</string>
+   </property>
+   <property name="statusTip">
+    <string>Rename current file or folder</string>
+   </property>
+  </action>
+  <action name="action_Online_help">
+   <property name="text">
+    <string>&amp;Online help</string>
    </property>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>GearTreeView</class>
-   <extends>QTreeView</extends>
-   <header>geartreeview.h</header>
-  </customwidget>
-  <customwidget>
    <class>GearListView</class>
    <extends>QListView</extends>
    <header>gearlistview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>GearTreeView</class>
+   <extends>QTreeView</extends>
+   <header>geartreeview.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -674,7 +874,7 @@ QListView::item:selected:!active{
  <connections>
   <connection>
    <sender>actionExit</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>AnalogExifClass</receiver>
    <slot>close()</slot>
    <hints>
@@ -690,7 +890,7 @@ QListView::item:selected:!active{
   </connection>
   <connection>
    <sender>action_Undo</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>revertBtn</receiver>
    <slot>click()</slot>
    <hints>
@@ -706,7 +906,7 @@ QListView::item:selected:!active{
   </connection>
   <connection>
    <sender>action_Save</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>applyChangesBtn</receiver>
    <slot>click()</slot>
    <hints>

@@ -46,18 +46,31 @@
          </widget>
         </item>
         <item row="1" column="0" colspan="5">
-         <widget class="QTreeView" name="gearView">
+         <widget class="GearTreeView" name="gearView">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
             <verstretch>60</verstretch>
            </sizepolicy>
           </property>
+          <property name="font">
+           <font>
+            <family>MS Shell Dlg 2</family>
+            <pointsize>8</pointsize>
+           </font>
+          </property>
           <property name="contextMenuPolicy">
            <enum>Qt::CustomContextMenu</enum>
           </property>
           <property name="statusTip">
            <string>Select the equipment to edit</string>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">/* keep selection even when focus is lost */
+QTreeView::item:selected:!active{
+	selection-color:						palette(highlighted-text);
+	selection-background-color:	palette(highlight);
+}</string>
           </property>
           <property name="dragEnabled">
            <bool>true</bool>
@@ -112,11 +125,24 @@
             <verstretch>40</verstretch>
            </sizepolicy>
           </property>
+          <property name="font">
+           <font>
+            <family>MS Shell Dlg 2</family>
+            <pointsize>8</pointsize>
+           </font>
+          </property>
           <property name="contextMenuPolicy">
            <enum>Qt::CustomContextMenu</enum>
           </property>
           <property name="statusTip">
            <string>Select the film to edit</string>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">/* keep selection even when focus is lost */
+QListView::item:selected:!active{
+	selection-color:						palette(highlighted-text);
+	selection-background-color:	palette(highlight);
+}</string>
           </property>
           <property name="dragEnabled">
            <bool>true</bool>
@@ -141,11 +167,24 @@
         </item>
         <item row="5" column="0" colspan="5">
          <widget class="GearListView" name="developerView">
+          <property name="font">
+           <font>
+            <family>MS Shell Dlg 2</family>
+            <pointsize>8</pointsize>
+           </font>
+          </property>
           <property name="contextMenuPolicy">
            <enum>Qt::CustomContextMenu</enum>
           </property>
           <property name="statusTip">
            <string>Select the developer to edit</string>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">/* keep selection even when focus is lost */
+QListView::item:selected:!active{
+	selection-color:						palette(highlighted-text);
+	selection-background-color:	palette(highlight);
+}</string>
           </property>
          </widget>
         </item>
@@ -158,11 +197,24 @@
         </item>
         <item row="7" column="0" colspan="5">
          <widget class="GearListView" name="authorView">
+          <property name="font">
+           <font>
+            <family>MS Shell Dlg 2</family>
+            <pointsize>8</pointsize>
+           </font>
+          </property>
           <property name="contextMenuPolicy">
            <enum>Qt::CustomContextMenu</enum>
           </property>
           <property name="statusTip">
            <string>Select the author to edit</string>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">/* keep selection even when focus is lost */
+QListView::item:selected:!active{
+	selection-color:						palette(highlighted-text);
+	selection-background-color:	palette(highlight);
+}</string>
           </property>
          </widget>
         </item>
@@ -459,21 +511,36 @@
        </layout>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <item>
+       <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,0,0">
+        <property name="horizontalSpacing">
+         <number>0</number>
+        </property>
+        <property name="verticalSpacing">
+         <number>2</number>
+        </property>
+        <item row="0" column="0">
          <widget class="QLabel" name="label_3">
           <property name="text">
            <string>Properties</string>
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="QTableView" name="metadataView">
+        <item row="1" column="0" colspan="4">
+         <widget class="GearTableView" name="metadataView">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>MS Shell Dlg 2</family>
+            <pointsize>8</pointsize>
+           </font>
+          </property>
+          <property name="contextMenuPolicy">
+           <enum>Qt::CustomContextMenu</enum>
           </property>
           <property name="showDropIndicator" stdset="0">
            <bool>false</bool>
@@ -482,7 +549,7 @@
            <bool>true</bool>
           </property>
           <property name="selectionMode">
-           <enum>QAbstractItemView::SingleSelection</enum>
+           <enum>QAbstractItemView::ExtendedSelection</enum>
           </property>
           <property name="selectionBehavior">
            <enum>QAbstractItemView::SelectRows</enum>
@@ -550,6 +617,46 @@
           <attribute name="horizontalHeaderDefaultSectionSize">
            <number>150</number>
           </attribute>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QToolButton" name="delTagBtn">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="toolTip">
+           <string>Delete meta tag</string>
+          </property>
+          <property name="text">
+           <string>...</string>
+          </property>
+          <property name="icon">
+           <iconset resource="analogexif.qrc">
+            <normaloff>:/images/icons/delete.png</normaloff>:/images/icons/delete.png</iconset>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QToolButton" name="addTagBtn">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="toolTip">
+           <string>Add new meta tag</string>
+          </property>
+          <property name="text">
+           <string>...</string>
+          </property>
+          <property name="icon">
+           <iconset resource="analogexif.qrc">
+            <normaloff>:/images/icons/add.png</normaloff>:/images/icons/add.png</iconset>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
        </layout>
@@ -643,6 +750,22 @@
     <string>Add new author</string>
    </property>
   </action>
+  <action name="actionAdd_new_meta_tag">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Add new meta tag</string>
+   </property>
+  </action>
+  <action name="actionDelete_meta_tag">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Delete meta tag</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -651,15 +774,41 @@
    <extends>QListView</extends>
    <header>gearlistview.h</header>
   </customwidget>
+  <customwidget>
+   <class>GearTreeView</class>
+   <extends>QTreeView</extends>
+   <header>geartreeview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>GearTableView</class>
+   <extends>QTableView</extends>
+   <header>geartableview.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>gearView</tabstop>
   <tabstop>filmView</tabstop>
+  <tabstop>developerView</tabstop>
   <tabstop>authorView</tabstop>
   <tabstop>metadataView</tabstop>
   <tabstop>okButton</tabstop>
   <tabstop>cancelButton</tabstop>
   <tabstop>applyButton</tabstop>
+  <tabstop>addCameraBtn</tabstop>
+  <tabstop>addLensBtn</tabstop>
+  <tabstop>dupGearBtn</tabstop>
+  <tabstop>delGearBtn</tabstop>
+  <tabstop>addFilmBtn</tabstop>
+  <tabstop>dupFilmBtn</tabstop>
+  <tabstop>delFilmBtn</tabstop>
+  <tabstop>addDevBtn</tabstop>
+  <tabstop>dupDevBtn</tabstop>
+  <tabstop>delDevBtn</tabstop>
+  <tabstop>addAuthorBtn</tabstop>
+  <tabstop>dupAuthorBtn</tabstop>
+  <tabstop>delAuthorBtn</tabstop>
+  <tabstop>addTagBtn</tabstop>
+  <tabstop>delTagBtn</tabstop>
  </tabstops>
  <resources>
   <include location="analogexif.qrc"/>
@@ -721,6 +870,22 @@
    <hints>
     <hint type="sourcelabel">
      <x>166</x>
+     <y>43</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>delTagBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>actionDelete_meta_tag</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>697</x>
      <y>43</y>
     </hint>
     <hint type="destinationlabel">

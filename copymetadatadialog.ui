@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CopyMetadataDialogClass</class>
+ <widget class="QDialog" name="CopyMetadataDialogClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>348</width>
+    <height>565</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Copy metadata</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="analogexif.qrc">
+    <normaloff>:/images/icons/film_go.png</normaloff>:/images/icons/film_go.png</iconset>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Select metadata to copy:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="CheckedGearTreeView" name="metadataView">
+     <property name="font">
+      <font>
+       <family>MS Shell Dlg 2</family>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <property name="showDropIndicator" stdset="0">
+      <bool>false</bool>
+     </property>
+     <property name="dragDropMode">
+      <enum>QAbstractItemView::NoDragDrop</enum>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <property name="uniformRowHeights">
+      <bool>true</bool>
+     </property>
+     <attribute name="headerVisible">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="headerVisible">
+      <bool>false</bool>
+     </attribute>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="checkUncheckCBox">
+     <property name="text">
+      <string>Check/uncheck all metadata</string>
+     </property>
+     <property name="tristate">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="okBtn">
+       <property name="text">
+        <string>&amp;Ok</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancelBtn">
+       <property name="text">
+        <string>&amp;Cancel</string>
+       </property>
+       <property name="default">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>CheckedGearTreeView</class>
+   <extends>QTreeView</extends>
+   <header>checkedgeartreeview.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="analogexif.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>okBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>CopyMetadataDialogClass</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>287</x>
+     <y>531</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>210</x>
+     <y>276</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cancelBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>CopyMetadataDialogClass</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>367</x>
+     <y>531</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>210</x>
+     <y>276</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

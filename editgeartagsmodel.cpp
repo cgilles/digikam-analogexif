@@ -1,3 +1,22 @@
+/*
+	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+
+	This file is part of AnalogExif.
+
+    AnalogExif is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    AnalogExif is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AnalogExif.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "editgeartagsmodel.h"
 #include "exiftreemodel.h"
 #include "exifitem.h"
@@ -21,15 +40,10 @@ Qt::ItemFlags EditGearTagsModel::flags(const QModelIndex &index) const
 	return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
-// TODO: should be abstracted
 QVariant EditGearTagsModel::data(const QModelIndex &index, int role) const
 {
 	if (!index.isValid())
 		return QVariant();
-
-	// return only for Display, Edit and GetTypeRole role
-	if (role != Qt::DisplayRole && role != Qt::EditRole && role != ExifTreeModel::GetTypeRole)
-		return QSqlQueryModel::data(index, role);
 
 	if(!query().seek(index.row()))
 		return QVariant();
@@ -38,114 +52,26 @@ QVariant EditGearTagsModel::data(const QModelIndex &index, int role) const
 	if((index.column() == 0)  && (role == Qt::DisplayRole))
 		return query().value(0).toString();
 
-	int tagType = query().value(2).toInt();
-
-	// return tag type for GetTypeRole
-	if(role == ExifTreeModel::GetTypeRole)
-		return tagType;
-
-	QVariant itemValue = query().value(1);
-	if(itemValue == QVariant())
-		return QVariant();
-
+	ExifItem::TagType tagType = (ExifItem::TagType)query().value(2).toInt();
 	QString formatString = query().value(3).toString();
+	ExifItem::TagFlags tagFlags = (ExifItem::TagFlags)query().value(5).toInt();
 
-	// return value according to the tag type
-	switch(tagType)
+	// return tag id
+	if(role == GetTagIdRole)
+		return query().value(4);
+
+	if(index.column() == 1)
 	{
-	case ExifItem::TagString:
-		if(role == Qt::DisplayRole)
-			return formatString.arg(itemValue.toString());
-		else if(role == Qt::EditRole)
-			return itemValue;
-		break;
-	case ExifItem::TagInteger:
-	case ExifItem::TagUInteger:
-	case ExifItem::TagISO:
-		if(role == Qt::DisplayRole)
-			return formatString.arg(itemValue.toInt());
-		else if(role == Qt::EditRole)
-			return itemValue;
-		break;
-	case ExifItem::TagRational:
-	case ExifItem::TagURational:
-	case ExifItem::TagAperture:
-	case ExifItem::TagApertureAPEX:
-		{
-			QStringList ratioStr = itemValue.toString().split('/', QString::SkipEmptyParts);
+		QVariant itemValue = ExifItem::valueFromString(query().value(1).toString(), tagType, true, tagFlags);
 
-			if(ratioStr.count() < 2)
-				return QVariant();
-
-			bool ok = false;
-
-			int first = ratioStr.at(0).toInt(&ok);
-			if(!ok)
-				return QVariant();
-
-			int second = ratioStr.at(1).toInt(&ok);
-			if(!ok)
-				return QVariant();
-
-			double value = (double)first / (double)second;
-
-			// adjust APEX values
-			if(tagType == ExifItem::TagApertureAPEX)
-				value = exp(value*log(2.0)*0.5);
-
-			if(role == Qt::DisplayRole)
-				return formatString.arg(value, 0, 'f', 1);
-			else if(role == Qt::EditRole)
-				return value;
-			break;
-		}
-	case ExifItem::TagFraction:
-	case ExifItem::TagShutter:
-		{
-			QStringList ratioStr = itemValue.toString().split('/', QString::SkipEmptyParts);
-
-			if(ratioStr.count() < 2)
-				return QVariant();
-			
-			bool ok = false;
-
-			int first = ratioStr.at(0).toInt(&ok);
-			if(!ok)
-				return QVariant();
-
-			int second = ratioStr.at(1).toInt(&ok);
-			if(!ok)
-				return QVariant();
-
-			double value = (double)first / (double)second;
-
-			if(role == Qt::DisplayRole)
-			{
-				if((value >= 0.5) && (tagType == ExifItem::TagShutter))
-				{
-					return formatString.arg(value);
-				}
-				else
-				{
-					return formatString.arg(QString("%1/%2").arg(first).arg(second));
-				}
-			}
-			else if(role == Qt::EditRole)
-			{
-				QVariantList rational;
-				rational << first << second;
-
-				return rational;
-			}
-
-			break;
-		}
-	default:
-		break;
+		if ((index.column() == 1) && (
+			(role == Qt::EditRole) || (role == Qt::DisplayRole) || (role == ExifTreeModel::GetFlagsRole) ||
+			(role == ExifTreeModel::GetChoiceRole) || (role == ExifTreeModel::GetTypeRole)
+			))
+			return ExifTreeModel::getItemData(itemValue, formatString, tagFlags, tagType, role);
 	}
 
-	// just return item value
-	return itemValue;
+	return QSqlQueryModel::data(index, role);
 }
 
 // TODO: again, should be abstracted somewhere
@@ -157,91 +83,49 @@ bool EditGearTagsModel::setData(const QModelIndex &index, const QVariant &value,
 	if(!query().seek(index.row()))
 		return false;
 
-	QString updateValue;
-	int tagType = query().value(2).toInt();
+	ExifItem::TagType tagType = (ExifItem::TagType)query().value(2).toInt();
+	ExifItem::TagFlags tagFlags = (ExifItem::TagFlags)query().value(5).toInt();
 
 	// return value according to the tag type
-	switch(tagType)
+	QString updateValue;
+
+	QVariant oldValue = ExifItem::valueFromString(query().value(1).toString(), tagType, true, tagFlags);
+
+	// special consideration for APEX-adjusted values
+	if((value != QVariant()) && (tagType == ExifItem::TagApertureAPEX))
 	{
-	// strings and numbers are stored as text anyway
-	case ExifItem::TagString:
-	case ExifItem::TagInteger:
-	case ExifItem::TagUInteger:
-	case ExifItem::TagISO:
-		updateValue = value.toString();
-		break;
-	// convert to fraction string
-	case ExifItem::TagRational:
-	case ExifItem::TagURational:
-	case ExifItem::TagAperture:
-	case ExifItem::TagApertureAPEX:
-		{
-			double val = value.toDouble();
-
-			// correction for APEX values
-			if(tagType == ExifItem::TagApertureAPEX)
-			{
-				val = 2*log(val)/log(2.0);
-			}
-
-			int first, second;
-
-			if(query().value(1).toString() != "")
-			{
-				QStringList ratioStr = query().value(1).toString().split('/', QString::SkipEmptyParts);
-				
-				bool ok = false;
-
-				first = ratioStr.at(0).toInt(&ok);
-				if(!ok)
-					return false;
-
-				second = ratioStr.at(1).toInt(&ok);
-				if(!ok)
-					return false;
-
-				// special check whether value is changed for rational numbers
-				double oldValue = (double)first / (double)second;
-
-				// compare APEX values up to the second digit after the decimal point
-				if(tagType == ExifItem::TagApertureAPEX)
-				{
-					if((int)(oldValue*100) == (int)(val*100))
-						return false;
-				}
-				else
-				{
-					if(oldValue == val)
-						return false;
-				}
-			}
-
-			ExifUtils::doubleToFraction(val, &first, &second);
-
-			updateValue = QString("%1/%2").arg(first).arg(second);
-			break;
-		}
-	case ExifItem::TagFraction:
-	case ExifItem::TagShutter:
-		{
-			QVariantList rational = value.toList();
-
-			if(rational == QVariantList())
-				return false;
-
-			updateValue = QString("%1/%2").arg(rational.at(0).toInt()).arg(rational.at(1).toInt());
-			break;
-		}
-	default:
-		return false;
-		break;
+		QVariant apexValue = 2*log(value.toDouble())/log(2.0);
+		updateValue = ExifItem::valueToStringMulti(apexValue, tagType, tagFlags, oldValue);
+	}
+	else
+	{
+		updateValue = ExifItem::valueToStringMulti(value, tagType, tagFlags, oldValue);
 	}
 
-	emit dataChanged(index, index);
+	if(updateValue.isNull())
+		return false;
 
 	// update the record
-	QSqlQuery updQuery(QString("UPDATE UserGearProperties SET TagValue = '%1' WHERE id = %2").arg(updateValue).arg(query().value(4).toInt()));
+	QSqlQuery updQuery(QString("UPDATE UserGearProperties SET TagValue = '%1' WHERE id = %2").arg(updateValue.replace("'", "''")).arg(query().value(4).toInt()));
 
+	if(updQuery.lastError().isValid())
+		return false;
+
+	reload();
+	emit dataChanged(index, index);
+
+	return true;
+}
+
+void EditGearTagsModel::reload(int id)
+{
+	gearId = id;
+	setQuery(QString("SELECT a.TagText, b.TagValue, a.TagType, a.PrintFormat, b.id, a.Flags FROM MetaTags a, UserGearProperties b WHERE b.GearId = %1 AND a.id = b.TagId ORDER BY b.OrderBy").arg(id));
+}
+
+bool EditGearTagsModel::addNewTag(int tagId, int orderBy)
+{
+	QSqlQuery updQuery(QString("INSERT INTO UserGearProperties(GearId, TagId, OrderBy) VALUES(%1, %2, %3)").arg(gearId).arg(tagId).arg(orderBy));
 	if(updQuery.lastError().isValid())
 		return false;
 
@@ -250,8 +134,13 @@ bool EditGearTagsModel::setData(const QModelIndex &index, const QVariant &value,
 	return true;
 }
 
-void EditGearTagsModel::reload(int id)
+bool EditGearTagsModel::deleteTag(int tagId)
 {
-	gearId = id;
-	setQuery(QString("SELECT a.TagText, b.TagValue, a.TagType, a.PrintFormat, b.id FROM MetaTags a, UserGearProperties b WHERE b.GearId = %1 AND a.id = b.TagId ORDER BY b.OrderBy").arg(id));
+	QSqlQuery updQuery(QString("DELETE FROM UserGearProperties WHERE id = %1").arg(tagId));
+	if(updQuery.lastError().isValid())
+		return false;
+
+	reload();
+
+	return true;
 }

@@ -40,10 +40,14 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				InlineFunctionExpansion="2"
+				FavorSizeOrSpeed="1"
+				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories=".;&quot;$(QTDIR)\include&quot;;&quot;.\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\qtmain&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtGui&quot;;&quot;$(QTDIR)\include\QtSql&quot;;&quot;.\exiv2-0.19\msvc\include&quot;"
 				PreprocessorDefinitions="UNICODE,WIN32,QT_LARGEFILE_SUPPORT,QT_THREAD_SUPPORT,QT_NO_DEBUG,NDEBUG,QT_CORE_LIB,QT_GUI_LIB,QT_SQL_LIB"
 				RuntimeLibrary="0"
 				TreatWChar_tAsBuiltInType="false"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="0"
 			/>
 			<Tool
@@ -61,10 +65,14 @@
 				AdditionalDependencies="Winmm.lib ws2_32.lib imm32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib qtmain.lib QtCore.lib QtGui.lib QtSql.lib exiv2.lib libexpatMT.lib zlib.lib xmpsdk.lib qsqlite.lib qjpeg.lib"
 				ShowProgress="0"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
+				LinkIncremental="0"
 				AdditionalLibraryDirectories="&quot;$(QTDIR)\plugins\sqldrivers&quot;;&quot;$(QTDIR)\plugins\imageformats&quot;;&quot;$(QTDIR)\lib&quot;;&quot;.\exiv2-0.19\msvc\bin\$(ConfigurationName)&quot;;&quot;.\exiv2-0.19\msvc\xmpsdk\$(ConfigurationName)&quot;;&quot;.\expat-2.0.1\win32\bin\$(ConfigurationName)&quot;;&quot;.\zlib-1.2.3\projects\visualc6\Win32_LIB_$(ConfigurationName)&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="false"
 				SubSystem="2"
+				OptimizeReferences="2"
+				LinkTimeCodeGeneration="1"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -168,11 +176,23 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\aboutdialog.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\analogexif.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\analogexifoptions.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\autofillexpnum.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\copymetadatadialog.cpp"
 				>
 			</File>
 			<File
@@ -189,6 +209,10 @@
 			</File>
 			<File
 				RelativePath=".\editgeartreemodel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\edittagselectvalues.cpp"
 				>
 			</File>
 			<File
@@ -220,11 +244,43 @@
 				>
 			</File>
 			<File
+				RelativePath=".\metadatatagcompleter.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\multitagvaluesdialog.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\optgeartemplatemodel.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\SQLite\sqlite3.c"
+				RelativePath=".\progressdialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\tagnameitemdelegate.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\tagselectvalsitemdelegate.cpp"
 				>
 			</File>
 			<File
@@ -237,6 +293,32 @@
 			Filter="h"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\aboutdialog.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\qtmain\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;.\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;.\exiv2-0.19\msvc\include\.&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\qtmain\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;.\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;.\exiv2-0.19\msvc\include\.&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+			</File>
 			<File
 				RelativePath=".\analogexif.h"
 				>
@@ -265,6 +347,84 @@
 			</File>
 			<File
 				RelativePath=".\analogexifoptions.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\qtmain\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;.\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;.\exiv2-0.19\msvc\include\.&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\qtmain\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;.\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;.\exiv2-0.19\msvc\include\.&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\autofillexpnum.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\qtmain\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;.\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;.\exiv2-0.19\msvc\include\.&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\qtmain\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;.\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;.\exiv2-0.19\msvc\include\.&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\checkedgeartreeview.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\qtmain\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;.\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;.\exiv2-0.19\msvc\include\.&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\qtmain\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;.\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;.\exiv2-0.19\msvc\include\.&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\copymetadatadialog.h"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -394,6 +554,32 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\edittagselectvalues.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\qtmain\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;.\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;.\exiv2-0.19\msvc\include\.&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\qtmain\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;.\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;.\exiv2-0.19\msvc\include\.&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\emptyspinbox.h"
 				>
 				<FileConfiguration
@@ -422,6 +608,28 @@
 			<File
 				RelativePath=".\exifitem.h"
 				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description=""
+						CommandLine=""
+						AdditionalDependencies=""
+						Outputs=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description=""
+						CommandLine=""
+						AdditionalDependencies=""
+						Outputs=""
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\exifitemdelegate.h"
@@ -532,6 +740,32 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\geartableview.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\qtmain\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;.\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;.\exiv2-0.19\msvc\include\.&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\qtmain\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;.\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;.\exiv2-0.19\msvc\include\.&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\geartreemodel.h"
 				>
 				<FileConfiguration
@@ -584,6 +818,60 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\metadatatagcompleter.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\qtmain\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;.\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;.\exiv2-0.19\msvc\include\.&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\qtmain\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;.\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;.\exiv2-0.19\msvc\include\.&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\multitagvaluesdialog.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\qtmain\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;.\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;.\exiv2-0.19\msvc\include\.&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\qtmain\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;.\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;.\exiv2-0.19\msvc\include\.&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\optgeartemplatemodel.h"
 				>
 				<FileConfiguration
@@ -610,8 +898,116 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\SQLite\sqlite3.h"
+				RelativePath=".\optgeartemplateview.h"
 				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\qtmain\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;.\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;.\exiv2-0.19\msvc\include\.&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\qtmain\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;.\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;.\exiv2-0.19\msvc\include\.&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\progressdialog.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\qtmain\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;.\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;.\exiv2-0.19\msvc\include\.&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\qtmain\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;.\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;.\exiv2-0.19\msvc\include\.&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\resource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\resource1.h"
+				>
+			</File>
+			<File
+				RelativePath=".\tagnameitemdelegate.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\qtmain\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;.\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;.\exiv2-0.19\msvc\include\.&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\qtmain\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;.\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;.\exiv2-0.19\msvc\include\.&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\tagselectvalsitemdelegate.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\qtmain\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;.\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;.\exiv2-0.19\msvc\include\.&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\qtmain\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;.\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;.\exiv2-0.19\msvc\include\.&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\tagtypeitemdelegate.h"
@@ -645,6 +1041,32 @@
 			Filter="ui"
 			UniqueIdentifier="{99349809-55BA-4b9d-BF79-8FDBB0286EB3}"
 			>
+			<File
+				RelativePath=".\aboutdialog.ui"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
+						Outputs="&quot;.\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
+						Outputs="&quot;.\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+			</File>
 			<File
 				RelativePath=".\analogexif.ui"
 				>
@@ -698,7 +1120,137 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\autofillexpnum.ui"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
+						Outputs="&quot;.\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
+						Outputs="&quot;.\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\copymetadatadialog.ui"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
+						Outputs="&quot;.\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
+						Outputs="&quot;.\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\editgear.ui"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
+						Outputs="&quot;.\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
+						Outputs="&quot;.\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\edittagselectvalues.ui"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
+						Outputs="&quot;.\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
+						Outputs="&quot;.\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\multitagvaluesdialog.ui"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
+						Outputs="&quot;.\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
+						Outputs="&quot;.\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\progressdialog.ui"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -784,6 +1336,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\ui_aboutdialog.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ui_analogexif.h"
 				>
 			</File>
@@ -792,7 +1348,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ui_autofillexpnum.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ui_copymetadatadialog.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ui_editgear.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ui_edittagselectvalues.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ui_multitagvaluesdialog.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ui_progressdialog.h"
 				>
 			</File>
 			<Filter
@@ -800,6 +1376,18 @@
 				Filter="cpp;moc"
 				SourceControlFiles="false"
 				>
+				<File
+					RelativePath=".\Release\moc_aboutdialog.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
 				<File
 					RelativePath=".\Release\moc_analogexif.cpp"
 					>
@@ -814,6 +1402,42 @@
 				</File>
 				<File
 					RelativePath=".\Release\moc_analogexifoptions.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Release\moc_autofillexpnum.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Release\moc_checkedgeartreeview.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Release\moc_copymetadatadialog.cpp"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -862,6 +1486,18 @@
 				</File>
 				<File
 					RelativePath=".\Release\moc_editgeartreemodel.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Release\moc_edittagselectvalues.cpp"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -933,6 +1569,18 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\Release\moc_geartableview.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath=".\Release\moc_geartreemodel.cpp"
 					>
 					<FileConfiguration
@@ -957,7 +1605,87 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\Release\moc_metadatatagcompleter.cpp"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Release\moc_multitagvaluesdialog.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath=".\Release\moc_optgeartemplatemodel.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Release\moc_optgeartemplateview.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Release\moc_progressdialog.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Release\moc_tagnameitemdelegate.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Release\moc_tagselectvalsitemdelegate.cpp"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -987,6 +1715,18 @@
 				SourceControlFiles="false"
 				>
 				<File
+					RelativePath=".\Debug\moc_aboutdialog.cpp"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath=".\Debug\moc_analogexif.cpp"
 					>
 					<FileConfiguration
@@ -1000,6 +1740,42 @@
 				</File>
 				<File
 					RelativePath=".\Debug\moc_analogexifoptions.cpp"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Debug\moc_autofillexpnum.cpp"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Debug\moc_checkedgeartreeview.cpp"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Debug\moc_copymetadatadialog.cpp"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
@@ -1048,6 +1824,18 @@
 				</File>
 				<File
 					RelativePath=".\Debug\moc_editgeartreemodel.cpp"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Debug\moc_edittagselectvalues.cpp"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
@@ -1119,6 +1907,18 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\Debug\moc_geartableview.cpp"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath=".\Debug\moc_geartreemodel.cpp"
 					>
 					<FileConfiguration
@@ -1143,7 +1943,87 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\Debug\moc_metadatatagcompleter.cpp"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Debug\moc_multitagvaluesdialog.cpp"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath=".\Debug\moc_optgeartemplatemodel.cpp"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Debug\moc_optgeartemplateview.cpp"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Debug\moc_progressdialog.cpp"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Debug\moc_tagnameitemdelegate.cpp"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Debug\moc_tagselectvalsitemdelegate.cpp"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
@@ -1188,6 +2068,14 @@
 			RelativePath=".\analogexif.sql"
 			>
 		</File>
+		<File
+			RelativePath=".\not-supported.txt"
+			>
+		</File>
+		<File
+			RelativePath=".\TODO"
+			>
+		</File>
 	</Files>
 	<Globals>
 		<Global
@@ -1204,7 +2092,7 @@
 		/>
 		<Global
 			Name="QtVersion Win32"
-			Value="4.6.2-static"
+			Value="4.6.3"
 		/>
 		<Global
 			Name="RccDir"

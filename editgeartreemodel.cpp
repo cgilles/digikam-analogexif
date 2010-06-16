@@ -1,3 +1,22 @@
+/*
+	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+
+	This file is part of AnalogExif.
+
+    AnalogExif is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    AnalogExif is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AnalogExif.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "editgeartreemodel.h"
 #include <QSqlQuery>
 #include <QSqlError>
@@ -48,7 +67,7 @@ QModelIndex EditGearTreeModel::reload(int id)
 		{
 			querySize++;
 
-			child = new QStandardItem(subquery.value(0).toString() + " (" + subquery.value(3).toString() + ")");
+			child = new QStandardItem(subquery.value(0).toString()/* + " (" + subquery.value(3).toString() + ")"*/);
 
 			if((id != -1) && (subquery.value(1).toInt() == id))
 				resultIndex = child;
@@ -298,14 +317,17 @@ bool EditGearTreeModel::setData(const QModelIndex& index, const QVariant& value,
 		{
 			int gearId = index.data(GetGearIdRole).toInt();
 
+			if(index.data(Qt::EditRole) == value)
+				return false;
+
 			QSqlQuery query(QString("UPDATE UserGearItems SET GearName = '%1' WHERE id = %2").arg(value.toString()).arg(gearId));
 
 			if(query.lastError().isValid())
 				return false;
 
-			emit dataChanged(index, index);
-
 			reload();
+
+			emit layoutChanged();
 
 			return true;
 		}

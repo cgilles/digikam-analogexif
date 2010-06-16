@@ -1,8 +1,29 @@
+/*
+	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+
+	This file is part of AnalogExif.
+
+    AnalogExif is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    AnalogExif is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AnalogExif.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "editgear.h"
 
 #include <QSqlQuery>
+#include <QSqlError>
 #include <QMenu>
 #include <QMessageBox>
+#include <QDir>
 
 EditGear::EditGear(QWidget *parent)
 	: QDialog(parent), dirty(false)
@@ -20,6 +41,7 @@ EditGear::EditGear(QWidget *parent)
 	connect(gearList, SIGNAL(layoutChanged()), this, SLOT(gearList_layoutChanged()));
 	connect(gearList, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), this, SLOT(gearList_dataChanged(const QModelIndex &, const QModelIndex &)));
 	connect(ui.gearView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(gearView_clicked(const QModelIndex &)));
+	connect(ui.gearView, SIGNAL(focused()), this, SLOT(gear_focused()));
 	connect(ui.gearView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(gear_selectionChanged(const QItemSelection&, const QItemSelection&)));
 	ui.gearView->expandAll();
 
@@ -29,7 +51,8 @@ EditGear::EditGear(QWidget *parent)
 	connect(filmList, SIGNAL(layoutChanged()), this, SLOT(gearList_layoutChanged()));
 	connect(filmList, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), this, SLOT(gearList_dataChanged(const QModelIndex &, const QModelIndex &)));
 	connect(ui.filmView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(gearView_clicked(const QModelIndex &)));
-	connect(ui.filmView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(gear_selectionChanged(const QItemSelection&, const QItemSelection&)));
+	connect(ui.filmView, SIGNAL(focused()), this, SLOT(film_focused()));
+	connect(ui.filmView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(film_selectionChanged(const QItemSelection&, const QItemSelection&)));
 
 	developerList = new EditGearTreeModel(this, 3, false, tr("No developers defined"));
 	developerList->reload();
@@ -37,7 +60,8 @@ EditGear::EditGear(QWidget *parent)
 	connect(developerList, SIGNAL(layoutChanged()), this, SLOT(gearList_layoutChanged()));
 	connect(developerList, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), this, SLOT(gearList_dataChanged(const QModelIndex &, const QModelIndex &)));
 	connect(ui.developerView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(gearView_clicked(const QModelIndex &)));
-	connect(ui.developerView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(gear_selectionChanged(const QItemSelection&, const QItemSelection&)));
+	connect(ui.developerView, SIGNAL(focused()), this, SLOT(developer_focused()));
+	connect(ui.developerView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(developer_selectionChanged(const QItemSelection&, const QItemSelection&)));
 
 	authorList = new EditGearTreeModel(this, 4, false, tr("No authors defined"));
 	authorList->reload();
@@ -45,7 +69,8 @@ EditGear::EditGear(QWidget *parent)
 	connect(authorList, SIGNAL(layoutChanged()), this, SLOT(gearList_layoutChanged()));
 	connect(authorList, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), this, SLOT(gearList_dataChanged(const QModelIndex &, const QModelIndex &)));
 	connect(ui.authorView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(gearView_clicked(const QModelIndex &)));
-	connect(ui.authorView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(gear_selectionChanged(const QItemSelection&, const QItemSelection&)));
+	connect(ui.authorView, SIGNAL(focused()), this, SLOT(author_focused()));
+	connect(ui.authorView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(author_selectionChanged(const QItemSelection&, const QItemSelection&)));
 	
 	QAction* separator = new QAction(this);
 	separator->setSeparator(true);
@@ -58,17 +83,33 @@ EditGear::EditGear(QWidget *parent)
 	metadataList = new EditGearTagsModel(this);
 	ui.metadataView->setModel(metadataList);
 	connect(metadataList, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(metadataList_dataChanged(const QModelIndex&, const QModelIndex&)));
+	connect(metadataList, SIGNAL(cleared()), this, SLOT(metadataList_cleared()));
+	connect(ui.metadataView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(metadata_selectionChanged(const QItemSelection&, const QItemSelection&)));
 
 	exifItemDelegate = new ExifItemDelegate(this);
 	ui.metadataView->setItemDelegateForColumn(1, exifItemDelegate);
+
+	metaTagsMenu = new QMenu(this);
+	fillMetaTagsMenu();
+
+	// set the database name in the title
+	QString dbName = QDir::fromNativeSeparators(QSqlDatabase::database().databaseName());
+	dbName = dbName.right(dbName.length() - dbName.lastIndexOf(QChar('/')) - 1);
+
+	setWindowTitle(tr("Edit equipment (") + dbName + ")[*]");
+
+	setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
 }
 
 EditGear::~EditGear()
 {
 	delete gearList;
 	delete filmList;
+	delete authorList;
+	delete developerList;
 	delete exifItemDelegate;
 	delete metadataList;
+	delete metaTagsMenu;
 }
 
 void EditGear::on_cancelButton_clicked()
@@ -449,11 +490,46 @@ void EditGear::on_actionDelete_triggered(bool checked)
 void EditGear::gearView_clicked(const QModelIndex& index)
 {
 	metadataList->reload(index.data(EditGearTreeModel::GetGearIdRole).toInt());
+	ui.addTagBtn->setEnabled(true);
+	metaTagsMenu->setEnabled(true);
+
+	// clear selection from other views
+	// could be done with pointer comparison, but non-illustrative
+	EditGearTreeModel* treemodel = static_cast<EditGearTreeModel*>((QAbstractItemModel*)index.model());
+	if(treemodel == NULL)
+		return;
+
+	int gearType = treemodel->getGearType();
+
+	switch(gearType)
+	{
+	case 0:
+		ui.filmView->clearSelection();
+		ui.developerView->clearSelection();
+		ui.authorView->clearSelection();
+		break;
+	case 2:
+		ui.gearView->clearSelection();
+		ui.developerView->clearSelection();
+		ui.authorView->clearSelection();
+		break;
+	case 3:
+		ui.gearView->clearSelection();
+		ui.filmView->clearSelection();
+		ui.authorView->clearSelection();
+		break;
+	case 4:
+		ui.gearView->clearSelection();
+		ui.filmView->clearSelection();
+		ui.developerView->clearSelection();
+		break;
+	}
 }
 
 void EditGear::metadataList_dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
 {
 	setDirty();
+	ui.metadataView->setFocus();
 }
 
 void EditGear::gearList_dataChanged(const QModelIndex &, const QModelIndex &)
@@ -463,18 +539,87 @@ void EditGear::gearList_dataChanged(const QModelIndex &, const QModelIndex &)
 
 void EditGear::gear_selectionChanged(const QItemSelection&, const QItemSelection&)
 {
-	ui.delGearBtn->setEnabled(ui.gearView->selectionModel()->hasSelection());
-	ui.addLensBtn->setEnabled(ui.gearView->selectionModel()->hasSelection());
-	ui.dupGearBtn->setEnabled(ui.gearView->selectionModel()->hasSelection());
+	bool hasSelection = ui.gearView->selectionModel()->hasSelection();
+	ui.delGearBtn->setEnabled(hasSelection);
+	ui.addLensBtn->setEnabled(hasSelection);
+	ui.dupGearBtn->setEnabled(hasSelection);
 
-	ui.delFilmBtn->setEnabled(ui.filmView->selectionModel()->hasSelection());
-	ui.dupFilmBtn->setEnabled(ui.filmView->selectionModel()->hasSelection());
+	if(!ui.gearView->selectionModel()->hasSelection() && !ui.filmView->selectionModel()->hasSelection() && !ui.developerView->selectionModel()->hasSelection()
+		&& !ui.authorView->selectionModel()->hasSelection())
+	{
+		metadataList->clear();
+	}
+}
 
-	ui.delDevBtn->setEnabled(ui.developerView->selectionModel()->hasSelection());
-	ui.dupDevBtn->setEnabled(ui.developerView->selectionModel()->hasSelection());
+void EditGear::gear_focused()
+{
+	// clear selection from other categories
+	ui.filmView->clearSelection();
+	ui.developerView->clearSelection();
+	ui.authorView->clearSelection();
+}
 
-	ui.delAuthorBtn->setEnabled(ui.authorView->selectionModel()->hasSelection());
-	ui.dupAuthorBtn->setEnabled(ui.authorView->selectionModel()->hasSelection());
+void EditGear::film_selectionChanged(const QItemSelection&, const QItemSelection&)
+{
+	bool hasSelection = ui.filmView->selectionModel()->hasSelection();
+	ui.delFilmBtn->setEnabled(hasSelection);
+	ui.dupFilmBtn->setEnabled(hasSelection);
+
+	if(!ui.gearView->selectionModel()->hasSelection() && !ui.filmView->selectionModel()->hasSelection() && !ui.developerView->selectionModel()->hasSelection()
+		&& !ui.authorView->selectionModel()->hasSelection())
+	{
+		metadataList->clear();
+	}
+}
+
+void EditGear::film_focused()
+{
+	// clear selection from other categories
+	ui.gearView->clearSelection();
+	ui.developerView->clearSelection();
+	ui.authorView->clearSelection();
+}
+
+void EditGear::developer_selectionChanged(const QItemSelection&, const QItemSelection&)
+{
+	bool hasSelection = ui.developerView->selectionModel()->hasSelection();
+	ui.delDevBtn->setEnabled(hasSelection);
+	ui.dupDevBtn->setEnabled(hasSelection);
+
+	if(!ui.gearView->selectionModel()->hasSelection() && !ui.filmView->selectionModel()->hasSelection() && !ui.developerView->selectionModel()->hasSelection()
+		&& !ui.authorView->selectionModel()->hasSelection())
+	{
+		metadataList->clear();
+	}
+}
+
+void EditGear::developer_focused()
+{
+	// clear selection from other categories
+	ui.gearView->clearSelection();
+	ui.filmView->clearSelection();
+	ui.authorView->clearSelection();
+}
+
+void EditGear::author_selectionChanged(const QItemSelection&, const QItemSelection&)
+{
+	bool hasSelection = ui.authorView->selectionModel()->hasSelection();
+	ui.delAuthorBtn->setEnabled(hasSelection);
+	ui.dupAuthorBtn->setEnabled(hasSelection);
+
+	if(!ui.gearView->selectionModel()->hasSelection() && !ui.filmView->selectionModel()->hasSelection() && !ui.developerView->selectionModel()->hasSelection()
+		&& !ui.authorView->selectionModel()->hasSelection())
+	{
+		metadataList->clear();
+	}
+}
+
+void EditGear::author_focused()
+{
+	// clear selection from other categories
+	ui.gearView->clearSelection();
+	ui.filmView->clearSelection();
+	ui.developerView->clearSelection();
 }
 
 void EditGear::on_delGearBtn_clicked()
@@ -563,5 +708,118 @@ void EditGear::on_dupAuthorBtn_clicked()
 	{
 		contextIndex = ui.authorView->selectionModel()->currentIndex();
 		ui.actionDuplicate->trigger();
+	}
+}
+
+void EditGear::fillMetaTagsMenu()
+{
+	metaTagsMenu->setTitle(tr("&Add meta tag..."));
+
+	QMenu* menu = metaTagsMenu->addMenu(tr("Camera body"));
+	addMetaTags(menu, 0);
+	menu = metaTagsMenu->addMenu(tr("Camera lens"));
+	addMetaTags(menu, 1);
+	menu = metaTagsMenu->addMenu(tr("Film"));
+	addMetaTags(menu, 2);
+	menu = metaTagsMenu->addMenu(tr("Developer"));
+	addMetaTags(menu, 3);
+	menu = metaTagsMenu->addMenu(tr("Author"));
+	addMetaTags(menu, 4);
+	menu = metaTagsMenu->addMenu(tr("Frame"));
+	addMetaTags(menu, 5);
+
+	metaTagsMenu->setEnabled(false);
+}
+
+void EditGear::addMetaTags(QMenu* menu, int category)
+{
+	QSqlQuery query(QString("SELECT b.TagText, b.id FROM GearTemplate a, MetaTags b WHERE a.GearType = %1 AND b.id = a.TagId ORDER BY a.OrderBy").arg(category));
+
+	if(query.lastError().isValid())
+		return;
+
+	while(query.next())
+	{
+		QAction* action = new QAction(query.value(0).toString(), menu);
+		// store tag id
+		action->setData(query.value(1));
+
+		menu->addAction(action);
+	}
+}
+
+void EditGear::on_addTagBtn_clicked()
+{
+	QAction* action = metaTagsMenu->exec(QCursor::pos());
+
+	// if tag selected
+	if(action)
+	{
+		// append new tag to the end of the list
+		if(metadataList->addNewTag(action->data().toInt(), metadataList->rowCount()))
+		{
+			setDirty();
+			// select last row (new)
+			ui.metadataView->selectRow(metadataList->rowCount() - 1);
+		}
+	}
+}
+
+void EditGear::metadata_selectionChanged(const QItemSelection&, const QItemSelection&)
+{
+	bool enabled = ui.metadataView->selectionModel()->hasSelection();
+	ui.delTagBtn->setEnabled(enabled);
+	ui.actionDelete_meta_tag->setEnabled(enabled);
+}
+
+void EditGear::metadataList_cleared()
+{
+	ui.metadataView->reset();
+	ui.delTagBtn->setEnabled(false);
+	ui.addTagBtn->setEnabled(false);
+	ui.actionDelete_meta_tag->setEnabled(false);
+	metaTagsMenu->setEnabled(false);
+}
+
+void EditGear::on_actionDelete_meta_tag_triggered(bool checked)
+{
+	QModelIndexList idxList = ui.metadataView->selectionModel()->selectedIndexes();
+	if(idxList.count() == 0)
+		return;
+
+	foreach(QModelIndex idx, idxList)
+	{
+		// get tag id
+		QVariant tagId = idx.data(EditGearTagsModel::GetTagIdRole);
+		if(tagId != QVariant())
+		{
+			// delete and set dirty on success
+			if(!metadataList->deleteTag(tagId.toInt()))
+				return;
+		}
+	}
+
+	setDirty();
+}
+
+void EditGear::on_metadataView_customContextMenuRequested(const QPoint& pos)
+{
+	QMenu menu(this);
+	menu.addMenu(metaTagsMenu);
+
+	menu.addAction(ui.actionDelete_meta_tag);
+
+	QAction* action = menu.exec(ui.metadataView->mapToGlobal(pos));
+
+	// if tag selected
+	if(action)
+	{
+		// append new tag to the end of the list
+		if(metadataList->addNewTag(action->data().toInt(), metadataList->rowCount()))
+		{
+			setDirty();
+			// select last row (new)
+			ui.metadataView->selectRow(metadataList->rowCount() - 1);
+		}
 	}
 }
