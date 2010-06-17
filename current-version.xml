@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Releases>
+  <Release>
+    <OS>Win32</OS>
+    <Version>0.0alpha</Version>
+    <Date>00:00 17.06.2010</Date>
+    <Notes>
+      This is plain-text release notes for the new release.
+    </Notes>
+  </Release>
+  <Release>
+    <OS>Win64</OS>
+    <Version>0.0alpha</Version>
+    <Date>00:00 17.06.2010</Date>
+    <Notes>
+      This is plain-text release notes for the new x64 release.
+    </Notes>
+  </Release>
+</Releases>
