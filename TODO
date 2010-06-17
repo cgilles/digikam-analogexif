@@ -7,7 +7,6 @@ FUTURE FEATURES
 * APEX-adjustment as tag flag
 * mark dirty fields in bold when editing gear template
 * native Windows file explorer (could be impossible in Qt?)
-* check for new version online
 * completer/separate dialog and help on exif field names when editing gear templates
 * support XMP structures and LangAlt
 * show progress during backup
@@ -22,11 +21,10 @@ FUTURE FEATURES
 DEVELOPMENT
 * Mac support
 * Fill-in the metatags database
-* Register all used namespaces on startup
+* check for new version online
 
 TESTS
 * verify against metadata corruption
-* verify against multi-line TagText tags in the equipment
 * test TIFF support
 
 BUGS
@@ -40,7 +38,7 @@ BUGS
 * when copying metadata and destination is one file, copied tags flicker as "dirty" for a moment
 * when auto-filling exposure number and asking for backup - metadata of the changed file may be reflected in the metadata view
 * handle all unsuccessfull returns
-* no revert after backup was cancelled
+* fix startup sort errors
 
 LIMITATIONS
 * Unicode paths only in Windows
