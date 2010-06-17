@@ -34,6 +34,7 @@
 #include <QTime>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QSysInfo>
 
 AnalogExif::AnalogExif(QWidget *parent, Qt::WFlags flags)
 	: QMainWindow(parent, flags)
@@ -113,6 +114,20 @@ AnalogExif::AnalogExif(QWidget *parent, Qt::WFlags flags)
 
 	contextMenus << ui.actionAuto_fill_exposure << ui.action_Copy_metadata << separator << ui.actionOpen_external << ui.actionRename << separator << ui.actionRemove;
 	ui.fileView->addActions(contextMenus);
+
+	verChecker = new OnlineVersionChecker(this);
+	connect(verChecker, SIGNAL(newVersionAvailable(QString, QDateTime, QString)), this, SLOT(newVersionAvailable(QString, QDateTime, QString)));
+
+#ifdef Q_WS_WIN
+	if(QSysInfo::windowsVersion() >= QSysInfo::WV_VISTA)
+	{
+		// For Vista/W7 style - disable alternating row colors on equipment views for better visibility
+		ui.gearView->setAlternatingRowColors(false);
+		ui.filmView->setAlternatingRowColors(false);
+		ui.developerView->setAlternatingRowColors(false);
+		ui.authorView->setAlternatingRowColors(false);
+	}
+#endif
 }
 
 AnalogExif::~AnalogExif()
@@ -129,6 +144,7 @@ AnalogExif::~AnalogExif()
 		delete developersList;
 	delete dirSorter;
 	delete fileViewModel;
+	delete verChecker;
 	// delete filePreviewPixmap;
 }
 
@@ -264,6 +280,9 @@ bool AnalogExif::initialize()
 		ui.fileView->setExpanded(lastFolder, true);
 	}
 
+	// check for the new version
+	verChecker->checkForNewVersion();
+
 	return true;
 }
 
@@ -292,7 +311,8 @@ void AnalogExif::fileView_selectionChanged(const QItemSelection& selected, const
 			}
 
 			if(result == QMessageBox::Save)
-				save();
+				if(!save())
+					return;
 
 			dirty = false;
 		}
@@ -801,7 +821,7 @@ void AnalogExif::selectFilm(const QModelIndex& index)
 		exifTreeModel->setValues(filmData.toList());
 	}
 
-	// filmsList->setSelectedIndex(index);
+	filmsList->setSelectedIndex(index);
 }
 
 void AnalogExif::selectGear(const QModelIndex& index)
@@ -815,7 +835,7 @@ void AnalogExif::selectGear(const QModelIndex& index)
 		exifTreeModel->setValues(gearData.toList());
 	}
 
-	// gearList->setSelectedIndex(index);
+	gearList->setSelectedIndex(index);
 }
 
 void AnalogExif::selectAuthor(const QModelIndex& index)
@@ -829,7 +849,7 @@ void AnalogExif::selectAuthor(const QModelIndex& index)
 		exifTreeModel->setValues(authorData.toList());
 	}
 
-	// authorsList->setSelectedIndex(index);
+	authorsList->setSelectedIndex(index);
 }
 
 void AnalogExif::selectDeveloper(const QModelIndex& index)
@@ -843,7 +863,7 @@ void AnalogExif::selectDeveloper(const QModelIndex& index)
 		exifTreeModel->setValues(devData.toList());
 	}
 
-	// developersList->setSelectedIndex(index);
+	developersList->setSelectedIndex(index);
 }
 
 // film double clicked - apply
@@ -1561,4 +1581,9 @@ void AnalogExif::on_action_About_triggered(bool checked)
 {
 	AboutDialog a(this);
 	a.exec();
+}
+
+void AnalogExif::newVersionAvailable(QString newTag, QDateTime newTime, QString newSummary)
+{
+	QMessageBox::information(this, tr("New version available"), tr("New version of AnalogExif is available - %1 (%2).\n\n%3").arg(newTag).arg(newTime.toString(Qt::DefaultLocaleLongDate)).arg(newSummary));
 }

@@ -36,6 +36,7 @@
 #include "exifitemdelegate.h"
 #include "gearlistmodel.h"
 #include "geartreemodel.h"
+#include "onlineversionchecker.h"
 
 class AnalogExif : public QMainWindow
 {
@@ -138,6 +139,8 @@ private:
 	QStringList scanSubfolders(QModelIndexList selIdx, bool includeDirs = false);
 	int filesFound;
 
+	OnlineVersionChecker* verChecker;
+
 signals:
 	void updatePreview();
 
@@ -201,6 +204,9 @@ private slots:
 
 	// on update preview
 	void previewUpdate();
+
+	// new version available
+	void newVersionAvailable(QString newTag, QDateTime newTime, QString newSummary);
 };
 
 #endif // ANALOGEXIF_H
