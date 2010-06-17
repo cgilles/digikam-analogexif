@@ -454,6 +454,9 @@ QListView::item:selected:!active{
 	selection-background-color:	palette(highlight);
 }</string>
             </property>
+            <property name="alternatingRowColors">
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item>
@@ -483,6 +486,9 @@ QListView::item:selected:!active{
 	selection-color:						palette(highlighted-text);
 	selection-background-color:	palette(highlight);
 }</string>
+            </property>
+            <property name="alternatingRowColors">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
