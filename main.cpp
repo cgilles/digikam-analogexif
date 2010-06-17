@@ -20,7 +20,6 @@
 #include "analogexif.h"
 #include <QtGui/QApplication>
 #include <QtPlugin>
-#include <QSysInfo>
 
 Q_IMPORT_PLUGIN(qjpeg)
 Q_IMPORT_PLUGIN(qsqlite)
