@@ -83,10 +83,13 @@ class OnlineVersionChecker : public QObject
 public:
 	OnlineVersionChecker(QObject *parent);
 
-	void checkForNewVersion();
+	void checkForNewVersion(bool force = false);
+	void cancelCheck();
+	static void openDownloadPage();
 
 private:
 	static const QUrl versionCheckUrl;
+	static const QUrl downloadUrl;
 
 	QNetworkAccessManager manager;
 
@@ -94,12 +97,15 @@ private:
 
 	QString selfVersion, selfPlatform;
 	QDateTime selfDate;
+	QNetworkReply *curRequest;
 
 private slots:
 	void downloadFinished(QNetworkReply *reply);
+	void error(QNetworkReply::NetworkError code);
 
 signals:
-	void newVersionAvailable(QString newTag, QDateTime newTime, QString newSummary);
+	void newVersionAvailable(QString selfTag, QString newTag, QDateTime newTime, QString newSummary);
+	void newVersionCheckError(QNetworkReply::NetworkError error);
 };
 
 #endif // ONLINEVERSIONCHECKER_H

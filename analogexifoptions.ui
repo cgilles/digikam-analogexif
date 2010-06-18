@@ -243,7 +243,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="upCheckBtn">
+          <widget class="QPushButton" name="updCheckBtn">
            <property name="text">
             <string>&amp;Check now</string>
            </property>
@@ -298,6 +298,9 @@
                 <width>200</width>
                 <height>0</height>
                </size>
+              </property>
+              <property name="inputMethodHints">
+               <set>Qt::ImhUrlCharactersOnly</set>
               </property>
              </widget>
             </item>
@@ -374,8 +377,11 @@
                 <height>0</height>
                </size>
               </property>
+              <property name="inputMethodHints">
+               <set>Qt::ImhHiddenText</set>
+              </property>
               <property name="echoMode">
-               <enum>QLineEdit::Password</enum>
+               <enum>QLineEdit::PasswordEchoOnEdit</enum>
               </property>
              </widget>
             </item>

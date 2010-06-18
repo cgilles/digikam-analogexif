@@ -116,7 +116,7 @@ AnalogExif::AnalogExif(QWidget *parent, Qt::WFlags flags)
 	ui.fileView->addActions(contextMenus);
 
 	verChecker = new OnlineVersionChecker(this);
-	connect(verChecker, SIGNAL(newVersionAvailable(QString, QDateTime, QString)), this, SLOT(newVersionAvailable(QString, QDateTime, QString)));
+	connect(verChecker, SIGNAL(newVersionAvailable(QString, QString, QDateTime, QString)), this, SLOT(newVersionAvailable(QString, QString, QDateTime, QString)));
 
 #ifdef Q_WS_WIN
 	if(QSysInfo::windowsVersion() >= QSysInfo::WV_VISTA)
@@ -128,6 +128,9 @@ AnalogExif::AnalogExif(QWidget *parent, Qt::WFlags flags)
 		ui.authorView->setAlternatingRowColors(false);
 	}
 #endif
+
+	// set application proxy
+	AnalogExifOptions::setupProxy();
 }
 
 AnalogExif::~AnalogExif()
@@ -1583,7 +1586,7 @@ void AnalogExif::on_action_About_triggered(bool checked)
 	a.exec();
 }
 
-void AnalogExif::newVersionAvailable(QString newTag, QDateTime newTime, QString newSummary)
+void AnalogExif::newVersionAvailable(QString selfTag, QString newTag, QDateTime newTime, QString newSummary)
 {
 	QMessageBox::information(this, tr("New version available"), tr("New version of AnalogExif is available - %1 (%2).\n\n%3").arg(newTag).arg(newTime.toString(Qt::DefaultLocaleLongDate)).arg(newSummary));
 }

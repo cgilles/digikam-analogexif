@@ -21,12 +21,23 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QMenu>
-#include <QMessageBox>
+#include <QNetworkProxy>
+#include <QRegExp>
+#include <QRegExpValidator>
 
 #include "exiftreemodel.h"
 
+#ifdef Q_WS_WIN32
+
+// use Windows CryptoAPI
+#pragma comment(lib, "crypt32.lib")
+#include <windows.h>
+#include <Wincrypt.h>
+
+#endif
+
 AnalogExifOptions::AnalogExifOptions(QWidget *parent)
-	: QDialog(parent), dirty(false)
+: QDialog(parent), dirty(false), progressBox(QMessageBox::NoIcon, tr("New program version"), tr("Checking for the new version..."), QMessageBox::Cancel, this)
 {
 	ui.setupUi(this);
 
@@ -74,6 +85,12 @@ AnalogExifOptions::AnalogExifOptions(QWidget *parent)
 	loadOptions();
 
 	setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint);
+
+	verChecker = new OnlineVersionChecker(this);
+	connect(verChecker, SIGNAL(newVersionAvailable(QString, QString, QDateTime, QString)), this, SLOT(newVersionAvailable(QString, QString, QDateTime, QString)));
+	connect(verChecker, SIGNAL(newVersionCheckError(QNetworkReply::NetworkError)), this, SLOT(newVersionCheckError(QNetworkReply::NetworkError)));
+
+	ui.proxyAddress->setValidator(new QRegExpValidator(QRegExp("[a-zA-Z0-9$-_@\\.&+!*\"'(),=;/#?: %\\\\]*"), this));
 }
 
 AnalogExifOptions::~AnalogExifOptions()
@@ -82,6 +99,7 @@ AnalogExifOptions::~AnalogExifOptions()
 	delete tagNameEditor;
 	delete tagFormatEditor;
 	delete gearTempList;
+	delete verChecker;
 }
 
 void AnalogExifOptions::on_gearTypesList_itemClicked(QListWidgetItem* item)
@@ -287,6 +305,53 @@ void AnalogExifOptions::loadOptions()
 		ui.createBkpCbox->setChecked(false);
 	}
 
+	// load update period
+	ui.updCheckInterval->setCurrentIndex(settings.value("CheckForUpdatePeriod", 0).toInt());
+
+	// load network proxy settings
+	ui.updProxyGBox->setChecked(settings.value("UseProxy", false).toBool());
+	initialState_updProxyGBox = ui.updProxyGBox->isChecked();
+
+	if(settings.value("ProxyType", QNetworkProxy::HttpProxy).toInt() == QNetworkProxy::HttpProxy)
+		ui.proxyTypeCBox->setCurrentIndex(0);
+	else
+		ui.proxyTypeCBox->setCurrentIndex(1);	// SOCKS5
+
+	ui.proxyAddress->setText(settings.value("ProxyHostName", QString()).toString());
+	initialState_proxyPort = settings.value("ProxyPort", 0).toInt();
+	ui.proxyPort->setValue(initialState_proxyPort);
+	ui.proxyUsername->setText(settings.value("ProxyUsername", QString()).toString());
+
+	QString userPassword;
+
+#ifdef Q_WS_WIN32
+	QByteArray userPwd = settings.value("ProxyPassword", QByteArray()).toByteArray();
+
+	// decode password using CryptoAPI under Windows
+	if(userPwd != QByteArray())
+	{
+		DATA_BLOB DataIn;
+		DATA_BLOB DataOut;
+
+		DataIn.cbData = userPwd.length();
+		DataIn.pbData = (BYTE*)userPwd.data();
+
+		if(!CryptUnprotectData(&DataIn, NULL, NULL, NULL, NULL, 0, &DataOut))
+			return;
+
+		userPwd.clear();
+		userPwd.append((const char*)DataOut.pbData, DataOut.cbData);
+
+		LocalFree(DataOut.pbData);
+
+		userPassword = userPwd;
+	}
+#else
+	userPassword = settings.value("ProxyPassword", QString()).toString();
+#endif	// Q_WS_WIN32
+
+	ui.proxyPassword->setText(userPassword);
+
 	// load user NS options
 	originalNs = "";
 	originalNsPrefix = "";
@@ -384,15 +449,74 @@ bool AnalogExifOptions::saveOptions()
 		}
 	}
 
+	// save update options
+	settings.setValue("CheckForUpdatePeriod", ui.updCheckInterval->currentIndex());
+
+	// save network proxy settings
+	settings.setValue("UseProxy", ui.updProxyGBox->isChecked());
+
+	if(ui.updProxyGBox->isChecked())
+	{
+		if(ui.proxyTypeCBox->currentIndex() == 0)
+			settings.setValue("ProxyType", QNetworkProxy::HttpProxy);
+		else
+			settings.setValue("ProxyType", QNetworkProxy::Socks5Proxy);
+
+		settings.setValue("ProxyHostName", ui.proxyAddress->text());
+		settings.setValue("ProxyPort", ui.proxyPort->value());
+		settings.setValue("ProxyUsername", ui.proxyUsername->text());
+
+#ifdef Q_WS_WIN32
+		QByteArray userPassword;
+		userPassword.append(ui.proxyPassword->text());
+
+		// encode password using CryptoAPI under Windows
+		if(userPassword != QByteArray())
+		{
+			DATA_BLOB DataIn;
+			DATA_BLOB DataOut;
+
+			DataIn.cbData = userPassword.length();
+			DataIn.pbData = (BYTE*)userPassword.data();
+
+			if(!CryptProtectData(&DataIn, L"Proxy authentication", NULL, NULL, NULL, 0, &DataOut))
+				return false;
+
+			userPassword.clear();
+			userPassword.append((const char*)DataOut.pbData, DataOut.cbData);
+
+			settings.setValue("ProxyPassword", userPassword);
+
+			LocalFree(DataOut.pbData);
+		}
+#else
+		settings.setValue("ProxyPassword", ui.proxyPassword->text());
+#endif	// Q_WS_WIN32
+	}
+	else
+	{
+		// clear proxy settings
+		settings.remove("ProxyType");
+		settings.remove("ProxyHostName");
+		settings.remove("ProxyPort");
+		settings.remove("ProxyUsername");
+		settings.remove("ProxyPassword");
+	}
+
 	settings.sync();
 
 	initialState_userNsGBox = ui.userNsGBox->isChecked();
 	initialState_createBkpCbox = ui.createBkpCbox->isChecked();
 	initialState_etagsCboxStorageXp = ui.etagsCboxStorageXp->isChecked();
 	initialState_etagsCboxStorageUser = ui.etagsCboxStorageUser->isChecked();
+	initialState_updProxyGBox = ui.updProxyGBox->isChecked();
+
+	initialState_proxyPort = ui.proxyPort->value();
 
 	//query.exec("COMMIT TRANSACTION");
 	query.exec("RELEASE EditOptionsStart");
+
+	setupProxy();
 
 	return true;
 }
@@ -537,4 +661,140 @@ void AnalogExifOptions::on_etagsCboxStorageUser_stateChanged(int state)
 {
 	if((state == Qt::Checked) != initialState_etagsCboxStorageUser)
 		setDirty();
+}
+
+void AnalogExifOptions::on_updProxyGBox_toggled(bool state)
+{
+	if(state != initialState_updProxyGBox)
+		setDirty();
+}
+
+void AnalogExifOptions::on_proxyAddress_textEdited(const QString&)
+{
+	setDirty();
+}
+
+void AnalogExifOptions::on_proxyUsername_textEdited(const QString&)
+{
+	setDirty();
+}
+
+void AnalogExifOptions::on_proxyPassword_textEdited(const QString&)
+{
+	setDirty();
+}
+
+void AnalogExifOptions::on_proxyPort_valueChanged(int newValue)
+{
+	if(newValue != initialState_proxyPort)
+		setDirty();
+}
+
+void AnalogExifOptions::on_proxyTypeCBox_currentIndexChanged(int)
+{
+	setDirty();
+}
+
+void AnalogExifOptions::on_updCheckInterval_currentIndexChanged(int)
+{
+	setDirty();
+}
+
+void AnalogExifOptions::setupProxy()
+{
+	QSettings settings;
+
+	if(settings.value("UseProxy", false).toBool())
+	{
+		// get proxy parameters
+		QNetworkProxy::ProxyType proxyType = (QNetworkProxy::ProxyType)settings.value("ProxyType", QNetworkProxy::HttpProxy).toInt();
+
+		// host name
+		QString hostName = settings.value("ProxyHostName", QString()).toString();
+
+		// check for valid hostname
+		if(hostName == QString())
+			return;
+
+		// proxy port
+		int proxyPort = settings.value("ProxyPort", 0).toInt();
+
+		// authentication
+		QString userName = settings.value("ProxyUsername", QString()).toString();
+		QString userPassword;
+
+#ifdef Q_WS_WIN32
+		QByteArray userPwd = settings.value("ProxyPassword", QByteArray()).toByteArray();
+
+		// decode password using CryptoAPI under Windows
+		if(userPwd != QByteArray())
+		{
+			DATA_BLOB DataIn;
+			DATA_BLOB DataOut;
+
+			DataIn.cbData = userPwd.length();
+			DataIn.pbData = (BYTE*)userPwd.data();
+
+			if(!CryptUnprotectData(&DataIn, NULL, NULL, NULL, NULL, 0, &DataOut))
+				return;
+
+			userPwd.clear();
+			userPwd.append((const char*)DataOut.pbData, DataOut.cbData);
+
+			LocalFree(DataOut.pbData);
+
+			userPassword = userPwd;
+		}
+#else
+		userPassword = settings.value("ProxyPassword", QString()).toString();
+#endif	// Q_WS_WIN32
+
+		// set application-wide proxy
+		QNetworkProxy::setApplicationProxy(QNetworkProxy(proxyType, hostName, proxyPort, userName, userPwd));
+	}
+	else
+	{
+		// set no proxy
+		QNetworkProxy::setApplicationProxy(QNetworkProxy(QNetworkProxy::NoProxy));
+	}
+}
+
+void AnalogExifOptions::on_updCheckBtn_clicked()
+{
+	progressBox.open(this, SLOT(cancelVersionCheck()));
+	verChecker->checkForNewVersion(true);
+}
+
+void AnalogExifOptions::newVersionAvailable(QString selfTag, QString newTag, QDateTime newTime, QString newSummary)
+{
+	progressBox.close();
+
+	QMessageBox info(QMessageBox::Question, tr("New program version available"), tr("New version of AnalogExif is available.\n"
+		   "Current version is %1, new version is %2 from %3.\n\n"
+		   "Do you want to open the program website?").arg(selfTag).arg(newTag).arg(newTime.toString("dd.MM.yyyy")), QMessageBox::Yes | QMessageBox::No, this);
+	info.setDetailedText(newSummary);
+
+	if(info.exec() == QMessageBox::Yes)
+	{
+		OnlineVersionChecker::openDownloadPage();
+	}
+}
+
+void AnalogExifOptions::newVersionCheckError(QNetworkReply::NetworkError error)
+{
+	progressBox.close();
+
+	if(error == QNetworkReply::NoError)
+	{
+		QMessageBox::information(this, tr("New program version"), tr("No new version of the program is available."));
+	}
+	else
+	{
+		QMessageBox::critical(this, tr("New program version"), tr("Error checking for the new program version."));
+	}
+}
+
+void AnalogExifOptions::cancelVersionCheck()
+{
+	verChecker->cancelCheck();
 }

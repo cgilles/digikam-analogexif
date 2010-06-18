@@ -24,6 +24,9 @@
 #include <QAction>
 #include <QModelIndex>
 #include <QSettings>
+#include <QNetworkReply>
+#include <QDateTime>
+#include <QMessageBox>
 
 #include "ui_analogexifoptions.h"
 
@@ -31,6 +34,7 @@
 #include "tagtypeitemdelegate.h"
 #include "tagnameitemdelegate.h"
 #include "tagselectvalsitemdelegate.h"
+#include "onlineversionchecker.h"
 
 class AnalogExifOptions : public QDialog
 {
@@ -39,6 +43,9 @@ class AnalogExifOptions : public QDialog
 public:
 	AnalogExifOptions(QWidget *parent = 0);
 	~AnalogExifOptions();
+
+	// setup proxy from settings
+	static void setupProxy();
 
 private:
 	Ui::AnalogExifOptionsClass ui;
@@ -73,9 +80,14 @@ private:
 	bool initialState_createBkpCbox;
 	bool initialState_etagsCboxStorageXp;
 	bool initialState_etagsCboxStorageUser;
+	bool initialState_updProxyGBox;
+	int initialState_proxyPort;
 
 	QString originalNs;
 	QString originalNsPrefix;
+
+	QMessageBox progressBox;
+	OnlineVersionChecker* verChecker;
 
 private slots:
 	// on gear clicked
@@ -100,6 +112,14 @@ private slots:
 	void on_userNsPrefix_textEdited(const QString &);
 	// unsupported tag
 	void unsupportedTag(const QModelIndex& idx, const QString& tagName);
+	// check for new verison button
+	void on_updCheckBtn_clicked();
+	// new version available
+	void newVersionAvailable(QString, QString, QDateTime, QString);
+	// new version check error
+	void newVersionCheckError(QNetworkReply::NetworkError);
+	// cancel version check
+	void cancelVersionCheck();
 
 	// dirtying signals
 	void on_userNsEdit_textEdited(const QString &);
@@ -107,6 +127,13 @@ private slots:
 	void on_createBkpCbox_stateChanged(int);
 	void on_etagsCboxStorageXp_stateChanged(int);
 	void on_etagsCboxStorageUser_stateChanged(int);
+	void on_updProxyGBox_toggled(bool);
+	void on_proxyAddress_textEdited(const QString&);
+	void on_proxyUsername_textEdited(const QString&);
+	void on_proxyPassword_textEdited(const QString&);
+	void on_proxyPort_valueChanged(int);
+	void on_proxyTypeCBox_currentIndexChanged(int);
+	void on_updCheckInterval_currentIndexChanged(int);
 };
 
 #endif // ANALOGEXIFOPTIONS_H

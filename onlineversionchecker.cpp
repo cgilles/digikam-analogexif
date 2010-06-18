@@ -21,16 +21,57 @@
 
 #include <QFile>
 #include <QTextStream>
+#include <QDesktopServices>
+#include <QSettings>
 
 const QUrl OnlineVersionChecker::versionCheckUrl("http://analogexif.svn.sourceforge.net/viewvc/analogexif/current-version.xml");
+const QUrl OnlineVersionChecker::downloadUrl("https://sourceforge.net/projects/analogexif/files/");
 
-OnlineVersionChecker::OnlineVersionChecker(QObject *parent) : QObject(parent)
+OnlineVersionChecker::OnlineVersionChecker(QObject *parent) : QObject(parent), curRequest(NULL)
 {
 	connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(downloadFinished(QNetworkReply*)));
 }
 
-void OnlineVersionChecker::checkForNewVersion()
+void OnlineVersionChecker::checkForNewVersion(bool force)
 {
+	QSettings settings;
+
+	if(!force)
+	{
+		int checkInterval = settings.value("CheckForUpdatePeriod", 0).toInt();
+
+		if(!checkInterval)
+			return;
+
+		QDateTime lastCheck = settings.value("LastCheckForUpdate", QDateTime()).toDateTime();
+
+		if(lastCheck.isValid())
+		{
+			int daysBetween = lastCheck.daysTo(QDateTime::currentDateTime());
+
+			switch(checkInterval)
+			{
+			case 1:	// every day
+				if(daysBetween < 1)
+					return;
+				break;
+			case 2: // every week
+				if(daysBetween < 7)
+					return;
+				break;
+			case 3: // every month
+				if(daysBetween < 31)
+					return;
+				break;
+			default:
+				return;
+			}
+		}
+	}
+
+	settings.setValue("LastCheckForUpdate", QDateTime::currentDateTime());
+	settings.sync();
+
 	// parse self version
 	QFile file(":/version.xml");
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -46,28 +87,60 @@ void OnlineVersionChecker::checkForNewVersion()
 	selfDate = parser.getDate();
 
 	QNetworkRequest request(versionCheckUrl);
-	QNetworkReply *reply = manager.get(request);
+	curRequest = manager.get(request);
+
+	if(curRequest->error())
+		emit newVersionCheckError(curRequest->error());
+}
+
+void OnlineVersionChecker::cancelCheck()
+{
+	if(curRequest)
+		curRequest->abort();
 }
 
 void OnlineVersionChecker::downloadFinished(QNetworkReply *reply)
 {
 	// mark for deletion
 	reply->deleteLater();
+	curRequest = NULL;
 
-	if(reply->error())
+	QNetworkReply::NetworkError error = reply->error();
+	if(error)
+	{
+		emit newVersionCheckError(error);
 		return;
+	}
 
 	if(!parser.parse(selfPlatform, reply->readAll()))
+	{
+		emit newVersionCheckError(QNetworkReply::ProtocolFailure);
 		return;
+	}
 
 	QString readVersion = parser.getVersion();
 	QDateTime readDate = parser.getDate();
 	QString readDetails = parser.getDetails();
 
-	//if(readDate > selfDate)
-	//{
-		emit newVersionAvailable(readVersion, readDate, readDetails);
-	//}
+	if(readDate > selfDate)
+	{
+		emit newVersionAvailable(selfVersion, readVersion, readDate, readDetails);
+	}
+	else
+	{
+		emit newVersionCheckError(QNetworkReply::NoError);
+	}
+}
+
+void OnlineVersionChecker::error(QNetworkReply::NetworkError code)
+{
+	emit newVersionCheckError(code);
+}
+
+
+void OnlineVersionChecker::openDownloadPage()
+{
+	QDesktopServices::openUrl(downloadUrl);
 }
 
 VersionFileParser::VersionFileParser(QObject *parent) : QObject(parent), version(QString()), platform(QString()), details(QString()), date(QString())

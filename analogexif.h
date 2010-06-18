@@ -206,7 +206,7 @@ private slots:
 	void previewUpdate();
 
 	// new version available
-	void newVersionAvailable(QString newTag, QDateTime newTime, QString newSummary);
+	void newVersionAvailable(QString selfTag, QString newTag, QDateTime newTime, QString newSummary);
 };
 
 #endif // ANALOGEXIF_H
