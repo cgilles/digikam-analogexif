@@ -21,11 +21,11 @@ FUTURE FEATURES
 DEVELOPMENT
 * Mac support
 * Fill-in the metatags database
-* check for new version online
 
 TESTS
 * verify against metadata corruption
 * test TIFF support
+* test proxy support
 
 BUGS
 * When typing long user-defined XMP schema prefix the Options dialog window resizes
