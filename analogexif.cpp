@@ -44,7 +44,6 @@ AnalogExif::AnalogExif(QWidget *parent, Qt::WFlags flags)
 	/// setup tree view
 	fileViewModel = new QFileSystemModel(this);
 	dirSorter = new DirSortFilterProxyModel(this);
-	dirSorter->setSourceModel(fileViewModel);
 	// show supported files only
 	fileViewModel->setNameFilterDisables(false);
 	fileViewModel->setNameFilters(QStringList() << "*.jpg" << "*.jpeg" << "*.tif" << "*.tiff");
@@ -271,6 +270,8 @@ bool AnalogExif::initialize()
 	}
 
 	QApplication::restoreOverrideCursor();
+
+	dirSorter->setSourceModel(fileViewModel);
 
 	connect(ui.fileView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(fileView_selectionChanged(const QItemSelection&, const QItemSelection&)));
 
