@@ -210,8 +210,15 @@ void EditTagSelectValues::on_buttonBox_accepted()
 
 void EditTagSelectValues::on_actionAdd_new_row_triggered()
 {
-	selValsModel->addRow(ui.selValsView->currentIndex());
-	ui.selValsView->edit(selValsModel->index(selValsModel->rowCount() - 1, 0));
+	QModelIndex curRow = ui.selValsView->currentIndex();
+	selValsModel->addRow(curRow);
+	if(curRow.isValid())
+		curRow = curRow.sibling(curRow.row()+1, 0);
+	else
+		curRow = selValsModel->index(selValsModel->rowCount() - 1, 0);
+
+	ui.selValsView->setCurrentIndex(curRow);
+	ui.selValsView->edit(curRow);
 }
 
 // delete selected values
