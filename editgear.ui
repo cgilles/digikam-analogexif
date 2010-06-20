@@ -675,32 +675,9 @@ QListView::item:selected:!active{
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="okButton">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="text">
-        <string>&amp;Ok</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="cancelButton">
-       <property name="text">
-        <string>&amp;Cancel</string>
-       </property>
-       <property name="default">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="applyButton">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="text">
-        <string>&amp;Apply</string>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
        </property>
       </widget>
      </item>
@@ -786,9 +763,6 @@ QListView::item:selected:!active{
   <tabstop>developerView</tabstop>
   <tabstop>authorView</tabstop>
   <tabstop>metadataView</tabstop>
-  <tabstop>okButton</tabstop>
-  <tabstop>cancelButton</tabstop>
-  <tabstop>applyButton</tabstop>
   <tabstop>addCameraBtn</tabstop>
   <tabstop>addLensBtn</tabstop>
   <tabstop>dupGearBtn</tabstop>

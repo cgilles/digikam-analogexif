@@ -92,6 +92,8 @@ AnalogExifOptions::AnalogExifOptions(QWidget *parent)
 	connect(verChecker, SIGNAL(newVersionCheckError(QNetworkReply::NetworkError)), this, SLOT(newVersionCheckError(QNetworkReply::NetworkError)));
 
 	ui.proxyAddress->setValidator(new QRegExpValidator(QRegExp("[a-zA-Z0-9$-_@\\.&+!*\"'(),=;/#?: %\\\\]*"), this));
+
+	ui.buttonBox->button(QDialogButtonBox::Apply)->setEnabled(false);
 }
 
 AnalogExifOptions::~AnalogExifOptions()
@@ -113,7 +115,7 @@ void AnalogExifOptions::on_gearTypesList_itemClicked(QListWidgetItem*)
 }
 
 // close button
-void AnalogExifOptions::on_cancelButton_clicked()
+void AnalogExifOptions::on_buttonBox_rejected()
 {
 	if(dirty)
 	{
@@ -124,7 +126,7 @@ void AnalogExifOptions::on_cancelButton_clicked()
 
 		if(result == QMessageBox::Save)
 		{
-			ui.okButton->click();
+			saveAndExit();
 			return;
 		}
 		else if (result == QMessageBox::Cancel)
@@ -143,7 +145,12 @@ void AnalogExifOptions::on_cancelButton_clicked()
 }
 
 // ok button
-void AnalogExifOptions::on_okButton_clicked()
+void AnalogExifOptions::on_buttonBox_accepted()
+{
+	saveAndExit();
+}
+
+void AnalogExifOptions::saveAndExit()
 {
 	if(!checkOptions())
 		return;
@@ -166,18 +173,21 @@ void AnalogExifOptions::on_okButton_clicked()
 }
 
 // apply button
-void AnalogExifOptions::on_applyButton_clicked()
+void AnalogExifOptions::on_buttonBox_clicked(QAbstractButton* button)
 {
-	if(!checkOptions())
-		return;
-
-	if(saveOptions())
+	if(ui.buttonBox->standardButton(button) == QDialogButtonBox::Apply)
 	{
-		// start new transaction
-		QSqlQuery query;
-		query.exec("SAVEPOINT EditOptionsStart");
+		if(!checkOptions())
+			return;
 
-		setDirty(false);
+		if(saveOptions())
+		{
+			// start new transaction
+			QSqlQuery query;
+			query.exec("SAVEPOINT EditOptionsStart");
+
+			setDirty(false);
+		}
 	}
 }
 

@@ -99,6 +99,8 @@ EditGear::EditGear(QWidget *parent)
 	setWindowTitle(tr("Edit equipment (") + dbName + ")[*]");
 
 	setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
+
+	ui.buttonBox->button(QDialogButtonBox::Apply)->setEnabled(false);
 }
 
 EditGear::~EditGear()
@@ -112,7 +114,7 @@ EditGear::~EditGear()
 	delete metaTagsMenu;
 }
 
-void EditGear::on_cancelButton_clicked()
+void EditGear::on_buttonBox_rejected()
 {
 	if(dirty)
 	{
@@ -123,8 +125,7 @@ void EditGear::on_cancelButton_clicked()
 
 		if(result == QMessageBox::Save)
 		{
-			// NB: Baaaad!
-			on_okButton_clicked();
+			saveAndClose();
 			return;
 		}
 		else if (result == QMessageBox::Cancel)
@@ -143,7 +144,12 @@ void EditGear::on_cancelButton_clicked()
 	reject();
 }
 
-void EditGear::on_okButton_clicked()
+void EditGear::on_buttonBox_accepted()
+{
+	saveAndClose();
+}
+
+void EditGear::saveAndClose()
 {
 	// apply transaction
 	QSqlQuery query;
@@ -153,14 +159,17 @@ void EditGear::on_okButton_clicked()
 	accept();
 }
 
-void EditGear::on_applyButton_clicked()
+void EditGear::on_buttonBox_clicked(QAbstractButton* button)
 {
-	QSqlQuery query;
-	//query.exec("COMMIT TRANSACTION");
-	query.exec("RELEASE EditGearStart");
-	query.exec("SAVEPOINT EditGearStart");
+	if(ui.buttonBox->standardButton(button) == QDialogButtonBox::Apply)
+	{
+		QSqlQuery query;
+		//query.exec("COMMIT TRANSACTION");
+		query.exec("RELEASE EditGearStart");
+		query.exec("SAVEPOINT EditGearStart");
 
-	setDirty(false);
+		setDirty(false);
+	}
 }
 
 void EditGear::gearList_layoutChanged()

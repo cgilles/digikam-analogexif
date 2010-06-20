@@ -81,19 +81,9 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="okBtn">
-       <property name="text">
-        <string>&amp;Ok</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="cancelBtn">
-       <property name="text">
-        <string>&amp;Cancel</string>
-       </property>
-       <property name="default">
-        <bool>true</bool>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
        </property>
       </widget>
      </item>
@@ -114,34 +104,34 @@
  </resources>
  <connections>
   <connection>
-   <sender>okBtn</sender>
-   <signal>clicked()</signal>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
    <receiver>CopyMetadataDialogClass</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>287</x>
-     <y>531</y>
+     <x>257</x>
+     <y>543</y>
     </hint>
     <hint type="destinationlabel">
-     <x>210</x>
-     <y>276</y>
+     <x>173</x>
+     <y>282</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>cancelBtn</sender>
-   <signal>clicked()</signal>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
    <receiver>CopyMetadataDialogClass</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>367</x>
-     <y>531</y>
+     <x>257</x>
+     <y>543</y>
     </hint>
     <hint type="destinationlabel">
-     <x>210</x>
-     <y>276</y>
+     <x>173</x>
+     <y>282</y>
     </hint>
    </hints>
   </connection>

@@ -134,19 +134,9 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="okBtn">
-       <property name="text">
-        <string>&amp;Ok</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="cancelBtn">
-       <property name="text">
-        <string>&amp;Cancel</string>
-       </property>
-       <property name="default">
-        <bool>true</bool>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
        </property>
       </widget>
      </item>
@@ -160,13 +150,13 @@
  </resources>
  <connections>
   <connection>
-   <sender>cancelBtn</sender>
-   <signal>clicked()</signal>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
    <receiver>AutoFillExpNumClass</receiver>
-   <slot>reject()</slot>
+   <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>245</x>
+     <x>204</x>
      <y>455</y>
     </hint>
     <hint type="destinationlabel">
@@ -176,13 +166,13 @@
    </hints>
   </connection>
   <connection>
-   <sender>okBtn</sender>
-   <signal>clicked()</signal>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
    <receiver>AutoFillExpNumClass</receiver>
-   <slot>accept()</slot>
+   <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>164</x>
+     <x>204</x>
      <y>455</y>
     </hint>
     <hint type="destinationlabel">

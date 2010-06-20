@@ -64,7 +64,7 @@ private:
 	void setDirty(bool isDirty = true)
 	{
 		dirty = isDirty;
-		ui.applyButton->setEnabled(isDirty);
+		ui.buttonBox->button(QDialogButtonBox::Apply)->setEnabled(isDirty);
 		setWindowModified(isDirty);
 	}
 
@@ -89,6 +89,8 @@ private:
 	QMessageBox progressBox;
 	OnlineVersionChecker* verChecker;
 
+	void saveAndExit();
+
 private slots:
 	// on gear clicked
 	void on_gearTypesList_itemClicked(QListWidgetItem* item);
@@ -105,11 +107,11 @@ private slots:
 	// on data changed
 	void gearTempList_dataChanged(const QModelIndex&, const QModelIndex&);
 	// close button
-	void on_cancelButton_clicked();
+	void on_buttonBox_rejected();
 	// ok button
-	void on_okButton_clicked();
+	void on_buttonBox_accepted();
 	// apply button
-	void on_applyButton_clicked();
+	void on_buttonBox_clicked(QAbstractButton* button);
 	// selection changed
 	void gearList_selectionChanged(const QItemSelection&, const QItemSelection&);
 	// user ns schema changed
