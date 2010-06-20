@@ -21,7 +21,7 @@
         <file>AnalogExif.ael</file>
     </qresource>
     <qresource prefix="/">
-        <file>not-supported.txt</file>
         <file>version.xml</file>
+        <file>not-supported.txt</file>
     </qresource>
 </RCC>

@@ -20,6 +20,7 @@ Exif.Image.TIFFEPStandardID
 Exif.Image.DNGVersion
 Exif.Image.DNGBackwardVersion
 Exif.Image.DNGPrivateData
+Exif.Image.IPTCNAA
 Iptc.Application2.RasterizedCaption
 Iptc.Application2.Preview
 Xmp.xmp.Thumbnails
