@@ -61,15 +61,9 @@ public:
 
 private:
 	// Expat handlers
-#ifdef Q_WS_MAC
 	static void xmlStartElementHandler(void* userData, const XML_Char *name, const XML_Char **atts);
 	static void xmlEndElementHandler(void* userData, const XML_Char *name);
 	static void xmlCharacterDataHandler(void *userData, const XML_Char *s, int len);
-#else
-	static void __cdecl xmlStartElementHandler(void* userData, const XML_Char *name, const XML_Char **atts);
-	static void __cdecl xmlEndElementHandler(void* userData, const XML_Char *name);
-	static void __cdecl xmlCharacterDataHandler(void *userData, const XML_Char *s, int len);
-#endif
 	
 	XML_Parser xmlParser;
 	QString curTag;
