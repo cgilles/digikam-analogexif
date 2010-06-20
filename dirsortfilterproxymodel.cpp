@@ -24,6 +24,9 @@ bool DirSortFilterProxyModel::lessThan(const QModelIndex &left, const QModelInde
 {
 	QFileSystemModel* srcModel = dynamic_cast<QFileSystemModel*>(sourceModel());
 
+	if(!left.isValid() || !right.isValid())
+		return false;
+
 	// if compared to directory file is always less than
 	if(srcModel->isDir(left) && !srcModel->isDir(right))
 		return true;
@@ -39,7 +42,10 @@ QVariant DirSortFilterProxyModel::data(const QModelIndex& index, int role) const
 {
 	QFileSystemModel* srcModel = dynamic_cast<QFileSystemModel*>(sourceModel());
 
-	if(index.isValid() && (role == Qt::ToolTipRole))
+	if(!index.isValid())
+		return QVariant();
+
+	if(role == Qt::ToolTipRole)
 	{
 		return srcModel->fileName(index);
 	}
