@@ -92,22 +92,16 @@ AnalogExif::AnalogExif(QWidget *parent, Qt::WFlags flags)
 		restoreState(settings.value("WindowState").toByteArray());
 	}
 
-	// Qt for Linux does not work very well with re/storing window geometry
-#if defined(__linux__)
-	QPoint pos = settings.value("WindowPos", QPoint(0,0)).toPoint();
-	QSize size = settings.value("WindowSize", QSize(701, 576)).toSize();
-	resize(size);
-	move(pos);
-#else
 	if(settings.contains("WindowGeometry")){
 		restoreGeometry(settings.value("WindowGeometry").toByteArray());
 	}
-#endif
 
 	setWindowTitle(QCoreApplication::applicationName());
 
+#ifndef Q_WS_MAC
 	// connect preview updates
 	connect(this, SIGNAL(updatePreview()), this, SLOT(previewUpdate()), Qt::BlockingQueuedConnection);
+#endif
 
 	contextMenus.clear();
 
@@ -258,11 +252,7 @@ bool AnalogExif::initialize()
 
 	connect(ui.fileView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(fileView_selectionChanged(const QItemSelection&, const QItemSelection&)));
 
-#ifdef Q_WS_MAC
 	QModelIndex lastFolder = dirSorter->mapFromSource(fileViewModel->index(settings.value("lastFolder", QDir::homePath()).toString()));
-#else
-	QModelIndex& lastFolder = dirSorter->mapFromSource(fileViewModel->index(settings.value("lastFolder", QDir::homePath()).toString()));
-#endif
 	if(lastFolder != QModelIndex())
 	{
 		ui.directoryLine->setText(QDir::toNativeSeparators(settings.value("lastFolder", QDir::homePath()).toString()));
@@ -359,7 +349,14 @@ void AnalogExif::fileView_selectionChanged(const QItemSelection&, const QItemSel
 
 			// load preview in the background
 			ui.filePreview->setPixmap(NULL);
+#ifdef Q_WS_MAC
+                        // Background loading doesn't work properly for Mac
+                        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+                        loadPreview(curFileName);
+                        QApplication::restoreOverrideCursor();
+#else
 			QFuture<void> future = QtConcurrent::run(this, &AnalogExif::loadPreview, curFileName);
+#endif
 			exifTreeModel->setReadonly(false);
 
 			previewIndex = selIdx.at(0);
@@ -402,32 +399,6 @@ void AnalogExif::fileView_selectionChanged(const QItemSelection&, const QItemSel
 	// clear current file name
 	curFileName = "";
 	previewIndex = QModelIndex();
-}
-
-// called when user clicks on item in the file view
-void AnalogExif::on_fileView_clicked(const QModelIndex&)
-{
-#if 0
-	// dirty data - notify user
-	if(dirty)
-	{
-		QMessageBox::StandardButton result = QMessageBox::question(this, tr("Unsaved data"),
-															tr("Save changes in the current image?"),
-															QMessageBox::Save | QMessageBox::Discard /*| QMessageBox::Cancel*/,
-															/*QMessageBox::Cancel*/QMessageBox::Discard);
-
-		//if(result == QMessageBox::Cancel)
-		//{
-		//	// select previous file
-		//	ui.fileView->selectionModel()->select(dirSorter->mapFromSource(previewIndex), QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
-		//	return;
-		//}
-
-		if(result == QMessageBox::Save)
-			save();
-		dirty = false;
-	}
-#endif
 }
 
 // open file for editing
@@ -513,7 +484,12 @@ void AnalogExif::loadPreview(QString filename)
 	// ui.filePreview->setPixmap(filePreviewPixmap->scaled(previewSize.width()-30, previewSize.height()-30, Qt::KeepAspectRatio));
 	filePreviewPixmap = filePreviewPixmap.scaled(previewSize.width()-30, previewSize.height()-30, Qt::KeepAspectRatio);
 
+#ifdef Q_WS_MAC
+        // preview is loaded on the same thread under Mac
+        previewUpdate();
+#else
 	emit updatePreview();
+#endif
 }
 
 void AnalogExif::previewUpdate()
@@ -525,11 +501,7 @@ void AnalogExif::previewUpdate()
 void AnalogExif::on_fileView_expanded (const QModelIndex& sortIndex)
 {
 	// have to map indices
-#ifdef Q_WS_MAC
 	QModelIndex index = dirSorter->mapToSource(sortIndex);
-#else
-	QModelIndex& index = dirSorter->mapToSource(sortIndex);
-#endif
 	ui.directoryLine->setText(QDir::toNativeSeparators(fileViewModel->filePath(index)));
 }
 
@@ -788,14 +760,7 @@ void AnalogExif::closeEvent(QCloseEvent *event)
 
 	// save window state and geometry
 	settings.setValue("WindowState", saveState());
-
-	// Qt for Linux does not work very well with re/storing window geometry
-#if defined(__linux__)
-	settings.setValue("WindowPos", pos());
-	settings.setValue("WindowSize", size());
-#else
 	settings.setValue("WindowGeometry", saveGeometry());
-#endif
 
 	// sync settings
 	settings.sync();

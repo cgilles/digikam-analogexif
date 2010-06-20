@@ -145,8 +145,6 @@ signals:
 	void updatePreview();
 
 private slots:
-	// selection from folder viewer
-	void on_fileView_clicked(const QModelIndex& sortIndex);
 	// expansion of the tree
 	void on_fileView_expanded(const QModelIndex& sortIndex);
 	// Apply changes clicked
