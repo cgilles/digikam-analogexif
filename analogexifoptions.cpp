@@ -762,7 +762,7 @@ void AnalogExifOptions::setupProxy()
 #endif	// Q_WS_WIN32
 
 		// set application-wide proxy
-		QNetworkProxy::setApplicationProxy(QNetworkProxy(proxyType, hostName, proxyPort, userName, userPwd));
+		QNetworkProxy::setApplicationProxy(QNetworkProxy(proxyType, hostName, proxyPort, userName, userPassword));
 	}
 	else
 	{
