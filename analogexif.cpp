@@ -444,8 +444,15 @@ void AnalogExif::openLocation(QString path)
 
 		// load preview in the background
 		ui.filePreview->setPixmap(NULL);
-		QFuture<void> future = QtConcurrent::run(this, &AnalogExif::loadPreview, curFileName);
-	}
+#ifdef Q_WS_MAC
+                // Background loading doesn't work properly for Mac
+                QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+                loadPreview(curFileName);
+                QApplication::restoreOverrideCursor();
+#else
+                QFuture<void> future = QtConcurrent::run(this, &AnalogExif::loadPreview, curFileName);
+#endif
+        }
 
 	ui.gearView->expandAll();
 
