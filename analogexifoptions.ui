@@ -578,8 +578,7 @@
            </property>
            <property name="font">
             <font>
-             <family>MS Shell Dlg 2</family>
-             <pointsize>8</pointsize>
+             <kerning>true</kerning>
             </font>
            </property>
            <property name="editTriggers">
@@ -600,8 +599,7 @@
            </property>
            <property name="font">
             <font>
-             <family>MS Shell Dlg 2</family>
-             <pointsize>8</pointsize>
+             <kerning>true</kerning>
             </font>
            </property>
            <property name="contextMenuPolicy">

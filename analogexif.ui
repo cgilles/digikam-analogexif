@@ -66,7 +66,8 @@
          <widget class="QLineEdit" name="directoryLine">
           <property name="font">
            <font>
-            <family>MS Shell Dlg 2</family>
+            <pointsize>9</pointsize>
+            <kerning>true</kerning>
            </font>
           </property>
           <property name="statusTip">
@@ -84,8 +85,7 @@
           </property>
           <property name="font">
            <font>
-            <family>MS Shell Dlg 2</family>
-            <pointsize>8</pointsize>
+            <kerning>true</kerning>
            </font>
           </property>
           <property name="contextMenuPolicy">
@@ -217,8 +217,7 @@ QTreeView::item:selected:!active{
             </property>
             <property name="font">
              <font>
-              <family>MS Shell Dlg 2</family>
-              <pointsize>8</pointsize>
+              <kerning>true</kerning>
              </font>
             </property>
             <property name="contextMenuPolicy">
@@ -332,8 +331,7 @@ QTreeView::item:selected:!active{
             </property>
             <property name="font">
              <font>
-              <family>MS Shell Dlg 2</family>
-              <pointsize>8</pointsize>
+              <kerning>true</kerning>
              </font>
             </property>
             <property name="contextMenuPolicy">
@@ -392,8 +390,7 @@ QTreeView::item:selected:!active{
            <widget class="GearListView" name="filmView">
             <property name="font">
              <font>
-              <family>MS Shell Dlg 2</family>
-              <pointsize>8</pointsize>
+              <kerning>true</kerning>
              </font>
             </property>
             <property name="contextMenuPolicy">
@@ -437,8 +434,7 @@ QListView::item:selected:!active{
            <widget class="GearListView" name="developerView">
             <property name="font">
              <font>
-              <family>MS Shell Dlg 2</family>
-              <pointsize>8</pointsize>
+              <kerning>true</kerning>
              </font>
             </property>
             <property name="contextMenuPolicy">
@@ -470,8 +466,7 @@ QListView::item:selected:!active{
            <widget class="GearListView" name="authorView">
             <property name="font">
              <font>
-              <family>MS Shell Dlg 2</family>
-              <pointsize>8</pointsize>
+              <kerning>true</kerning>
              </font>
             </property>
             <property name="contextMenuPolicy">
