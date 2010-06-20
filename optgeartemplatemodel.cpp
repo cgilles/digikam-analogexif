@@ -41,7 +41,7 @@ Qt::ItemFlags OptGearTemplateModel::flags(const QModelIndex &index) const
 	if(!query().seek(index.row()))
 		return 0;
 
-	if(((ExifItem::TagFlags)query().value(5).toInt()).testFlag(ExifItem::Protected))
+	if(ProtectBuiltInTags && ((ExifItem::TagFlags)query().value(5).toInt()).testFlag(ExifItem::Protected))
 	{
 		if((index.column() != 0) && (index.column() != 2) && (index.column() != 4))
 			return Qt::ItemIsSelectable;
