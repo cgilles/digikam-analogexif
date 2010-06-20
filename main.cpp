@@ -19,11 +19,13 @@
 
 #include "analogexif.h"
 #include <QtGui/QApplication>
+
+#ifdef Q_WS_WIN32
 #include <QtPlugin>
 
 Q_IMPORT_PLUGIN(qjpeg)
 Q_IMPORT_PLUGIN(qsqlite)
-
+#endif
 
 int main(int argc, char *argv[])
 {

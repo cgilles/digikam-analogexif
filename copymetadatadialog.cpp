@@ -73,7 +73,7 @@ void CopyMetadataDialog::on_checkUncheckCBox_stateChanged(int state)
 	exifTreeModel->setChecked(state);
 }
 
-void CopyMetadataDialog::exifTreeModel_dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
+void CopyMetadataDialog::exifTreeModel_dataChanged(const QModelIndex& topLeft, const QModelIndex&)
 {
 	if(topLeft.isValid())
 	{

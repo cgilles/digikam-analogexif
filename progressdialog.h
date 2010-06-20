@@ -70,6 +70,7 @@ private slots:
 	// on cancel button clicked
 	void on_cancelBtn_clicked(bool checked = false)
 	{
+                Q_UNUSED(checked);
 		cancelled = true;
 	}
 };

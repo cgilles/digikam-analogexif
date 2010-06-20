@@ -172,7 +172,7 @@ QWidget* ExifItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 								80, 60, 50, 45, 40, 30, 25, 20, 15, 10, 8, 6,
 								4, 3, 2 };
 
-			for(int i = 0; i < sizeof(exposures) / sizeof(int); i++)
+                        for(unsigned i = 0; i < sizeof(exposures) / sizeof(int); i++)
 			{
 				combo->addItem(QString("1/%1").arg(exposures[i]));
 			}
@@ -185,7 +185,7 @@ QWidget* ExifItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 
 			int secExposures[] = { 2, 3, 4, 6, 8, 10, 15, 20, 30 };
 
-			for(int i = 0; i < sizeof(secExposures) / sizeof (int); i++)
+                        for(unsigned i = 0; i < sizeof(secExposures) / sizeof (int); i++)
 			{
 				combo->addItem(QString("%1").arg(secExposures[i]));
 			}
@@ -223,6 +223,8 @@ QWidget* ExifItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 			return gpsEdit;
 		}
 		break;
+        default:
+                break;
 	}
 
 	return QStyledItemDelegate::createEditor(parent, option, index);
@@ -567,7 +569,7 @@ void ExifItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 				if(!ok)
 					return;
 
-				ExifUtils::doubleToFraction(text.toDouble(), &first, &second);
+                                ExifUtils::doubleToFraction(value, &first, &second);
 
 				QVariantList rational;
 				// all checks should be done by validator
@@ -732,17 +734,17 @@ bool ExifItemDelegate::eventFilter(QObject *object, QEvent *event)
 GpsLineEdit::GpsLineEdit(QWidget* parent) : QLineEdit(parent)
 {
 	setFrame(false);
-	setInputMask("#99° 99' 99.999\" #999° 99' 99.999\"");
-	defaultValue = "+00° 00' 00.000\" +000° 00' 00.000\"";
+	setInputMask("#99\u00B0 99' 99.999\" #999\u00B0 99' 99.999\"");
+	defaultValue = "+00\u00B0 00' 00.000\" +000\u00B0 00' 00.000\"";
 	setText(defaultValue);
-	setValidator(new QRegExpValidator(QRegExp("(\\+|\\-){1}\\d{2}° \\d{2}' \\d{2}\\.\\d{3}\" (\\+|\\-){1}\\d{3}° \\d{2}' \\d{2}\\.\\d{3}\""), this));
+	setValidator(new QRegExpValidator(QRegExp("(\\+|\\-){1}\\d{2}\u00B0 \\d{2}' \\d{2}\\.\\d{3}\" (\\+|\\-){1}\\d{3}\u00B0 \\d{2}' \\d{2}\\.\\d{3}\""), this));
 }
 
 GpsLineEdit::GpsLineEdit(const QString& contents, QWidget* parent) : QLineEdit(contents, parent), defaultValue(contents)
 {
 	setFrame(false);
-	setInputMask("#99° 99' 99.999\" #999° 99' 99.999\"");
-	setValidator(new QRegExpValidator(QRegExp("(\\+|\\-){1}\\d{2}° \\d{2}' \\d{2}\\.\\d{3}\" (\\+|\\-){1}\\d{3}° \\d{2}' \\d{2}\\.\\d{3}\""), this));
+	setInputMask("#99\u00B0 99' 99.999\" #999\u00B0 99' 99.999\"");
+	setValidator(new QRegExpValidator(QRegExp("(\\+|\\-){1}\\d{2}\u00B0 \\d{2}' \\d{2}\\.\\d{3}\" (\\+|\\-){1}\\d{3}\u00B0 \\d{2}' \\d{2}\\.\\d{3}\""), this));
 }
 
 void GpsLineEdit::paste()
@@ -752,8 +754,8 @@ void GpsLineEdit::paste()
 	// handle google maps pastes
     QString clip = QApplication::clipboard()->text(QClipboard::Clipboard);
     if (!clip.isEmpty() || hasSelectedText()) {
-		// "+xx° xx' xx.xxx" +xxx° xx' xx.xxx" format
-		QRegExp regEx("(\\+|\\-)?(\\d{1,2})°\\s*(\\d{1,2})'\\s*(\\d{1,2}(?:\\.\\d{1,3})?)\"\\s*\\,?\\s*(\\+|\\-)?(\\d{1,3})°\\s*(\\d{1,2})'\\s*(\\d{1,2}(?:\\.\\d{1,3})?)\"");
+		// "+xx xx' xx.xxx" +xxx xx' xx.xxx" format
+		QRegExp regEx("(\\+|\\-)?(\\d{1,2})\u00B0\\s*(\\d{1,2})'\\s*(\\d{1,2}(?:\\.\\d{1,3})?)\"\\s*\\,?\\s*(\\+|\\-)?(\\d{1,3})\u00B0\\s*(\\d{1,2})'\\s*(\\d{1,2}(?:\\.\\d{1,3})?)\"");
 		QStringList caps;
 
 		if(regEx.indexIn(clip) != -1)
@@ -768,7 +770,7 @@ void GpsLineEdit::paste()
 				else
 					result += "+";
 
-				result += QString("%1° %2' %3\" ").arg(regEx.cap(2)).arg(regEx.cap(3)).arg(regEx.cap(4));
+				result += QString("%1\u00B0 %2' %3\" ").arg(regEx.cap(2)).arg(regEx.cap(3)).arg(regEx.cap(4));
 
 				// East/West
 				if(regEx.cap(5) == "-")
@@ -776,7 +778,7 @@ void GpsLineEdit::paste()
 				else
 					result += "+";
 
-				result += QString("%1° %2' %3\" ").arg(regEx.cap(6)).arg(regEx.cap(7)).arg(regEx.cap(8));
+				result += QString("%1\u00B0 %2' %3\" ").arg(regEx.cap(6)).arg(regEx.cap(7)).arg(regEx.cap(8));
 
 				insert(result);
 				return;
@@ -802,7 +804,7 @@ void GpsLineEdit::paste()
 				double s;
 				ExifUtils::doubleToDegrees(regEx.cap(2).toDouble(), d, m, s);
 
-				result += QString("%1° %2' %3\" ").arg(d, 2, 10, QChar('0')).arg(m, 2, 10, QChar('0')).arg(s, 2, 'f', 3, QChar('0'));
+				result += QString("%1\u00B0 %2' %3\" ").arg(d, 2, 10, QChar('0')).arg(m, 2, 10, QChar('0')).arg(s, 2, 'f', 3, QChar('0'));
 
 				// East/West
 				if(regEx.cap(3) == "-")
@@ -813,7 +815,7 @@ void GpsLineEdit::paste()
 				// latitude
 				ExifUtils::doubleToDegrees(regEx.cap(4).toDouble(), d, m, s);
 
-				result += QString("%1° %2' %3\"").arg(d, 3, 10, QChar('0')).arg(m, 2, 10, QChar('0')).arg(s, 2, 'f', 3, QChar('0'));
+				result += QString("%1\u00B0 %2' %3\"").arg(d, 3, 10, QChar('0')).arg(m, 2, 10, QChar('0')).arg(s, 2, 'f', 3, QChar('0'));
 
 				insert(result);
 				return;

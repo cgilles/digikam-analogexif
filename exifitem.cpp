@@ -504,9 +504,11 @@ QVariant ExifItem::valueFromString(const QString& value, TagType type, bool conv
 			return rational;
 		}
 		break;
-	case ExifItem::TagDateTime:
+        case TagDateTime:
 		return QDateTime::fromString(value, "yyyy:MM:dd HH:mm:ss");
 		break;
+        default:
+                break;
 	}
 
 	return QVariant();

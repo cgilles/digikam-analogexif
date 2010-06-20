@@ -28,7 +28,7 @@
 #include <QLineEdit>
 
 QWidget* TagNameItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option,
-	const QModelIndex &index) const
+        const QModelIndex &) const
 {
 	QWidget* editor = new QWidget(parent);
 
@@ -77,7 +77,7 @@ void TagNameItemDelegate::setEditorData(QWidget *editor, const QModelIndex &inde
 		gbox = static_cast<QGroupBox*>(editor->layout()->itemAt(0)->widget());
 	}
 
-	ExifItem::TagFlags flags = index.data(OptGearTemplateModel::GetTagFlagsRole).toInt();
+	ExifItem::TagFlags flags = (ExifItem::TagFlags)index.data(OptGearTemplateModel::GetTagFlagsRole).toInt();
 
 	if(flags)
 	{
@@ -164,9 +164,17 @@ void TagNameItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mode
 }
 
 void TagNameItemDelegate::updateEditorGeometry(QWidget *editor,
-	const QStyleOptionViewItem &option, const QModelIndex &index) const
+        const QStyleOptionViewItem &option, const QModelIndex &) const
 {
-	QLineEdit* lineEdit = static_cast<QLineEdit*>(editor->layout()->itemAt(0)->widget());
+	// set edit text
+	bool swappedLayout = false;
+	QLineEdit* lineEdit = dynamic_cast<QLineEdit*>(editor->layout()->itemAt(0)->widget());
+
+	if(!lineEdit)
+	{
+		swappedLayout = true;
+		lineEdit = static_cast<QLineEdit*>(editor->layout()->itemAt(1)->widget());
+	}
 
 	if(lineEdit)
 	{
@@ -174,7 +182,13 @@ void TagNameItemDelegate::updateEditorGeometry(QWidget *editor,
 		lineEdit->setMaximumWidth(option.rect.width());
 	}
 
-	QGroupBox* gbox = static_cast<QGroupBox*>(editor->layout()->itemAt(1)->widget());
+	// scan through checkboxes and set them according to the flags
+	QGroupBox* gbox;
+	
+	if(swappedLayout)
+		gbox = static_cast<QGroupBox*>(editor->layout()->itemAt(0)->widget());
+	else
+		gbox = static_cast<QGroupBox*>(editor->layout()->itemAt(1)->widget());
 
 	if(gbox)
 	{
@@ -197,7 +211,6 @@ void TagNameItemDelegate::updateEditorGeometry(QWidget *editor,
 			maxWidth = 0;
 
 		QRect adjRect = option.rect.adjusted(0, 0, maxWidth, option.rect.height()*(nItems+3));
-		int parentWidth = editor->parentWidget()->geometry().width();
 		int parentHeight = editor->parentWidget()->geometry().height();
 
 		// if exceeds parent view, move checkbox menu on top of the edit row

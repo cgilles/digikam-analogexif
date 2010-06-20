@@ -23,8 +23,8 @@
 #include <QComboBox>
 #include <QStringList>
 
-QWidget* TagTypeItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option,
-	const QModelIndex &index) const
+QWidget* TagTypeItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &,
+        const QModelIndex &) const
 {
 	QComboBox* combo = new QComboBox(parent);
 
@@ -59,7 +59,7 @@ void TagTypeItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mode
 }
 
 void TagTypeItemDelegate::updateEditorGeometry(QWidget *editor,
-	const QStyleOptionViewItem &option, const QModelIndex &index) const
+        const QStyleOptionViewItem &option, const QModelIndex &) const
 {
 	editor->setGeometry(option.rect.adjusted(0, -2, 0, 2));
 }

@@ -186,8 +186,6 @@ Qt::ItemFlags ExifTreeModel::flags(const QModelIndex &index) const
 	if(!index.isValid())
 		return 0;
 
-	ExifItem* item = getItem(index);
-
 	// caption or tag text - selectable, enabled, non-editable
 	if(index.column() == 0)
 		return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
@@ -229,7 +227,7 @@ QModelIndex ExifTreeModel::parent(const QModelIndex &index) const
 	return createIndex(parentItem->childNumber(), 0, parentItem);
 }
 
-QVariant ExifTreeModel::getItemValue(const QVariant& itemValue, const QString& itemFormat, ExifItem::TagFlags itemFlags, ExifItem::TagType itemType, int role)
+QVariant ExifTreeModel::getItemValue(const QVariant& itemValue, const QString& itemFormat, ExifItem::TagFlags, ExifItem::TagType itemType, int role)
 {
 	// return value according to the tag type
 	switch(itemType)
@@ -456,6 +454,8 @@ QVariant ExifTreeModel::processItemData(const ExifItem *item, const QVariant& va
 	case ExifItem::TagDateTime:
 		return value.toDateTime().toString("yyyy:MM:dd HH:mm:ss");
 		break;
+        default:
+                break;
 	}
 
 	ok = false;
@@ -583,7 +583,7 @@ QString ExifTreeModel::getGPSfromXmp()
 			else
 				gpsPosition = "-";
 
-			gpsPosition += QString("%1° %2' %3\" ").arg(latStrs.at(0)).arg(latStrs.at(1)).arg(latStrs.at(2).left(latStrs.at(2).length() - 1));
+			gpsPosition += QString("%1\u00B0 %2' %3\" ").arg(latStrs.at(0)).arg(latStrs.at(1)).arg(latStrs.at(2).left(latStrs.at(2).length() - 1));
 		}
 		else if(latStrs.count() == 2)
 		{
@@ -596,7 +596,7 @@ QString ExifTreeModel::getGPSfromXmp()
 
 			double secVal = modf(minVal, NULL);
 
-			gpsPosition += QString("%1° %2' %3\" ").arg(latStrs.at(0)).arg((int)minVal, 2, 10, QChar('0')).arg(secVal, 2, 'f', 3, QChar('0'));
+			gpsPosition += QString("%1\u00B0 %2' %3\" ").arg(latStrs.at(0)).arg((int)minVal, 2, 10, QChar('0')).arg(secVal, 2, 'f', 3, QChar('0'));
 		}
 		else
 			return "";
@@ -614,7 +614,7 @@ QString ExifTreeModel::getGPSfromXmp()
 				else
 					gpsPosition += "-";
 
-				gpsPosition += QString("%1° %2' %3\"").arg(longStrs.at(0)).arg(longStrs.at(1)).arg(longStrs.at(2).left(longStrs.at(2).length() - 1));
+				gpsPosition += QString("%1\u00B0 %2' %3\"").arg(longStrs.at(0)).arg(longStrs.at(1)).arg(longStrs.at(2).left(longStrs.at(2).length() - 1));
 			}
 			else if(longStrs.count() == 2)
 			{
@@ -627,7 +627,7 @@ QString ExifTreeModel::getGPSfromXmp()
 
 				double secVal = modf(minVal, NULL);
 
-				gpsPosition += QString("%1° %2' %3\" ").arg(longStrs.at(0)).arg((int)minVal, 2, 10, QChar('0')).arg(secVal, 2, 'f', 3, QChar('0'));
+				gpsPosition += QString("%1\u00B0 %2' %3\" ").arg(longStrs.at(0)).arg((int)minVal, 2, 10, QChar('0')).arg(secVal, 2, 'f', 3, QChar('0'));
 			}
 			else
 				return "";
@@ -675,7 +675,7 @@ QString ExifTreeModel::getGPSfromExif()
 				secDouble += frac * 60.0;
 			}
 
-			gpsPosition += QString("%1° %2' %3\" ").arg(deg.first, 2, 10, QChar('0')).arg(min.first, 2, 10, QChar('0')).arg(secDouble, 2, 'f', 3, QChar('0'));
+			gpsPosition += QString("%1\u00B0 %2' %3\" ").arg(deg.first, 2, 10, QChar('0')).arg(min.first, 2, 10, QChar('0')).arg(secDouble, 2, 'f', 3, QChar('0'));
 
 			pos = curExifData.findKey(Exiv2::ExifKey("Exif.GPSInfo.GPSLongitudeRef"));
 			if(pos != curExifData.end())
@@ -707,7 +707,7 @@ QString ExifTreeModel::getGPSfromExif()
 						secDouble += frac * 60.0;
 					}
 
-					gpsPosition += QString("%1° %2' %3\"").arg(deg.first, 3, 10, QChar('0')).arg(min.first, 2, 10, QChar('0')).arg(secDouble, 2, 'f', 3, QChar('0'));
+					gpsPosition += QString("%1\u00B0 %2' %3\"").arg(deg.first, 3, 10, QChar('0')).arg(min.first, 2, 10, QChar('0')).arg(secDouble, 2, 'f', 3, QChar('0'));
 
 					return gpsPosition;
 				}
@@ -743,7 +743,7 @@ QVariant ExifTreeModel::getTagValueFromExif(ExifItem::TagType tagType, const Exi
 	case Exiv2::signedShort:
 	case Exiv2::signedLong:
 	case Exiv2::undefined:
-		return tagValue.toLong(pos);
+		return QVariant::fromValue(tagValue.toLong(pos));
 		break;
 	case Exiv2::unsignedRational:
 	case Exiv2::signedRational:
@@ -761,6 +761,8 @@ QVariant ExifTreeModel::getTagValueFromExif(ExifItem::TagType tagType, const Exi
 			}
 			break;
 		}
+        default:
+                break;
 	}
 
 	return QVariant();
@@ -809,8 +811,7 @@ void ExifTreeModel::processTag(ExifItem* tag, Exiv2::ExifData& exifData, Exiv2::
 				continue;
 			}
 
-			int tagId = exifKey.tag();
-			tag->setChecked(true);
+                        tag->setChecked(true);
 
 			const Exiv2::Value& tagValue = pos->value();
 
@@ -1064,7 +1065,7 @@ void ExifTreeModel::repopulate()
 
 bool ExifTreeModel::parseGPSString(QString gpsStr, QString& latRef, int& latDeg, int& latMin, double& latSec, QString& lonRef, int& lonDeg, int& lonMin, double& lonSec)
 {
-	QRegExp regEx("(\\+|\\-)?(\\d{1,2})°\\s*(\\d{1,2})'\\s*(\\d{1,2}(?:\\.\\d{1,3})?)\" (\\+|\\-)?(\\d{1,3})°\\s*(\\d{1,2})'\\s*(\\d{1,2}(?:\\.\\d{1,3})?)\"");
+	QRegExp regEx("(\\+|\\-)?(\\d{1,2})\u00B0\\s*(\\d{1,2})'\\s*(\\d{1,2}(?:\\.\\d{1,3})?)\" (\\+|\\-)?(\\d{1,3})\u00B0\\s*(\\d{1,2})'\\s*(\\d{1,2}(?:\\.\\d{1,3})?)\"");
 
 	QStringList caps;
 
@@ -1453,7 +1454,7 @@ Exiv2::Value::AutoPtr ExifTreeModel::QStringToExifUtf(QString qstr, bool addUnic
 	return v;
 }
 
-void ExifTreeModel::QStringToExifUtf(Exiv2::Value& v, QString qstr, bool addUnicodeMarker, bool isUtf8, Exiv2::TypeId typeId)
+void ExifTreeModel::QStringToExifUtf(Exiv2::Value& v, QString qstr, bool addUnicodeMarker, bool isUtf8, Exiv2::TypeId)
 {
 	// get UTF-16 byte string
 	QByteArray utfData;
@@ -1583,8 +1584,6 @@ void ExifTreeModel::storeEtags(Exiv2::ExifData& exifData)
 
 bool ExifTreeModel::saveFile(QString filename, bool overwrite)
 {
-	int etagsStorageOptions = settings.value("ExtraTagsStorage", 0x03).toInt();
-
 	try
 	{
 

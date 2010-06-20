@@ -171,7 +171,7 @@ bool AnalogExif::initialize()
 
 		QPushButton* openBtn = msgBox.addButton(tr("Open..."), QMessageBox::ActionRole);
 		QPushButton* newBtn = msgBox.addButton(tr("New..."), QMessageBox::ActionRole);
-		QPushButton* retryBtn = msgBox.addButton(QMessageBox::Retry);
+                msgBox.addButton(QMessageBox::Retry);
 		QPushButton* cancelBtn = msgBox.addButton(QMessageBox::Cancel);
 
 		msgBox.setWindowIcon(this->windowIcon());
@@ -275,7 +275,11 @@ bool AnalogExif::initialize()
 
 	connect(ui.fileView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(fileView_selectionChanged(const QItemSelection&, const QItemSelection&)));
 
+#ifdef Q_WS_MAC
+	QModelIndex lastFolder = dirSorter->mapFromSource(fileViewModel->index(settings.value("lastFolder", QDir::homePath()).toString()));
+#else
 	QModelIndex& lastFolder = dirSorter->mapFromSource(fileViewModel->index(settings.value("lastFolder", QDir::homePath()).toString()));
+#endif
 	if(lastFolder != QModelIndex())
 	{
 		ui.directoryLine->setText(QDir::toNativeSeparators(settings.value("lastFolder", QDir::homePath()).toString()));
@@ -291,7 +295,7 @@ bool AnalogExif::initialize()
 }
 
 // changed selection of the file browser
-void AnalogExif::fileView_selectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
+void AnalogExif::fileView_selectionChanged(const QItemSelection&, const QItemSelection&)
 {
 	// map selection to original
 	QModelIndexList selIdx = ui.fileView->selectionModel()->selectedRows();
@@ -418,7 +422,7 @@ void AnalogExif::fileView_selectionChanged(const QItemSelection& selected, const
 }
 
 // called when user clicks on item in the file view
-void AnalogExif::on_fileView_clicked(const QModelIndex& sortIndex)
+void AnalogExif::on_fileView_clicked(const QModelIndex&)
 {
 #if 0
 	// dirty data - notify user
@@ -538,13 +542,16 @@ void AnalogExif::previewUpdate()
 void AnalogExif::on_fileView_expanded (const QModelIndex& sortIndex)
 {
 	// have to map indices
+#ifdef Q_WS_MAC
+	QModelIndex index = dirSorter->mapToSource(sortIndex);
+#else
 	QModelIndex& index = dirSorter->mapToSource(sortIndex);
-
+#endif
 	ui.directoryLine->setText(QDir::toNativeSeparators(fileViewModel->filePath(index)));
 }
 
 // on main window resize event
-void AnalogExif::resizeEvent(QResizeEvent * event)
+void AnalogExif::resizeEvent(QResizeEvent *)
 {
 	// rescale the pixmap
 	if(!ui.filePreview->pixmap()->isNull())
@@ -822,7 +829,8 @@ void AnalogExif::selectFilm(const QModelIndex& index)
 	QVariant filmData = filmsList->data(index, GearListModel::GetExifData);
 	if(filmData != QVariant())
 	{
-		exifTreeModel->setValues(filmData.toList());
+		QVariantList list = filmData.toList();
+		exifTreeModel->setValues(list);
 	}
 
 	filmsList->setSelectedIndex(index);
@@ -836,7 +844,8 @@ void AnalogExif::selectGear(const QModelIndex& index)
 	QVariant gearData = gearList->data(index, GearTreeModel::GetExifData);
 	if(gearData != QVariant())
 	{
-		exifTreeModel->setValues(gearData.toList());
+		QVariantList list = gearData.toList();
+		exifTreeModel->setValues(list);
 	}
 
 	gearList->setSelectedIndex(index);
@@ -850,7 +859,8 @@ void AnalogExif::selectAuthor(const QModelIndex& index)
 	QVariant authorData = authorsList->data(index, GearListModel::GetExifData);
 	if(authorData != QVariant())
 	{
-		exifTreeModel->setValues(authorData.toList());
+		QVariantList list = authorData.toList();
+		exifTreeModel->setValues(list);
 	}
 
 	authorsList->setSelectedIndex(index);
@@ -864,7 +874,8 @@ void AnalogExif::selectDeveloper(const QModelIndex& index)
 	QVariant devData = developersList->data(index, GearListModel::GetExifData);
 	if(devData != QVariant())
 	{
-		exifTreeModel->setValues(devData.toList());
+		QVariantList list = devData.toList();
+		exifTreeModel->setValues(list);
 	}
 
 	developersList->setSelectedIndex(index);
@@ -889,7 +900,7 @@ void AnalogExif::on_developerView_doubleClicked(const QModelIndex& index)
 }
 
 // film or gear selected - enable "apply gear" button
-void AnalogExif::filmAndGearView_selectionChanged(const QItemSelection& selected, const QItemSelection&)
+void AnalogExif::filmAndGearView_selectionChanged(const QItemSelection&, const QItemSelection&)
 {
 	bool validSelection = ui.gearView->selectionModel()->hasSelection() | ui.filmView->selectionModel()->hasSelection() | ui.developerView->selectionModel()->hasSelection() | ui.authorView->selectionModel()->hasSelection();
 	ui.actionApply_gear->setEnabled(validSelection);
@@ -897,7 +908,7 @@ void AnalogExif::filmAndGearView_selectionChanged(const QItemSelection& selected
 }
 
 // Apply action triggered
-void AnalogExif::on_actionApply_gear_triggered(bool checked)
+void AnalogExif::on_actionApply_gear_triggered(bool)
 {
 	QModelIndexList curFilm = ui.filmView->selectionModel()->selectedIndexes();
 	QModelIndexList curGear = ui.gearView->selectionModel()->selectedIndexes();
@@ -918,7 +929,7 @@ void AnalogExif::on_actionApply_gear_triggered(bool checked)
 }
 
 // Edit gear action
-void AnalogExif::on_actionEdit_gear_triggered(bool checked)
+void AnalogExif::on_actionEdit_gear_triggered(bool)
 {
 	if(!checkForDirty())
 		return;
@@ -937,7 +948,7 @@ void AnalogExif::on_actionEdit_gear_triggered(bool checked)
 }
 
 // Preferences
-void AnalogExif::on_actionPreferences_triggered(bool checked)
+void AnalogExif::on_actionPreferences_triggered(bool)
 {
 	if(!checkForDirty())
 		return;
@@ -969,7 +980,7 @@ void AnalogExif::on_directoryLine_returnPressed()
 }
 
 // open file
-void AnalogExif::on_actionOpen_triggered(bool checked)
+void AnalogExif::on_actionOpen_triggered(bool)
 {
 	if(!checkForDirty())
 		return;
@@ -1009,7 +1020,7 @@ bool AnalogExif::checkForDirty()
 	return true;
 }
 
-void AnalogExif::on_action_Clear_tag_value_triggered(bool checked)
+void AnalogExif::on_action_Clear_tag_value_triggered(bool)
 {
 	// get the list of selected items
 	QModelIndexList idxList = ui.metadataView->selectionModel()->selectedIndexes();
@@ -1045,7 +1056,7 @@ void AnalogExif::metadataView_selectionChanged(const QItemSelection& selected, c
 }
 
 // open new library
-void AnalogExif::on_actionOpen_library_triggered(bool checked)
+void AnalogExif::on_actionOpen_library_triggered(bool)
 {
 	QString newName = QFileDialog::getOpenFileName(this, tr("Open equipment library"), QDir::fromNativeSeparators(ui.directoryLine->text()), tr("AnalogExif library files (*.ael);;All files (*.*)"));
 
@@ -1080,7 +1091,7 @@ void AnalogExif::on_actionOpen_library_triggered(bool checked)
 }
 
 // create new library
-void AnalogExif::on_actionNew_library_triggered(bool checked)
+void AnalogExif::on_actionNew_library_triggered(bool)
 {
 	QString newDb = createLibrary(this, QDir::fromNativeSeparators(ui.directoryLine->text()));
 
@@ -1279,7 +1290,7 @@ QStringList AnalogExif::getFileList(QModelIndexList selIdx, bool includeDirs)
 }
 
 // auto-fill exposure
-void AnalogExif::on_actionAuto_fill_exposure_triggered(bool checked)
+void AnalogExif::on_actionAuto_fill_exposure_triggered(bool)
 {
 	// determine the number of selected files
 	QModelIndexList selIdx = ui.fileView->selectionModel()->selectedRows();
@@ -1368,7 +1379,7 @@ void AnalogExif::on_fileView_doubleClicked(const QModelIndex& index)
 	openExternal(index);
 }
 
-void AnalogExif::on_actionOpen_external_triggered(bool checked)
+void AnalogExif::on_actionOpen_external_triggered(bool)
 {
 	// determine the number of selected files
 	QModelIndexList selIdx = ui.fileView->selectionModel()->selectedRows();
@@ -1390,12 +1401,12 @@ void AnalogExif::openExternal(const QModelIndex& index)
 		QDesktopServices::openUrl(QUrl::fromLocalFile(fileViewModel->filePath(idx)));
 }
 
-void AnalogExif::on_actionRename_triggered(bool checked)
+void AnalogExif::on_actionRename_triggered(bool)
 {
 	ui.fileView->edit(ui.fileView->selectionModel()->currentIndex());
 }
 
-void AnalogExif::on_actionRemove_triggered(bool checked)
+void AnalogExif::on_actionRemove_triggered(bool)
 {
 	// determine the number of selected files
 	QModelIndexList selIdx = ui.fileView->selectionModel()->selectedRows();
@@ -1480,7 +1491,7 @@ void AnalogExif::on_actionRemove_triggered(bool checked)
 }
 
 // copy metadata from another file
-void AnalogExif::on_action_Copy_metadata_triggered(bool checked)
+void AnalogExif::on_action_Copy_metadata_triggered(bool)
 {
 	// determine the number of selected files
 	QModelIndexList selIdx = ui.fileView->selectionModel()->selectedRows();
@@ -1581,7 +1592,7 @@ void AnalogExif::on_action_Copy_metadata_triggered(bool checked)
 	}
 }
 
-void AnalogExif::on_action_About_triggered(bool checked)
+void AnalogExif::on_action_About_triggered(bool)
 {
 	AboutDialog a(this);
 	a.exec();
@@ -1589,5 +1600,13 @@ void AnalogExif::on_action_About_triggered(bool checked)
 
 void AnalogExif::newVersionAvailable(QString selfTag, QString newTag, QDateTime newTime, QString newSummary)
 {
-	QMessageBox::information(this, tr("New version available"), tr("New version of AnalogExif is available - %1 (%2).\n\n%3").arg(newTag).arg(newTime.toString(Qt::DefaultLocaleLongDate)).arg(newSummary));
+    QMessageBox info(QMessageBox::Question, tr("New program version available"), tr("New version of AnalogExif is available.\n"
+               "Current version is %1, new version is %2 from %3.\n\n"
+               "Do you want to open the program website?").arg(selfTag).arg(newTag).arg(newTime.toString("dd.MM.yyyy")), QMessageBox::Yes | QMessageBox::No, this);
+    info.setDetailedText(newSummary);
+
+    if(info.exec() == QMessageBox::Yes)
+    {
+            OnlineVersionChecker::openDownloadPage();
+    }
 }

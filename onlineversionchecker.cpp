@@ -238,7 +238,7 @@ bool VersionFileParser::parse(const QString& ver, const QString& xmlData)
 	return found;
 }
 
-void VersionFileParser::xmlStartElementHandler(void* userData, const XML_Char *name, const XML_Char **atts)
+void VersionFileParser::xmlStartElementHandler(void* userData, const XML_Char *name, const XML_Char **)
 {
 	VersionFileParser* parser = static_cast<VersionFileParser*>(userData);
 

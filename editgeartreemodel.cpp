@@ -171,8 +171,6 @@ bool EditGearTreeModel::dropMimeData(const QMimeData *data, Qt::DropAction actio
 		QString itemName;
 		int gearId, gearType;
 
-		int curRow = 0;
-
 		stream >> gearId >> gearType;
 
 		if(action == Qt::CopyAction)

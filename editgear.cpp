@@ -266,7 +266,7 @@ void EditGear::on_developerView_customContextMenuRequested(const QPoint &pos)
 	menu.exec(ui.developerView->mapToGlobal(pos));
 }
 
-void EditGear::on_actionAdd_new_camera_body_triggered(bool checked)
+void EditGear::on_actionAdd_new_camera_body_triggered(bool)
 {
 	// add new camera body
 	int newId = gearList->createNewGear(-1, -1, 0, tr("New camera body"), gearList->invisibleRootItem()->rowCount());
@@ -279,7 +279,7 @@ void EditGear::on_actionAdd_new_camera_body_triggered(bool checked)
 	ui.gearView->edit(newIdx);
 }
 
-void EditGear::on_actionAdd_new_camera_lens_triggered(bool checked)
+void EditGear::on_actionAdd_new_camera_lens_triggered(bool)
 {
 	int orderBy = gearList->itemFromIndex(contextIndex)->rowCount();
 
@@ -301,7 +301,7 @@ void EditGear::on_actionAdd_new_camera_lens_triggered(bool checked)
 	ui.gearView->edit(newIdx);
 }
 
-void EditGear::on_actionAdd_new_film_triggered(bool checked)
+void EditGear::on_actionAdd_new_film_triggered(bool)
 {
 	// add new film
 	int newId = filmList->createNewGear(-1, -1, 2, tr("New film"), filmList->invisibleRootItem()->rowCount());
@@ -313,7 +313,7 @@ void EditGear::on_actionAdd_new_film_triggered(bool checked)
 	ui.filmView->edit(newIdx);
 }
 
-void EditGear::on_actionAdd_new_developer_triggered(bool checked)
+void EditGear::on_actionAdd_new_developer_triggered(bool)
 {
 	// add new film
 	int newId = filmList->createNewGear(-1, -1, 3, tr("New developer"), developerList->invisibleRootItem()->rowCount());
@@ -325,7 +325,7 @@ void EditGear::on_actionAdd_new_developer_triggered(bool checked)
 	ui.developerView->edit(newIdx);
 }
 
-void EditGear::on_actionAdd_new_author_triggered(bool checked)
+void EditGear::on_actionAdd_new_author_triggered(bool)
 {
 	// add new film
 	int newId = authorList->createNewGear(-1, -1, 4, tr("New author"), authorList->invisibleRootItem()->rowCount());
@@ -337,7 +337,7 @@ void EditGear::on_actionAdd_new_author_triggered(bool checked)
 	ui.authorView->edit(newIdx);
 }
 
-void EditGear::on_actionDuplicate_triggered(bool checked)
+void EditGear::on_actionDuplicate_triggered(bool)
 {
 	// duplicate selected gear
 	QModelIndexList selectedItems;
@@ -414,7 +414,7 @@ void EditGear::on_actionDuplicate_triggered(bool checked)
 	setDirty();
 }
 
-void EditGear::on_actionDelete_triggered(bool checked)
+void EditGear::on_actionDelete_triggered(bool)
 {
 	QModelIndexList selectedItems;
 	QItemSelectionModel* selModel;
@@ -526,7 +526,7 @@ void EditGear::gearView_clicked(const QModelIndex& index)
 	}
 }
 
-void EditGear::metadataList_dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
+void EditGear::metadataList_dataChanged(const QModelIndex&, const QModelIndex&)
 {
 	setDirty();
 	ui.metadataView->setFocus();
@@ -781,7 +781,7 @@ void EditGear::metadataList_cleared()
 	metaTagsMenu->setEnabled(false);
 }
 
-void EditGear::on_actionDelete_meta_tag_triggered(bool checked)
+void EditGear::on_actionDelete_meta_tag_triggered(bool)
 {
 	QModelIndexList idxList = ui.metadataView->selectionModel()->selectedIndexes();
 	if(idxList.count() == 0)

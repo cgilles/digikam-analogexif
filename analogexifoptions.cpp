@@ -103,7 +103,7 @@ AnalogExifOptions::~AnalogExifOptions()
 	delete verChecker;
 }
 
-void AnalogExifOptions::on_gearTypesList_itemClicked(QListWidgetItem* item)
+void AnalogExifOptions::on_gearTypesList_itemClicked(QListWidgetItem*)
 {
 	gearTempList->reload(ui.gearTypesList->currentRow());
 	ui.gearTemplateView->setColumnWidth(0, 25);
@@ -245,7 +245,7 @@ void AnalogExifOptions::removeTag(QModelIndex idx)
 	}
 }
 
-void AnalogExifOptions::on_actionDelete_triggered(bool checked)
+void AnalogExifOptions::on_actionDelete_triggered(bool)
 {
 	// check all selections 
 	QModelIndexList idxs = ui.gearTemplateView->selectionModel()->selectedRows();
@@ -259,9 +259,9 @@ void AnalogExifOptions::on_actionDelete_triggered(bool checked)
 }
 
 // add new tag
-void AnalogExifOptions::on_actionAdd_new_tag_triggered(bool checked)
+void AnalogExifOptions::on_actionAdd_new_tag_triggered(bool)
 {
-	int newId = gearTempList->insertTag("", tr("New EXIF tag"), "%1", ExifItem::TagString);
+        int newId = gearTempList->insertTag("", tr("New tag"), "%1", ExifItem::TagString);
 
 	if(newId != -1)
 	{
@@ -271,7 +271,7 @@ void AnalogExifOptions::on_actionAdd_new_tag_triggered(bool checked)
 	setDirty();
 }
 
-void AnalogExifOptions::gearTempList_dataChanged(const QModelIndex& topLeft, const QModelIndex&)
+void AnalogExifOptions::gearTempList_dataChanged(const QModelIndex&, const QModelIndex&)
 {
 	setDirty();
 }
@@ -811,7 +811,7 @@ void AnalogExifOptions::cancelVersionCheck()
 	verChecker->cancelCheck();
 }
 
-void AnalogExifOptions::on_actionMove_up_triggered(bool checked)
+void AnalogExifOptions::on_actionMove_up_triggered(bool)
 {
 	QModelIndex curIdx = ui.gearTemplateView->currentIndex();
 	if(curIdx.isValid())
@@ -832,7 +832,7 @@ void AnalogExifOptions::on_actionMove_up_triggered(bool checked)
 	setDirty();
 }
 
-void AnalogExifOptions::on_actionMove_down_triggered(bool checked)
+void AnalogExifOptions::on_actionMove_down_triggered(bool)
 {
 	QModelIndex curIdx = ui.gearTemplateView->currentIndex();
 	if(curIdx.isValid())
