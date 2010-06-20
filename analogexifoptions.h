@@ -98,6 +98,10 @@ private slots:
 	void on_actionDelete_triggered(bool checked = false);
 	// on add new template tag
 	void on_actionAdd_new_tag_triggered(bool checked = false);
+	// move tag up
+	void on_actionMove_up_triggered(bool checked = false);
+	// move tag down
+	void on_actionMove_down_triggered(bool checked = false);
 	// on data changed
 	void gearTempList_dataChanged(const QModelIndex&, const QModelIndex&);
 	// close button

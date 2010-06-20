@@ -56,6 +56,9 @@ public:
 	// insert new tag and return its id
 	int insertTag(QString tagName, QString tagDesc, QString tagFormat, ExifItem::TagType tagType);
 
+	// swap the orderby fields for the given indexes
+	void swapOrderBys(const QModelIndex& idx1, const QModelIndex& idx2);
+
 	// data role to get tag id
 	static const int GetTagId = Qt::UserRole + 1;
 	static const int GetTagFlagsRole = Qt::UserRole + 2;

@@ -62,6 +62,7 @@ AnalogExifOptions::AnalogExifOptions(QWidget *parent)
 	ui.gearTemplateView->setColumnWidth(1, 125);
 	ui.gearTemplateView->setColumnWidth(2, 125);
 	ui.gearTemplateView->horizontalHeader()->setStretchLastSection(true);
+	ui.gearTemplateView->setColumnHidden(0, true);
 
 	tagTypeEditor = new TagTypeItemDelegate(this);
 	ui.gearTemplateView->setItemDelegateForColumn(3, tagTypeEditor);
@@ -523,15 +524,26 @@ bool AnalogExifOptions::saveOptions()
 
 void AnalogExifOptions::gearList_selectionChanged(const QItemSelection&, const QItemSelection&)
 {
-	if(ui.gearTemplateView->currentIndex().isValid())
+	QModelIndex curIndex = ui.gearTemplateView->currentIndex();
+	if(curIndex.isValid())
 	{
 		ui.actionDelete->setEnabled(true);
 		ui.delBtn->setEnabled(true);
+
+		ui.upBtn->setEnabled((curIndex.row() != 0));
+		ui.actionMove_up->setEnabled((curIndex.row() != 0));
+
+		ui.downBtn->setEnabled((curIndex.row() != (gearTempList->rowCount() - 1)));
+		ui.actionMove_down->setEnabled((curIndex.row() != (gearTempList->rowCount() - 1)));
 	}
 	else
 	{
 		ui.actionDelete->setEnabled(false);
 		ui.delBtn->setEnabled(false);
+		ui.downBtn->setEnabled(false);
+		ui.actionMove_down->setEnabled(false);
+		ui.upBtn->setEnabled(false);
+		ui.actionMove_up->setEnabled(false);
 	}
 }
 
@@ -797,4 +809,46 @@ void AnalogExifOptions::newVersionCheckError(QNetworkReply::NetworkError error)
 void AnalogExifOptions::cancelVersionCheck()
 {
 	verChecker->cancelCheck();
+}
+
+void AnalogExifOptions::on_actionMove_up_triggered(bool checked)
+{
+	QModelIndex curIdx = ui.gearTemplateView->currentIndex();
+	if(curIdx.isValid())
+	{
+		int curRow = curIdx.row();
+
+		// already on top
+		if(curRow == 0)
+			return;
+
+		gearTempList->swapOrderBys(curIdx, curIdx.sibling(curRow - 1, 0));
+
+		QModelIndex newIdx = gearTempList->index(curRow - 1, 0, curIdx.parent());
+		ui.gearTemplateView->setCurrentIndex(newIdx);
+		ui.gearTemplateView->selectRow(curRow - 1);
+	}
+
+	setDirty();
+}
+
+void AnalogExifOptions::on_actionMove_down_triggered(bool checked)
+{
+	QModelIndex curIdx = ui.gearTemplateView->currentIndex();
+	if(curIdx.isValid())
+	{
+		int curRow = curIdx.row();
+
+		// already on bottom
+		if(curRow == (gearTempList->rowCount() - 1))
+			return;
+
+		gearTempList->swapOrderBys(curIdx, curIdx.sibling(curRow + 1, 0));
+
+		QModelIndex newIdx = gearTempList->index(curRow + 1, 0, curIdx.parent());
+		ui.gearTemplateView->setCurrentIndex(newIdx);
+		ui.gearTemplateView->selectRow(curRow + 1);
+	}
+
+	setDirty();
 }

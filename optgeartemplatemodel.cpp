@@ -335,3 +335,38 @@ int OptGearTemplateModel::insertTag(QString tagName, QString tagDesc, QString ta
 
 	return query.lastInsertId().toInt();
 }
+
+void OptGearTemplateModel::swapOrderBys(const QModelIndex& idx1, const QModelIndex& idx2)
+{
+	// check for validity
+	if(!idx1.isValid() || !idx2.isValid())
+		return;
+
+	// get id and orderby values of the first index
+	if(!query().seek(idx1.row()))
+		return;
+
+	int tagId1 = query().value(7).toInt();
+	int orderBy1 = query().value(0).toInt();
+
+	// get id and orderby values of the second index
+	if(!query().seek(idx2.row()))
+		return;
+
+	int tagId2 = query().value(7).toInt();
+	int orderBy2 = query().value(0).toInt();
+
+	// update database
+	QSqlQuery updQuery(QString("UPDATE GearTemplate SET OrderBy = %1 WHERE id = %2").arg(orderBy2).arg(tagId1));
+
+	if(updQuery.lastError().isValid())
+		return;
+
+	updQuery.exec(QString("UPDATE GearTemplate SET OrderBy = %1 WHERE id = %2").arg(orderBy1).arg(tagId2));
+
+	if(updQuery.lastError().isValid())
+		return;
+
+	// notify the view
+	reload();
+}
