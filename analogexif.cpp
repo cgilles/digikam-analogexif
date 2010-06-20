@@ -251,24 +251,7 @@ bool AnalogExif::initialize()
 
 	// start scan
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-
-	QTime timer;
-	ProgressDialog progress(tr("Scaning folders"), "Please wait...", "", this, 0, 100);
-	QFuture<QModelIndex> future = QtConcurrent::run(fileViewModel, &QFileSystemModel::setRootPath, QDir::rootPath());
-
-	progress.setValue(0);
-
-	while(!future.isFinished())
-	{
-		if((timer.elapsed() > 500) && (!progress.isVisible()))
-			progress.show();
-
-		progress.setValue(timer.elapsed() / 1000);
-
-		QCoreApplication::processEvents();
-		QCoreApplication::sendPostedEvents();
-	}
-
+        fileViewModel->setRootPath(QDir::rootPath());
 	QApplication::restoreOverrideCursor();
 
 	dirSorter->setSourceModel(fileViewModel);
