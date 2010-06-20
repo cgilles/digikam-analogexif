@@ -37,6 +37,8 @@ public:
 
 	int columnCount(const QModelIndex &parent = QModelIndex()) const
 	{
+                Q_UNUSED(parent);
+
 		// order by, tag name, description, type and print format
 		return 5;
 	}
