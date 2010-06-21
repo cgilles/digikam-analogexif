@@ -78,7 +78,7 @@ AnalogExifOptions::AnalogExifOptions(QWidget *parent)
 	QAction* separator = new QAction(this);
 	separator->setSeparator(true);
 
-	tempContextMenu << ui.actionAdd_new_tag << separator << ui.actionDelete;
+	tempContextMenu << ui.actionAdd_new_tag << ui.actionMove_up << ui.actionMove_down << separator << ui.actionDelete;
 
 	ui.userNsEdit->setValidator(new QRegExpValidator(QRegExp("[a-zA-Z0-9$-_@\\.&+!*\"'(),=;/#?: %\\\\]*"), this));
 	ui.userNsPrefix->setValidator(new QRegExpValidator(QRegExp("[a-zA-Z0-9]*"), this));
