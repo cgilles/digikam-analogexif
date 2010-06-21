@@ -11,21 +11,23 @@ FUTURE FEATURES
 * support XMP structures and LangAlt
 * show progress during backup
 * when failed to open new database and consequently fail to open previous db - ask to create new and revert to default
-* when editing equipment template change tag order with buttons (i.e. remove orderby editable field)
 ? Filter shown metadata
 ? Other file format support
 ? set proper XMP toolkit tag
 * when disabling custom namespace warn regarding affected equipment
 * multiple custom namespaces
+* change tool buttons in Mac to something else
+* x64 support
 
 DEVELOPMENT
-* Mac support
 * Fill-in the metatags database
+* warn(Win32)/prohibit(Mac) when user tries to store unicode characters in exif
 
 TESTS
 * verify against metadata corruption
 * test TIFF support
 * test proxy support
+* test Mac features
 
 BUGS
 * When typing long user-defined XMP schema prefix the Options dialog window resizes
@@ -38,7 +40,7 @@ BUGS
 * when copying metadata and destination is one file, copied tags flicker as "dirty" for a moment
 * when auto-filling exposure number and asking for backup - metadata of the changed file may be reflected in the metadata view
 * handle all unsuccessfull returns
-* fix startup sort errors
+* in the equipment template edit, when tag flags checkboxes and line edit got swapped out, editor does not close properly when loses focus
+* [Mac] local 8-bit exif string values are still stored as UTF-8 (toLocal8Bit() returns UTF-8) - fix by prohibiting local characters?
+* When pasting Google map coordinates cursor should be on the first character to pass the validator
 
-LIMITATIONS
-* Unicode paths only in Windows
