@@ -134,11 +134,12 @@ bool ExifTreeModel::openFile(QString filename)
 	try
 	{
 		// open file using Exiv2 library
-#ifdef _WIN32
+#ifdef Q_WS_WIN
 		// unicode paths supported only in windows version
 		exifHandle = Exiv2::ImageFactory::open(filename.toStdWString());
 #else
-		exifHandle = Exiv2::ImageFactory::open(filename.toStdString());
+		// convert to UTF-8
+		exifHandle = Exiv2::ImageFactory::open(filename.toUtf8().data());
 #endif
 		if(exifHandle.get() == 0)
 			return false;
@@ -1587,11 +1588,12 @@ bool ExifTreeModel::saveFile(QString filename, bool overwrite)
 	try
 	{
 
-#ifdef _WIN32
+#ifdef Q_WS_WIN
 		// unicode paths are supported only in Windows verison
 	    Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open(filename.toStdWString());
 #else
-		Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open(filename.toStdString());
+		// use UTF-8
+		Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open(filename.toUtf8().data());
 #endif
 
 	    if((image.get() == 0) || (!image->good()))
@@ -1872,11 +1874,12 @@ bool ExifTreeModel::setExposureNumber(QString filename, int exposure)
 
 	try
 	{
-#ifdef _WIN32
+#ifdef Q_WS_WIN
 		// unicode paths are supported only in Windows verison
 	    Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open(filename.toStdWString());
 #else
-		Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open(filename.toStdString());
+		// use UTF-8
+		Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open(filename.toUtf8().data());
 #endif
 
 	    if((image.get() == 0) || (!image->good()))
@@ -1921,11 +1924,12 @@ bool ExifTreeModel::mergeMetadata(QString filename, QVariantList metadata)
 
 	try
 	{
-#ifdef _WIN32
+#ifdef Q_WS_WIN
 		// unicode paths are supported only in Windows verison
 	    Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open(filename.toStdWString());
 #else
-		Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open(filename.toStdString());
+		// use UTF-8
+		Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open(filename.toUtf8().data());
 #endif
 
 	    if((image.get() == 0) || (!image->good()))
