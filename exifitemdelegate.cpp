@@ -733,7 +733,7 @@ bool ExifItemDelegate::eventFilter(QObject *object, QEvent *event)
 
 GpsLineEdit::GpsLineEdit(QWidget* parent) : QLineEdit(parent)
 {
-	setFrame(false);
+	// setFrame(false);
 	setInputMask("#99\u00B0 99' 99.999\" #999\u00B0 99' 99.999\"");
 	defaultValue = "+00\u00B0 00' 00.000\" +000\u00B0 00' 00.000\"";
 	setText(defaultValue);
@@ -742,7 +742,7 @@ GpsLineEdit::GpsLineEdit(QWidget* parent) : QLineEdit(parent)
 
 GpsLineEdit::GpsLineEdit(const QString& contents, QWidget* parent) : QLineEdit(contents, parent), defaultValue(contents)
 {
-	setFrame(false);
+	// setFrame(false);
 	setInputMask("#99\u00B0 99' 99.999\" #999\u00B0 99' 99.999\"");
 	setValidator(new QRegExpValidator(QRegExp("(\\+|\\-){1}\\d{2}\u00B0 \\d{2}' \\d{2}\\.\\d{3}\" (\\+|\\-){1}\\d{3}\u00B0 \\d{2}' \\d{2}\\.\\d{3}\""), this));
 }
@@ -778,7 +778,7 @@ void GpsLineEdit::paste()
 				else
 					result += "+";
 
-				result += QString("%1\u00B0 %2' %3\" ").arg(regEx.cap(6)).arg(regEx.cap(7)).arg(regEx.cap(8));
+				result += QString("%1\u00B0 %2' %3\" ").arg(regEx.cap(6), 3, QChar('0')).arg(regEx.cap(7)).arg(regEx.cap(8));
 
 				insert(result);
 				return;
