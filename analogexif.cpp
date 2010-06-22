@@ -1206,8 +1206,11 @@ QStringList AnalogExif::scanSubfolders(QModelIndexList selIdx, bool includeDirs)
 	return fileNames;
 }
 
-QStringList AnalogExif::getFileList(QModelIndexList selIdx, bool includeDirs)
+QStringList AnalogExif::getFileList(QModelIndexList selIdx, bool includeDirs, bool* cancelled)
 {
+	if(cancelled)
+		*cancelled = false;
+
 	filesFound = 0;
 
 	ProgressDialog progress(tr("Scanning subfolders..."), tr("Files found: 0"), tr("Cancel"), this, 0, 500);
@@ -1236,7 +1239,11 @@ QStringList AnalogExif::getFileList(QModelIndexList selIdx, bool includeDirs)
 		QCoreApplication::sendPostedEvents();
 
 		if(progress.wasCanceled())
+		{
+			if(cancelled)
+				*cancelled = true;
 			return QStringList();
+		}
 	}
 
 	progress.close();
@@ -1250,7 +1257,12 @@ void AnalogExif::on_actionAuto_fill_exposure_triggered(bool)
 	// determine the number of selected files
 	QModelIndexList selIdx = ui.fileView->selectionModel()->selectedRows();
 
-	QStringList fileNames = getFileList(selIdx);
+	bool cancelled = false;
+
+	QStringList fileNames = getFileList(selIdx, false, &cancelled);
+
+	if(cancelled)
+		return;
 
 	if(fileNames.count() < 2)
 	{
@@ -1366,13 +1378,12 @@ void AnalogExif::on_actionRemove_triggered(bool)
 	// determine the number of selected files
 	QModelIndexList selIdx = ui.fileView->selectionModel()->selectedRows();
 
-	QStringList fileNames = getFileList(selIdx, true);
+	bool cancelled = false;
 
-	if(fileNames.count() < 1)
-	{
-		QMessageBox::warning(this, tr("Empty folder"), tr("No files found in the given subfolder."));
+	QStringList fileNames = getFileList(selIdx, true, &cancelled);
+
+	if(cancelled)
 		return;
-	}
 
 	QMessageBox warning;
 	warning.setWindowTitle(tr("Delete files"));
@@ -1453,11 +1464,8 @@ void AnalogExif::on_action_Copy_metadata_triggered(bool)
 
 	QStringList fileNames = getFileList(selIdx);
 
-	if(fileNames.count() < 1)
-	{
-		QMessageBox::warning(this, tr("Empty folder"), tr("No files found in the given subfolder."));
+	if(fileNames.isEmpty())
 		return;
-	}
 
 	// get source filename
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Select source file for metadata..."), QDir::fromNativeSeparators(ui.directoryLine->text()), tr("JPEG images (*.jpg *.jpeg);;TIFF images (*.tif *.tiff);;All files (*.*)"));

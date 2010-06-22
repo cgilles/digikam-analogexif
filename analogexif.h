@@ -133,7 +133,7 @@ private:
 	void openExternal(const QModelIndex& index);
 
 	// async get file list
-	QStringList getFileList(QModelIndexList selIdx, bool includeDirs = false);
+	QStringList getFileList(QModelIndexList selIdx, bool includeDirs = false, bool* cancelled = 0);
 
 	void addFileNames(QStringList& fileNames, const QString& path, bool includeDirs = false);
 	QStringList scanSubfolders(QModelIndexList selIdx, bool includeDirs = false);
