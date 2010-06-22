@@ -86,6 +86,7 @@ AnalogExif::AnalogExif(QWidget *parent, Qt::WFlags flags)
 	ui.metadataView->addActions(contextMenus);
 
 	dirty = false;
+	setDirty(false);
 
 	// read previous window state
 	if(settings.contains("WindowState")){
@@ -295,7 +296,7 @@ void AnalogExif::fileView_selectionChanged(const QItemSelection&, const QItemSel
 				if(!save())
 					return;
 
-			dirty = false;
+			setDirty(false);
 		}
 		else if ((selIdx.count() == 1) && (previewIndex == selIdx.at(0)))
 		{
@@ -303,6 +304,8 @@ void AnalogExif::fileView_selectionChanged(const QItemSelection&, const QItemSel
 			return;
 		}
 	}
+
+	setDirty(false);
 
 	// enable copy metadata if anything selected
 	if(selIdx.count())
@@ -456,7 +459,7 @@ void AnalogExif::openLocation(QString path)
 
 	ui.gearView->expandAll();
 
-	dirty = false;
+	setDirty(false);
 
 	// setup tree
 	setupTreeView();
@@ -672,8 +675,7 @@ bool AnalogExif::save()
 
 	// clear dirty flags
 	exifTreeModel->resetDirty();
-	dirty = false;
-	setWindowModified(false);
+	setDirty(false);
 
 	// re-setup metadata view
 	setupTreeView();
@@ -683,12 +685,6 @@ bool AnalogExif::save()
 	gearList->setSelectedIndex(QModelIndex());
 	authorsList->setSelectedIndex(QModelIndex());
 	developersList->setSelectedIndex(QModelIndex());
-
-	// disable editing functions
-	ui.applyChangesBtn->setEnabled(false);
-	ui.revertBtn->setEnabled(false);
-	ui.action_Save->setEnabled(false);
-	ui.action_Undo->setEnabled(false);
 
 	// focus on metadata view
 	ui.metadataView->setFocus(Qt::OtherFocusReason);
@@ -700,18 +696,12 @@ bool AnalogExif::save()
 void AnalogExif::on_revertBtn_clicked()
 {
 	exifTreeModel->reload();
-	dirty = false;
-	setWindowModified(false);
+	setDirty(false);
 	setupTreeView();
 	filmsList->setSelectedIndex(QModelIndex());
 	gearList->setSelectedIndex(QModelIndex());
 	authorsList->setSelectedIndex(QModelIndex());
 	developersList->setSelectedIndex(QModelIndex());
-
-	ui.applyChangesBtn->setEnabled(false);
-	ui.revertBtn->setEnabled(false);
-	ui.action_Save->setEnabled(false);
-	ui.action_Undo->setEnabled(false);
 
 	ui.metadataView->setFocus(Qt::OtherFocusReason);
 }
@@ -719,18 +709,7 @@ void AnalogExif::on_revertBtn_clicked()
 // data model changed signal
 void AnalogExif::modelDataChanged(const QModelIndex&, const QModelIndex&)
 {
-	if(ui.fileView->selectionModel()->selectedRows().count() == 1)
-	{
-		// data changed - enable apply/revert buttons
-		dirty = true;
-		setWindowModified(true);
-		ui.revertBtn->setEnabled(true);
-		ui.action_Save->setEnabled(true);
-		ui.action_Undo->setEnabled(true);
-	}
-
-	// enable apply changes both for single and multiple selection
-	ui.applyChangesBtn->setEnabled(true);
+	setDirty(true);
 }
 
 // set up tree view
@@ -970,7 +949,10 @@ bool AnalogExif::checkForDirty()
 		if(result == QMessageBox::Save)
 			if(!save())
 				return false;
+
 	}
+
+	setDirty(false);
 
 	return true;
 }

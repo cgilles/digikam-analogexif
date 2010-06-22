@@ -97,6 +97,27 @@ private:
 	void setupTreeView();
 
 	// data is dirty
+	void setDirty(bool isDirty)
+	{
+		if(previewIndex != QModelIndex())
+		{
+			dirty = isDirty;
+			setWindowModified(isDirty);
+
+			ui.applyChangesBtn->setEnabled(isDirty);
+			ui.revertBtn->setEnabled(isDirty);
+			ui.action_Undo->setEnabled(isDirty);
+		}
+		else
+		{
+			ui.revertBtn->setEnabled(false);
+			ui.action_Undo->setEnabled(false);
+		}
+
+		ui.action_Save->setEnabled(isDirty);
+		ui.applyChangesBtn->setEnabled(isDirty);
+	}
+
 	bool dirty;
 
 	// create backup
