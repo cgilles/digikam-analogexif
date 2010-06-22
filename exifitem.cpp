@@ -210,6 +210,10 @@ QString ExifItem::flagName(TagFlag flag)
 			return QT_TR_NOOP("Multiple values");
 			break;
 
+	case Ascii:
+			return QT_TR_NOOP("7-bit ASCII");
+			break;
+
 	default:
 			return QT_TR_NOOP("Unknown");
 			break;

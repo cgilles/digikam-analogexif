@@ -53,6 +53,7 @@ public:
 		Extra		= 2,
 		Choice		= 4,
 		Multi		= 8,
+		Ascii		= 16,
 		Last
 	};
 	Q_DECLARE_FLAGS(TagFlags, TagFlag);

@@ -75,10 +75,16 @@ QWidget* ExifItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 	{
 	case ExifItem::TagString:
 		{
-			QLineEdit* edit = new QLineEdit(parent);
-			//edit->setFrame(false);
-
-			return edit;
+			if(tagFlags.testFlag(ExifItem::Ascii))
+			{
+				AsciiLineEdit* edit = new AsciiLineEdit(parent);
+				return edit;
+			}
+			else
+			{
+				QLineEdit* edit = new QLineEdit(parent);
+				return edit;
+			}
 		}
 		break;
 	case ExifItem::TagInteger:
