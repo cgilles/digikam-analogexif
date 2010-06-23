@@ -21,7 +21,6 @@ FUTURE FEATURES
 
 DEVELOPMENT
 * Fill-in the metatags database
-* warn(Win32)/prohibit(Mac) when user tries to store unicode characters in exif
 
 TESTS
 * verify against metadata corruption
@@ -41,6 +40,5 @@ BUGS
 * when auto-filling exposure number and asking for backup - metadata of the changed file may be reflected in the metadata view
 * handle all unsuccessfull returns
 * in the equipment template edit, when tag flags checkboxes and line edit got swapped out, editor does not close properly when loses focus
-* [Mac] local 8-bit exif string values are still stored as UTF-8 (toLocal8Bit() returns UTF-8) - fix by prohibiting local characters?
 * When pasting Google map coordinates cursor should be on the first character to pass the validator
 
