@@ -1379,12 +1379,18 @@ bool ExifTreeModel::storeTag(ExifItem* tag, Exiv2::ExifData& exifData, Exiv2::Ip
 								QStringToExifUtf(*v, ExifItem::valueToString(val, tag->tagType(), QVariant(), false), false, true, typId);
 							}
 						}
+						else
+						{
+							v = QStringToExifUtf(tag->getValueAsString(false), false, true, typId);
+						}
 						break;
 					default:
 						break;
 					}
 
-					xmpData[tagName.toStdString()] = *v;
+					if(v.get())
+						xmpData[tagName.toStdString()] = *v;
+
 					v.reset();
 				}
 			}
