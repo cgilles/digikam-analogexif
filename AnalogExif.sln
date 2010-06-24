@@ -2,8 +2,6 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AnalogExif", "AnalogExif.vcproj", "{8F11D1D4-AC78-4978-AFFD-8E29CD6D6E1D}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "AnalogExif Setup", "AnalogExif Setup\AnalogExif Setup.vdproj", "{AAA21231-9240-4D78-912D-6BDE2C7E6008}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -20,10 +18,6 @@ Global
 		{8F11D1D4-AC78-4978-AFFD-8E29CD6D6E1D}.Release|Win32.Build.0 = Release|Win32
 		{8F11D1D4-AC78-4978-AFFD-8E29CD6D6E1D}.ReleaseDLL|Win32.ActiveCfg = Release|Win32
 		{8F11D1D4-AC78-4978-AFFD-8E29CD6D6E1D}.ReleaseDLL|Win32.Build.0 = Release|Win32
-		{AAA21231-9240-4D78-912D-6BDE2C7E6008}.Debug|Win32.ActiveCfg = Debug
-		{AAA21231-9240-4D78-912D-6BDE2C7E6008}.DebugDLL|Win32.ActiveCfg = Debug
-		{AAA21231-9240-4D78-912D-6BDE2C7E6008}.Release|Win32.ActiveCfg = Release
-		{AAA21231-9240-4D78-912D-6BDE2C7E6008}.ReleaseDLL|Win32.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

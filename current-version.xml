@@ -2,18 +2,18 @@
 <Releases>
   <Release>
     <OS>Win32</OS>
-    <Version>0.0alpha</Version>
-    <Date>00:00 17.06.2010</Date>
+    <Version>0.0beta</Version>
+    <Date>20:00 20.06.2010</Date>
     <Notes>
-      This is plain-text release notes for the new release.
+      Initial release of Win32 version
     </Notes>
   </Release>
   <Release>
-    <OS>Win64</OS>
-    <Version>0.0alpha</Version>
-    <Date>00:00 17.06.2010</Date>
+    <OS>Mac</OS>
+    <Version>0.0beta</Version>
+    <Date>20:00 20.06.2010</Date>
     <Notes>
-      This is plain-text release notes for the new x64 release.
+      Initial release of Mac version.
     </Notes>
   </Release>
 </Releases>
