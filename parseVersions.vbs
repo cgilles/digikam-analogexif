@@ -60,4 +60,24 @@ Sub ParseReleaseData(ReleaseNode)
 
     fsoFile.WriteLine("!define PRODUCT_NOTES """ & ReleaseNotesText & """")
     fsoFile.Close
+    
+    ' Modify VERSIONINFO
+    Set fsoFile = fso.CreateTextFile("AnalogExif.rc.tmp", True)
+    Set sourceRcFile = fso.OpenTextFile("AnalogExif.rc", 1)
+   
+    Do While Not sourceRcFile.AtEndofStream
+        myLine = sourceRcFile.ReadLine
+        If InStr(myLine, "VALUE ""FileVersion""") Then
+            myLine = "            VALUE ""FileVersion"", """ & ReleaseVersion(0).Text & """"
+        ElseIf InStr(myLine, "VALUE ""ProductVersion""") Then
+            myLine = "            VALUE ""ProductVersion"", """ & ReleaseVersion(0).Text & """"
+        End If
+
+        fsoFile.WriteLine(myLine)
+    Loop
+
+    fsoFile.Close
+    sourceRcFile.Close
+    fso.DeleteFile("AnalogExif.rc")
+    fso.MoveFile "AnalogExif.rc.tmp", "AnalogExif.rc"
 End Sub
