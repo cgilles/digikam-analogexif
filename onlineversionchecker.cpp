@@ -85,6 +85,7 @@ void OnlineVersionChecker::checkForNewVersion(bool force)
 	selfVersion = parser.getVersion();
 	selfPlatform = parser.getPlatform();
 	selfDate = parser.getDate();
+	selfReleaseNumber = parser.getReleaseNumber();
 
 	QNetworkRequest request(versionCheckUrl);
 	curRequest = manager.get(request);
@@ -121,8 +122,9 @@ void OnlineVersionChecker::downloadFinished(QNetworkReply *reply)
 	QString readVersion = parser.getVersion();
 	QDateTime readDate = parser.getDate();
 	QString readDetails = parser.getDetails();
+	int readReleaseNumber = parser.getReleaseNumber();
 
-	if(readDate > selfDate)
+	if(readReleaseNumber > selfReleaseNumber)
 	{
 		emit newVersionAvailable(selfVersion, readVersion, readDate, readDetails);
 	}
@@ -143,7 +145,7 @@ void OnlineVersionChecker::openDownloadPage()
 	QDesktopServices::openUrl(downloadUrl);
 }
 
-VersionFileParser::VersionFileParser(QObject *parent) : QObject(parent), version(QString()), platform(QString()), details(QString()), date(QString())
+VersionFileParser::VersionFileParser(QObject *parent) : QObject(parent), version(QString()), platform(QString()), details(QString()), date(QString()), releaseNumber(QString())
 {
 	xmlParser = XML_ParserCreate(NULL);
 }
@@ -180,6 +182,7 @@ bool VersionFileParser::parse(const QString& xmlData)
 	details = QString();
 	date = QString();
 	lookupPlatform = QString();
+	releaseNumber = QString();
 	found = false;
 
 	// parse the XML
@@ -215,6 +218,7 @@ bool VersionFileParser::parse(const QString& ver, const QString& xmlData)
 	platform = QString();
 	details = QString();
 	date = QString();
+	releaseNumber = QString();
 	lookupPlatform = ver;
 	found = false;
 
@@ -231,6 +235,7 @@ bool VersionFileParser::parse(const QString& ver, const QString& xmlData)
 	{
 		version = QString();
 		platform = QString();
+		releaseNumber = QString();
 		details = QString();
 		date = QString();
 	}
@@ -267,6 +272,7 @@ void VersionFileParser::xmlEndElementHandler(void* userData, const XML_Char *nam
 				parser->version = QString();
 				parser->platform = QString();
 				parser->details = QString();
+				parser->releaseNumber = QString();
 				parser->date = QString();
 			}
 		}
@@ -292,6 +298,10 @@ void VersionFileParser::xmlCharacterDataHandler(void *userData, const XML_Char *
 	else if(parser->curTag == "Version")
 	{
 		parser->version += xmlStr;
+	}
+	else if(parser->curTag == "ReleaseNumber")
+	{
+		parser->releaseNumber += xmlStr;
 	}
 	else if(parser->curTag == "Date")
 	{

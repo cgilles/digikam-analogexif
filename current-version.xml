@@ -3,7 +3,8 @@
   <Release>
     <OS>Win32</OS>
     <Version>0.0beta</Version>
-    <Date>20:00 20.06.2010</Date>
+    <ReleaseNumber>0</ReleaseNumber>
+    <Date>20.06.2010</Date>
     <Notes>
       Initial release of Win32 version
     </Notes>
@@ -11,7 +12,8 @@
   <Release>
     <OS>Mac</OS>
     <Version>0.0beta</Version>
-    <Date>20:00 20.06.2010</Date>
+    <ReleaseNumber>0</ReleaseNumber>
+    <Date>20.06.2010</Date>
     <Notes>
       Initial release of Mac version.
     </Notes>

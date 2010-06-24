@@ -51,12 +51,17 @@ public:
 
 	QDateTime getDate() const
 	{
-		return QDateTime::fromString(date.simplified(), "hh:mm dd.MM.yyyy");
+		return QDateTime::fromString(date.simplified(), "dd.MM.yyyy");
 	}
 
 	QString getDetails() const
 	{
 		return details;
+	}
+
+	int getReleaseNumber() const
+	{
+		return releaseNumber.toInt();
 	}
 
 private:
@@ -71,6 +76,7 @@ private:
 	bool found;
 
 	QString version;
+	QString releaseNumber;
 	QString platform;
 	QString details;
 	QString date;
@@ -96,6 +102,7 @@ private:
 	VersionFileParser parser;
 
 	QString selfVersion, selfPlatform;
+	int selfReleaseNumber;
 	QDateTime selfDate;
 	QNetworkReply *curRequest;
 
