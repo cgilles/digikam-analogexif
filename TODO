@@ -2,11 +2,10 @@ FUTURE FEATURES
 * database export/import (XML/CSV)
 * Linux support
 * Google Maps support
-? duplicate EXIF in XMP
 * help
 * APEX-adjustment as tag flag
 * mark dirty fields in bold when editing gear template
-* native Windows file explorer (could be impossible in Qt?)
+* native OS file explorer (could be impossible in Qt?)
 * completer/separate dialog and help on exif field names when editing gear templates
 * support XMP structures and LangAlt
 * show progress during backup
@@ -17,7 +16,11 @@ FUTURE FEATURES
 * when disabling custom namespace warn regarding affected equipment
 * multiple custom namespaces
 * change tool buttons in Mac to something else
+? Mac UI redesign
 * x64 support
+* write and read correct IPTC encoding
+* duplicate Exif/IPTC/XMP intersections
+* Add non-unicode tag values
 
 DEVELOPMENT
 * Fill-in the metatags database
@@ -34,11 +37,12 @@ BUGS
 * Icon provider on the filelist sometimes caches icons
 * For selected empty directories "Auto-fill exposures" and "Copy metadata" actions are not disabled
 * memory leaks
-* for extra long comments metadataview changes appearance
+? for extra long comments metadataview changes appearance
 * incorrect setWindowModified() on main window
 * when copying metadata and destination is one file, copied tags flicker as "dirty" for a moment
 * when auto-filling exposure number and asking for backup - metadata of the changed file may be reflected in the metadata view
 * handle all unsuccessfull returns
 * in the equipment template edit, when tag flags checkboxes and line edit got swapped out, editor does not close properly when loses focus
-* When pasting Google map coordinates cursor should be on the first character to pass the validator
-
+* when pasting Google map coordinates cursor should be on the first character to pass the validator
+* image metadata is not reloaded when options dialog opened/closed
+* handle langAlt tags properly (remove "lang=" prefix)
