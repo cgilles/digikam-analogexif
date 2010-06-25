@@ -285,7 +285,21 @@ QVariant ExifTreeModel::getItemValue(const QVariant& itemValue, const QString& i
 				}
 				else
 				{
-					return QString(itemFormat).arg(QString("%1/%2").arg(rational.at(0).toInt()).arg(rational.at(1).toInt()));
+					QChar signChar = QChar();
+					if((itemType == ExifItem::TagFraction) &&(value > 0))
+						signChar = '+';
+
+					int first = rational.at(0).toInt();
+					int second = rational.at(1).toInt();
+
+					if(abs(first) > abs(second))
+					{
+						int val = first / abs(second);
+						int frac = abs(first) % abs(second);
+						return QString(itemFormat).arg(QString("%1%2 %3/%4").arg(signChar).arg(val).arg(frac).arg(second));
+					}
+
+					return QString(itemFormat).arg(QString("%1%2/%3").arg(signChar).arg(first).arg(second));
 				}
 			}
 			else if(role == Qt::EditRole)
@@ -431,22 +445,10 @@ QVariant ExifTreeModel::processItemData(const ExifItem *item, const QVariant& va
 				// special check whether value is changed for rational numbers
 				double oldvalue = item->value().toDouble();
 
-				// compare APEX values up to the second digit after the decimal point
-				if(item->tagType() == ExifItem::TagApertureAPEX)
+				if((int)(oldvalue*100) == (int)(val*100))
 				{
-					if((int)(oldvalue*100) == (int)(val*100))
-					{
-						ok = false;
-						return QVariant();
-					}
-				}
-				else
-				{
-					if(oldvalue == val)
-					{
-						ok = false;
-						return QVariant();
-					}
+					ok = false;
+					return QVariant();
 				}
 			}
 			return val;

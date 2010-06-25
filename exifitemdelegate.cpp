@@ -131,7 +131,8 @@ QWidget* ExifItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 				spinBox->setRange(0.0, DBL_MAX);
 
 			//spinBox->setFrame(false);
-			spinBox->setDecimals(ExifUtils::DoublePrecision);
+			//spinBox->setDecimals(ExifUtils::DoublePrecision);
+			spinBox->setDecimals(2);
 			
 			return spinBox;
 		}
@@ -162,7 +163,7 @@ QWidget* ExifItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 		{
 			QLineEdit* edit = new QLineEdit(parent);
 
-			edit->setValidator(new QRegExpValidator(QRegExp("\\d+/\\d+"), edit));
+			edit->setValidator(new QRegExpValidator(QRegExp("(\\+|\\-)?(\\d+\\s)?\\d+/\\d+"), edit));
 			//edit->setFrame(false);
 
 			return edit;
@@ -301,7 +302,16 @@ void ExifItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
 				int second = rational.at(1).toInt();
 				QLineEdit* edit = static_cast<QLineEdit*>(editor);
 
-				edit->setText(QString("%1/%2").arg(first).arg(second));
+				if(abs(first) > abs(second))
+				{
+					int val = first / abs(second);
+					int frac = abs(first) % abs(second);
+					edit->setText(QString("%1 %2/%3").arg(val).arg(frac).arg(second));
+				}
+				else
+				{
+					edit->setText(QString("%1/%2").arg(first).arg(second));
+				}
 			}
 			else
 				return;
@@ -495,6 +505,9 @@ void ExifItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 
 	case ExifItem::TagFraction:
 		{
+			int wholePart = 0;
+			bool ok = false;
+
 			QLineEdit* edit = static_cast<QLineEdit*>(editor);
 			QString text = edit->text();
 
@@ -504,7 +517,28 @@ void ExifItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 				return;
 			}
 
-			// parse text since therer is no way of detecting whether user typed text or selected from list
+			if(text.contains(' '))
+			{
+				// x y/z format
+				QStringList str = text.split(' ', QString::SkipEmptyParts);
+				
+				wholePart = str.at(0).toInt(&ok);
+				if(!ok)
+					return;
+
+				// whole number
+				if(str.size() == 1)
+				{
+					QVariantList rational;
+					rational << wholePart << 1;
+					model->setData(index, rational);
+					return;
+				}
+
+				// process fraction part
+				text = str.at(1);
+			}
+
 			if(text.contains('/'))
 			{
 				// x/y format
@@ -515,7 +549,6 @@ void ExifItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 				if(ratioStr.size() != 2)
 					return;
 
-				bool ok = false;
 				int first = ratioStr.at(0).toInt(&ok);
 				if(!ok)
 					return;
@@ -524,7 +557,10 @@ void ExifItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 				if(!ok)
 					return;
 
-				rational << first << second;
+				if(wholePart < 0)
+					first = -first;
+
+				rational << (first + wholePart*second) << second;
 				model->setData(index, rational);
 			}
 		}
