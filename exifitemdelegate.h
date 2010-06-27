@@ -67,14 +67,10 @@ protected:
 				if((curChar >= 0x80) || (curChar ==0))
 				{
 					// not supported character
-#ifdef Q_WS_WIN
-					QToolTip::showText(mapToGlobal(cursorRect().topRight()), tr("Only 7-bit ASCII characters are allowed in this field.\nLocal characters may not be displayed properly in the other applications."));
-#else
-					QToolTip::showText(mapToGlobal(cursorRect().topRight()), tr("Only 7-bit ASCII characters are allowed in the field."));
+					QToolTip::showText(mapToGlobal(cursorRect().topRight()), tr("Only 7-bit Ascii characters are allowed in this field."));
 					QApplication::beep();
 					event->ignore();
 					return;
-#endif
 				}
 			}
 		}
