@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>AnalogExifOptionsClass</class>
  <widget class="QDialog" name="AnalogExifOptionsClass">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -16,6 +19,9 @@
   <property name="windowIcon">
    <iconset resource="analogexif.qrc">
     <normaloff>:/images/icons/cog.png</normaloff>:/images/icons/cog.png</iconset>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
