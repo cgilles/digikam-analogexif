@@ -19,7 +19,7 @@
         <file>icons/arrow_undo.png</file>
     </qresource>
     <qresource prefix="/database">
-        <file>AnalogExif.ael</file>
+        <file>NewDb.ael</file>
     </qresource>
     <qresource prefix="/">
         <file>version.xml</file>

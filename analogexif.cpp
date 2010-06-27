@@ -1150,7 +1150,7 @@ QString AnalogExif::createLibrary(QWidget* parent, QString dir)
 		}
 
 		// copy from the resource file
-		if(!QFile::copy(":/database/AnalogExif.ael", newDb))
+		if(!QFile::copy(":/database/NewDb.ael", newDb))
 		{
 			QMessageBox::critical(this, tr("Library create error"), tr("Unable to create new library ")+QDir::toNativeSeparators(newDb));
 			return QString();
