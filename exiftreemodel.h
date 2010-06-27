@@ -127,6 +127,7 @@ protected:
 	bool storeTag(ExifItem* tag, Exiv2::ExifData& exifData, Exiv2::IptcData& iptcData, Exiv2::XmpData& xmpData);
 	void processTag(ExifItem* tag, Exiv2::ExifData& exifData, Exiv2::IptcData& iptcData,  Exiv2::XmpData& xmpData);
 	void eraseTag(ExifItem* tag, Exiv2::ExifData& exifData, Exiv2::IptcData& iptcData, Exiv2::XmpData& xmpData);
+	void eraseTag(QString& tagNames, Exiv2::ExifData& exifData, Exiv2::IptcData& iptcData, Exiv2::XmpData& xmpData);
 	void tagValueToMetadata(QVariant value, ExifItem::TagType tagType, Exiv2::Value& v);
 
 	// store extra tags values in the comments of the given Exiv2 ExifData, can throw Exiv2 exceptions
@@ -151,6 +152,9 @@ protected:
 	QVariant getTagValueFromExif(ExifItem::TagType tagType, const Exiv2::Value& tagValue, int pos = 0) const;
 	static QVariant getItemValue(const QVariant& itemValue, const QString& itemFormat, ExifItem::TagFlags itemFlags, ExifItem::TagType itemType, int role);
 	QVariant processItemData(const ExifItem *item, const QVariant& value, bool& ok);
+
+	QVariant readTagValue(QString& tagNames, int& srcTagType, ExifItem::TagType tagType, ExifItem::TagFlags tagFlags, Exiv2::ExifData& exifData, Exiv2::IptcData& iptcData, Exiv2::XmpData& xmpData);
+	void writeTagValue(QString& tagNames, const QVariant& tagValue, ExifItem::TagType type, ExifItem::TagFlags tagFlags, Exiv2::ExifData& exifData, Exiv2::IptcData& iptcData, Exiv2::XmpData& xmpData);
 
 	bool editable;
 	// extra tags string

@@ -29,7 +29,7 @@
 void OptGearTemplateModel::reload(int id)
 {
 	gearId = id;
-	setQuery(QString("SELECT a.OrderBy, b.TagName, b.TagText, b.TagType, b.PrintFormat, b.Flags, b.id, a.id FROM GearTemplate a, MetaTags b WHERE a.GearType = %1 AND b.id = a.TagId ORDER BY a.OrderBy").arg(id));
+	setQuery(QString("SELECT a.OrderBy, b.TagName, b.TagText, b.TagType, b.PrintFormat, b.Flags, b.id, a.id, b.AltTag FROM GearTemplate a, MetaTags b WHERE a.GearType = %1 AND b.id = a.TagId ORDER BY a.OrderBy").arg(id));
 }
 
 Qt::ItemFlags OptGearTemplateModel::flags(const QModelIndex &index) const
@@ -82,15 +82,31 @@ QVariant OptGearTemplateModel::data(const QModelIndex &index, int role) const
 		return query().value(5).toInt();
 	}
 
-	if((role == Qt::ToolTipRole) && (index.column() == 1))
+	if(role == GetAltTagRole)
 	{
 		if(!query().seek(index.row()))
 			return QVariant();
 
-		return query().value(1);
+		return query().value(8).toString();
 	}
 
 	QVariant v = QSqlQueryModel::data(index, role);
+
+	if(((role == Qt::ToolTipRole) || (role == Qt::DisplayRole)) && (index.column() == 1))
+	{
+		if(!query().seek(index.row()))
+			return QVariant();
+
+		QString text = query().value(1).toString();
+
+		if(((ExifItem::TagFlags)query().value(5).toInt()).testFlag(ExifItem::Ascii))
+		{
+			if(query().value(8).toString() != "")
+				text += " (" + query().value(8).toString() + ")";
+		}
+
+		return text;
+	}
 
 	if(index.column() == 3)
 	{
@@ -214,7 +230,7 @@ bool OptGearTemplateModel::setData(const QModelIndex &index, const QVariant &val
 		case 1:
 			{
 				QVariantList vallist = value.toList();
-				if(vallist.count() != 2)
+				if(vallist.count() != 3)
 					return false;
 
 				if(vallist.at(0) == QVariant())
@@ -222,7 +238,17 @@ bool OptGearTemplateModel::setData(const QModelIndex &index, const QVariant &val
 
 				// TODO: bad, should be checked in item delegate
 				if((query().value(1).toString() == vallist.at(0).toString()) && (query().value(5).toInt() == vallist.at(1).toInt()))
-					return false;
+				{
+					if(((ExifItem::TagFlags)vallist.at(1).toInt()).testFlag(ExifItem::Ascii))
+					{
+						if(query().value(8).toString() == vallist.at(2).toString())
+							return false;
+					}
+					else
+					{
+						return false;
+					}
+				}
 
 				// browse through tags and verify them
 				QStringList tags = vallist.at(0).toString().remove(QRegExp("(\\s?)")).split(",", QString::SkipEmptyParts);
@@ -236,6 +262,27 @@ bool OptGearTemplateModel::setData(const QModelIndex &index, const QVariant &val
 				}
 
 				queryStr += QString("TagName = '%1', Flags = %2").arg(vallist.at(0).toString().replace("'", "''")).arg(vallist.at(1).toInt());
+
+				if(((ExifItem::TagFlags)vallist.at(1).toInt()).testFlag(ExifItem::Ascii))
+				{
+					// browse through tags and verify them
+					QStringList tags = vallist.at(2).toString().remove(QRegExp("(\\s?)")).split(",", QString::SkipEmptyParts);
+					foreach(QString tag, tags)
+					{
+						if(!ExifTreeModel::tagSupported(tag))
+						{
+							emit unsupportedTag(index, tag);
+							return false;
+						}
+					}
+
+					queryStr += QString(", AltTag = '%1'").arg(vallist.at(2).toString().replace("'", "''"));
+				}
+				else
+				{
+					// empty alt tag otherwise
+					queryStr += QString(", AltTag = ''");
+				}
 			}
 			break;
 		case 2:

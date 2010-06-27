@@ -58,12 +58,13 @@ public:
 	};
 	Q_DECLARE_FLAGS(TagFlags, TagFlag);
 
-	ExifItem(const QString& tag, const QString& tagText, const QVariant& tagValue, const QString& printFormat = "%1", TagType type = TagString, TagFlags flags = None, ExifItem* parent = 0)
+	ExifItem(const QString& tag, const QString& tagText, const QVariant& tagValue, const QString& printFormat = "%1", TagType type = TagString, TagFlags flags = None, const QString& altTag = "", ExifItem* parent = 0)
 	{
 		parentItem = parent;
 		this->printFormat = printFormat;
 		this->type = type;
 		metaTag = tag;
+		metaAltTag = altTag;
 		metaTagText = tagText;
 		metaValue = tagValue;
 		this->flags = flags;
@@ -72,12 +73,13 @@ public:
 		srcTagType = 0x1fffe;
 	}
 
-	ExifItem(const QString& tag, TagType type, const QString& tagValue, TagFlags flags = None)
+	ExifItem(const QString& tag, TagType type, const QString& tagValue, TagFlags flags = None, const QString& altTag = "")
 	{
 		parentItem = NULL;
 		this->type = type;
 		this->flags = flags;
 		metaTag = tag;
+		metaAltTag = altTag;
 		setValueFromString(tagValue);
 		dirty = false;
 		checked = true;
@@ -90,6 +92,7 @@ public:
 		type = item.type;
 		flags = item.flags;
 		metaTag = item.metaTag;
+		metaAltTag = item.metaAltTag;
 		metaValue = item.metaValue;
 		metaTagText = item.metaTagText;
 		dirty = item.dirty;
@@ -140,6 +143,11 @@ public:
 		return metaTag;
 	}
 
+	QString tagAltName() const
+	{
+		return metaAltTag;
+	}
+
 	// return associated tag
 	QString tagText() const
 	{
@@ -176,10 +184,10 @@ public:
 
 
 	// set caption or value
-	void setValueFromString(const QString& value, bool setDirty = false, bool convertReal = true);
+	void setValueFromString(const QVariant& value, bool setDirty = false, bool convertReal = true);
 
 	// set value ov the given tag for itself or children
-	bool findSetTagValueFromString(const QString& tagName, const QString& value, bool setDirty = false);
+	bool findSetTagValueFromString(const QString& tagName, const QVariant& value, bool setDirty = false);
 	bool findSetTagValueFromTag(const ExifItem* tag, bool setDirty = false);
 
 	// find tag by its EXIF name
@@ -218,7 +226,7 @@ public:
 	void reset();
 
 	// insert child
-	ExifItem* insertChild(const QString& tag, const QString& tagText, const QVariant& tagValue, const QString& printFormat = "%1", TagType type = TagString, TagFlags flags = None);
+	ExifItem* insertChild(const QString& tag, const QString& tagText, const QVariant& tagValue, const QString& printFormat = "%1", TagType type = TagString, TagFlags flags = None, const QString& altTag = "");
 
 	// remove child at given position
 	bool removeChild(int position);
@@ -263,6 +271,7 @@ public:
 private:
 	// meta tag name
 	QString metaTag;
+	QString metaAltTag;
 	// readable meta tag text
 	QString metaTagText;
 	// value - either tag value or caption

@@ -25,9 +25,9 @@
 #include <cmath>
 
 // insert child
-ExifItem* ExifItem::insertChild(const QString& tag, const QString& tagText, const QVariant& tagValue, const QString& printFormat, TagType type, TagFlags flags)
+ExifItem* ExifItem::insertChild(const QString& tag, const QString& tagText, const QVariant& tagValue, const QString& printFormat, TagType type, TagFlags flags, const QString& altTag)
 {
-	ExifItem* child = new ExifItem(tag, tagText, tagValue, printFormat, type, flags, this);
+	ExifItem* child = new ExifItem(tag, tagText, tagValue, printFormat, type, flags, altTag, this);
 	childItems.append(child);
 	return child;
 }
@@ -68,9 +68,27 @@ void ExifItem::reset()
 }
 
 // set value from string
-void ExifItem::setValueFromString(const QString& value, bool setDirty, bool convertReal)
+void ExifItem::setValueFromString(const QVariant& value, bool setDirty, bool convertReal)
 {
-	setValue(valueFromString(value, type, convertReal, flags), setDirty);
+	if((value != QVariant()) && flags.testFlag(Ascii))
+	{
+		QVariantList varList = value.toList();
+		if(varList.count() > 1)
+		{
+			QVariantList listValue;
+			listValue << valueFromString(varList.at(0).toString(), type, convertReal, flags) << valueFromString(varList.at(1).toString(), type, convertReal, flags);
+
+			setValue(listValue, setDirty);
+		}
+		else
+		{
+			setValue(QVariant(), setDirty);
+		}
+	}
+	else
+	{
+		setValue(valueFromString(value.toString(), type, convertReal, flags), setDirty);
+	}
 }
 
 ExifItem* ExifItem::findTagByName(const QString& name)
@@ -88,7 +106,7 @@ ExifItem* ExifItem::findTagByName(const QString& name)
 	return NULL;
 }
 
-bool ExifItem::findSetTagValueFromString(const QString& tagName, const QString& value, bool setDirty)
+bool ExifItem::findSetTagValueFromString(const QString& tagName, const QVariant& value, bool setDirty)
 {
 	if(metaTag == tagName)
 	{
@@ -187,7 +205,7 @@ QString ExifItem::typeName(TagType type)
 
 QString ExifItem::getValueAsString(bool convertReal)
 {
-	return valueToString(metaValue, type, convertReal);
+	return valueToString(metaValue, type, QVariant(), convertReal);
 }
 
 QString ExifItem::flagName(TagFlag flag)
@@ -211,7 +229,7 @@ QString ExifItem::flagName(TagFlag flag)
 			break;
 
 	case Ascii:
-			return QT_TR_NOOP("7-bit ASCII");
+			return QT_TR_NOOP("ASCII value");
 			break;
 
 	default:
@@ -517,21 +535,6 @@ QVariant ExifItem::valueFromString(const QString& value, TagType type, bool conv
 
 	return QVariant();
 }
-
-/*
-bool ExifItem::testFlag(TagFlags flagValue, TagFlags flag)
-{
-	if((unsigned)flagValue & (1 << ((unsigned)flag - 1)))
-		return true;
-
-	return false;
-}
-
-ExifItem::TagFlags ExifItem::clearFlag(TagFlags flagValue, TagFlags flag)
-{
-	return (TagFlags)(flagValue & ~(1 << ((unsigned)flag - 1)));
-}
-*/
 
 QList<QVariantList> ExifItem::parseEncodedChoiceList(QString list, TagType dataType, TagFlags flags)
 {

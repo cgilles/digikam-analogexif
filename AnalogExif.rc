@@ -81,14 +81,14 @@ BEGIN
     BEGIN
         BLOCK "000904b0"
         BEGIN
-            VALUE "CompanyName", "C-41 bytes"
+            VALUE "CompanyName", "C-41 Bytes"
             VALUE "FileDescription", "AnalogExif"
-            VALUE "FileVersion", "0.1"
+            VALUE "FileVersion", "0.0beta"
             VALUE "InternalName", "AnalogExif"
             VALUE "LegalCopyright", "Copyright © 2010 C-41 bytes"
             VALUE "OriginalFilename", "AnalogExif"
             VALUE "ProductName", "AnalogExif"
-            VALUE "ProductVersion", "0.1a"
+            VALUE "ProductVersion", "0.0beta"
         END
     END
     BLOCK "VarFileInfo"

@@ -17,27 +17,47 @@
     along with AnalogExif.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef TAGNAMEITEMDELEGATE_H
-#define TAGNAMEITEMDELEGATE_H
+#ifndef ASCIISTRINGDIALOG_H
+#define ASCIISTRINGDIALOG_H
 
-#include <QStyledItemDelegate>
+#include <QDialog>
+#include "ui_asciistringdialog.h"
 
-class TagNameItemDelegate : public QStyledItemDelegate
+class AsciiStringDialog : public QDialog
 {
 	Q_OBJECT
 
 public:
-	TagNameItemDelegate(QObject *parent) : QStyledItemDelegate(parent) { }
+	AsciiStringDialog(const QString& uValue, const QString& aValue, QWidget *parent = 0);
 
-	virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
-		const QModelIndex &index) const;
+	void setUnicodeValue(const QString& uValue)
+	{
+		unicodeValue = uValue;
+		ui.unicodeEdit->setText(unicodeValue);
+	}
 
-	virtual void setEditorData(QWidget *editor, const QModelIndex &index) const;
-	virtual void setModelData(QWidget *editor, QAbstractItemModel *model,
-		const QModelIndex &index) const;
+	QString getUnicodeValue() const
+	{
+		return ui.unicodeEdit->text();
+	}
 
-	virtual void updateEditorGeometry(QWidget *editor,
-		const QStyleOptionViewItem &option, const QModelIndex &index) const { }
+	void setAsciiValue(const QString& aValue)
+	{
+		ui.asciiEdit->setText(aValue);
+	}
+
+	QString getAsciiValue() const
+	{
+		return ui.asciiEdit->text();
+	}
+
+private:
+	QString unicodeValue;
+	Ui::AsciiStringDialogClass ui;
+
+private slots:
+	void on_copyBtn_clicked();
+	void on_buttonBox_clicked(QAbstractButton* button);
 };
 
-#endif // TAGNAMEITEMDELEGATE_H
+#endif // ASCIISTRINGDIALOG_H

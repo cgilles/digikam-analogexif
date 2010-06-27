@@ -76,6 +76,24 @@ QString ExifUtils::fancyPrintDouble(double val)
 	if(modf(val, &dec) == 0.0)
 		return QString::number(val, 'f', 1);
 
-	// return QString::number(val, 'g', DoublePrecision);
-	return QString::number(val, 'f', 2);
+	return QString::number(val, 'g', DoublePrecision);
+}
+
+bool ExifUtils::containsNonAscii(const QString& str)
+{
+	bool result = false;
+
+	foreach(QChar c, str)
+	{
+		unsigned char chr = (unsigned char)c.toAscii();
+
+		if((chr > 0x80) || (chr == 0x00))
+		{
+			// character is out of ASCII 7bit
+			result = true;
+			break;
+		}
+	}
+
+	return result;
 }

@@ -64,6 +64,14 @@ QVariant EditGearTagsModel::data(const QModelIndex &index, int role) const
 	{
 		QVariant itemValue = ExifItem::valueFromString(query().value(1).toString(), tagType, true, tagFlags);
 
+		if(tagFlags.testFlag(ExifItem::Ascii))
+		{
+			QVariantList varList;
+			varList << itemValue << ExifItem::valueFromString(query().value(6).toString(), tagType, true, tagFlags);
+
+			itemValue = varList;
+		}
+
 		if ((index.column() == 1) && (
 			(role == Qt::EditRole) || (role == Qt::DisplayRole) || (role == ExifTreeModel::GetFlagsRole) ||
 			(role == ExifTreeModel::GetChoiceRole) || (role == ExifTreeModel::GetTypeRole)
@@ -75,7 +83,7 @@ QVariant EditGearTagsModel::data(const QModelIndex &index, int role) const
 }
 
 // TODO: again, should be abstracted somewhere
-bool EditGearTagsModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool EditGearTagsModel::setData(const QModelIndex &index, const QVariant &dataValue, int role)
 {
 	if (role != Qt::EditRole)
 		return false;
@@ -88,25 +96,47 @@ bool EditGearTagsModel::setData(const QModelIndex &index, const QVariant &value,
 
 	// return value according to the tag type
 	QString updateValue;
+	QString updateAltValue;
 
 	QVariant oldValue = ExifItem::valueFromString(query().value(1).toString(), tagType, true, tagFlags);
+	QVariant value = dataValue;
+
+	QVariantList varList;
+
+	if(tagFlags.testFlag(ExifItem::Ascii) && (dataValue != QVariant()))
+	{
+		varList = dataValue.toList();
+		if(!varList.isEmpty())
+			value = varList.at(0);
+	}
 
 	// special consideration for APEX-adjusted values
 	if((value != QVariant()) && (tagType == ExifItem::TagApertureAPEX))
 	{
 		QVariant apexValue = 2*log(value.toDouble())/log(2.0);
 		updateValue = ExifItem::valueToStringMulti(apexValue, tagType, tagFlags, oldValue);
+
+		if(tagFlags.testFlag(ExifItem::Ascii) && (varList.count() > 1))
+		{
+			QVariant apexAltValue = 2*log(varList.at(1).toDouble())/log(2.0);
+			updateAltValue = ExifItem::valueToStringMulti(apexAltValue, tagType, tagFlags, oldValue);
+		}
 	}
 	else
 	{
 		updateValue = ExifItem::valueToStringMulti(value, tagType, tagFlags, oldValue);
+
+		if(tagFlags.testFlag(ExifItem::Ascii) && (varList.count() > 1))
+		{
+			updateAltValue = ExifItem::valueToStringMulti(varList.at(1), tagType, tagFlags, oldValue);
+		}
 	}
 
 	if(updateValue.isNull())
 		return false;
 
 	// update the record
-	QSqlQuery updQuery(QString("UPDATE UserGearProperties SET TagValue = '%1' WHERE id = %2").arg(updateValue.replace("'", "''")).arg(query().value(4).toInt()));
+	QSqlQuery updQuery(QString("UPDATE UserGearProperties SET TagValue = '%1', AltValue = '%2' WHERE id = %3").arg(updateValue.replace("'", "''")).arg(updateAltValue.replace("'", "''")).arg(query().value(4).toInt()));
 
 	if(updQuery.lastError().isValid())
 		return false;
@@ -120,7 +150,7 @@ bool EditGearTagsModel::setData(const QModelIndex &index, const QVariant &value,
 void EditGearTagsModel::reload(int id)
 {
 	gearId = id;
-	setQuery(QString("SELECT a.TagText, b.TagValue, a.TagType, a.PrintFormat, b.id, a.Flags FROM MetaTags a, UserGearProperties b WHERE b.GearId = %1 AND a.id = b.TagId ORDER BY b.OrderBy").arg(id));
+	setQuery(QString("SELECT a.TagText, b.TagValue, a.TagType, a.PrintFormat, b.id, a.Flags, b.AltValue FROM MetaTags a, UserGearProperties b WHERE b.GearId = %1 AND a.id = b.TagId ORDER BY b.OrderBy").arg(id));
 }
 
 bool EditGearTagsModel::addNewTag(int tagId, int orderBy)

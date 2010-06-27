@@ -18,6 +18,7 @@
 */
 
 #include "gearlistmodel.h"
+#include "exifitem.h"
 
 #include <QFont>
 #include <QSqlQuery>
@@ -72,11 +73,21 @@ QVariant GearListModel::data(const QModelIndex &item, int role) const
 		QSqlRecord curRecord = record(item.row());
 		if(!curRecord.isEmpty())
 		{
-			QSqlQuery query(QString("SELECT b.TagName, a.TagValue FROM UserGearProperties a, MetaTags b WHERE a.GearId = %1 AND b.id = a.TagId").arg(curRecord.value(1).toInt()));
+			QSqlQuery query(QString("SELECT b.TagName, a.TagValue, b.Flags, a.AltValue FROM UserGearProperties a, MetaTags b WHERE a.GearId = %1 AND b.id = a.TagId").arg(curRecord.value(1).toInt()));
 			QVariantList properties;
 
 		    while (query.next()) {
-				properties << query.value(0) << query.value(1);
+				QVariant value = query.value(1);
+
+				if(((ExifItem::TagFlags)query.value(2).toInt()).testFlag(ExifItem::Ascii))
+				{
+					QVariantList varList;
+					varList << value << query.value(3);
+
+					value = varList;
+				}
+
+				properties << query.value(0) << value;
 			}
 
 			if(properties.count())

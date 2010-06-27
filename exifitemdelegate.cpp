@@ -22,6 +22,7 @@
 #include "exifutils.h"
 #include "emptyspinbox.h"
 #include "multitagvaluesdialog.h"
+#include "asciistringdialog.h"
 
 #include <QComboBox>
 #include <QLineEdit>
@@ -32,6 +33,7 @@
 #include <QPlainTextEdit>
 #include <QApplication>
 #include <QClipboard>
+#include <QMessageBox>
 
 #include <climits>
 #include <cfloat>
@@ -77,14 +79,18 @@ QWidget* ExifItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 		{
 			if(tagFlags.testFlag(ExifItem::Ascii))
 			{
-				AsciiLineEdit* edit = new AsciiLineEdit(parent);
-				return edit;
+				// check the list
+				QStringList strList = index.data(Qt::EditRole).toStringList();
+
+				if((strList != QStringList()) && (strList.size() > 1) && (!strList.at(1).isEmpty()) && (strList.at(0) != strList.at(1)))
+				{
+					AsciiStringDialog* asciiDialog = new AsciiStringDialog(strList.at(0), strList.at(1), parent);
+					return asciiDialog;
+				}
 			}
-			else
-			{
-				QLineEdit* edit = new QLineEdit(parent);
-				return edit;
-			}
+
+			QLineEdit* edit = new QLineEdit(parent);
+			return edit;
 		}
 		break;
 	case ExifItem::TagInteger:
@@ -131,8 +137,7 @@ QWidget* ExifItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 				spinBox->setRange(0.0, DBL_MAX);
 
 			//spinBox->setFrame(false);
-			//spinBox->setDecimals(ExifUtils::DoublePrecision);
-			spinBox->setDecimals(2);
+			spinBox->setDecimals(ExifUtils::DoublePrecision);
 			
 			return spinBox;
 		}
@@ -284,10 +289,49 @@ void ExifItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
 	switch(typeRole)
 	{
 	case ExifItem::TagString:
+		{
+			QString text;
+			QVariant value = index.data(Qt::EditRole);
+
+			// BUG? If model data changes between createEditor() and setEditorData() - we are doomed
+			if(tagFlags.testFlag(ExifItem::Ascii))
+			{
+				if(value != QVariant())
+				{
+					AsciiStringDialog* asciiDialog = dynamic_cast<AsciiStringDialog*>(editor);
+					QStringList strList = value.toStringList();
+
+					if(asciiDialog)
+					{
+						if((strList != QStringList()) && (strList.size() > 1))
+						{
+							asciiDialog->setUnicodeValue(strList.at(0));
+							asciiDialog->setAsciiValue(strList.at(1));
+
+							return;
+						}
+					}
+					else
+					{
+						if((strList != QStringList()) && (strList.size() > 1))
+							text = strList.at(0);
+					}
+				}
+			}
+			else
+			{
+				text = value.toString();
+			}
+
+			QLineEdit* edit = static_cast<QLineEdit*>(editor);
+			if(value != QVariant())
+				edit->setText(text);
+		}
+		break;
 	case ExifItem::TagGPS:
 		{
 			QLineEdit* edit = static_cast<QLineEdit*>(editor);
-			QVariant value = index.model()->data(index, Qt::EditRole);
+			QVariant value = index.data(Qt::EditRole);
 			if(value != QVariant())
 				edit->setText(value.toString());
 		}
@@ -478,14 +522,77 @@ void ExifItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 	{
 	case ExifItem::TagString:
 		{
+			if(tagFlags.testFlag(ExifItem::Ascii))
+			{
+				AsciiStringDialog* asciiDialog = dynamic_cast<AsciiStringDialog*>(editor);
+
+				if(asciiDialog)
+				{
+					if(asciiDialog->result() == QDialogButtonBox::AcceptRole)
+					{
+						QStringList strList;
+						strList << asciiDialog->getUnicodeValue() << asciiDialog->getAsciiValue();
+
+						model->setData(index, strList);
+					} else if(asciiDialog->result() == QDialogButtonBox::DestructiveRole)
+					{
+						QStringList strList;
+						strList << asciiDialog->getUnicodeValue() << QString();
+
+						model->setData(index, strList);
+					}
+
+					return;
+				}
+			}
+
 			QLineEdit* edit = static_cast<QLineEdit*>(editor);
 			QString text = edit->text();
 
 			if(text == "")
+			{
 				model->setData(index, QVariant());
+			}
 			else
 			{
-				model->setData(index, text);
+				if(tagFlags.testFlag(ExifItem::Ascii))
+				{
+					QStringList strList;
+					// check whether non-ascii entered
+					if(ExifUtils::containsNonAscii(text))
+					{
+						// show AsciiDialog
+						AsciiStringDialog asciiDialog(text, "", editor->parentWidget());
+
+						asciiDialog.exec();
+						switch(asciiDialog.result())
+						{
+						case QDialogButtonBox::AcceptRole:
+							// entered alternative value for ascii
+							strList << asciiDialog.getUnicodeValue() << asciiDialog.getAsciiValue();
+							break;
+						case QDialogButtonBox::DestructiveRole:
+							// forced to ignore alternative value
+							strList << text << QString();
+							break;
+						default:
+							// either cancelled or non-supported role
+							return;
+							break;
+						}
+					}
+					else
+					{
+						// if all characters are 7bit, set the same value for alternative
+						strList << text << text;
+					}
+
+					model->setData(index, strList);
+				}
+				else
+				{
+					model->setData(index, text);
+				}
 			}
 
 		}
@@ -724,6 +831,14 @@ void ExifItemDelegate::updateEditorGeometry(QWidget *editor,
 	// no need for resize for multi-value fields
 	if(tagFlags.testFlag(ExifItem::Multi) && !tagFlags.testFlag(ExifItem::Choice))
 		return;
+
+	if(tagFlags.testFlag(ExifItem::Ascii))
+	{
+		AsciiStringDialog* asciiDialog = dynamic_cast<AsciiStringDialog*>(editor);
+
+		if(asciiDialog)
+			return;
+	}
 
 	switch(typeRole)
 	{

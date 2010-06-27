@@ -28,8 +28,9 @@ public:
 	static void doubleToFraction(double value, int* numerator, int* denom);
 	static void doubleToDegrees(double val, int& deg, int& min, double& sec);
 	static QString fancyPrintDouble(double val);
+	static bool containsNonAscii(const QString& str);
 
-	static const int DoublePrecision = 10;
+	static const int DoublePrecision = 2;
 private:
 	static double fractionPart(double value);
 	static void getFraction(double value, int* num, int* denom, int depth);

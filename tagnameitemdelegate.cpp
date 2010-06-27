@@ -20,6 +20,7 @@
 #include "tagnameitemdelegate.h"
 #include "optgeartemplatemodel.h"
 #include "exifitem.h"
+#include "tagnameeditdialog.h"
 #include "exiftreemodel.h"
 
 #include <QGroupBox>
@@ -30,197 +31,35 @@
 QWidget* TagNameItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option,
         const QModelIndex &) const
 {
-	QWidget* editor = new QWidget(parent);
 
-	QVBoxLayout *vbox = new QVBoxLayout(editor);
-	editor->setLayout(vbox);
+	TagNameEditDialog* tagNameEditDialog = new TagNameEditDialog(parent);
 
-	vbox->setContentsMargins(0, 0, 0, 0);
-	vbox->setSpacing(0);
-
-	// add tag name editor
-	QLineEdit* edit = new QLineEdit(editor);
-	edit->setPalette(option.palette);
-
-	vbox->addWidget(edit);
-	editor->setFocusProxy(edit);
-
-	// add flags checkboxes
-	QGroupBox* gbox = new QGroupBox(editor);
-	QVBoxLayout *vbox1 = new QVBoxLayout(gbox);
-	gbox->setAutoFillBackground(true);
-	gbox->setPalette(option.palette);
-
-	int startItem = 1;
-	if(OptGearTemplateModel::ProtectBuiltInTags)
-		startItem = 2;
-
-	for(int i = startItem; i < ExifItem::Last; i *= 2)
-		vbox1->addWidget(new QCheckBox(ExifItem::flagName((ExifItem::TagFlag)i), editor));
-
-	vbox->addWidget(gbox);
-
-	return editor;
+	return tagNameEditDialog;
 }
 
 void TagNameItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
-	// scan through checkboxes and set them according to the flags
-	bool swappedLayout = false;
-	QGroupBox* gbox = dynamic_cast<QGroupBox*>(editor->layout()->itemAt(1)->widget());
+	TagNameEditDialog* tagNameEditDialog = static_cast<TagNameEditDialog*>(editor);
 
-	if(!gbox)
-	{
-		// widgets may have been swapped
-		swappedLayout = true;
-
-		gbox = static_cast<QGroupBox*>(editor->layout()->itemAt(0)->widget());
-	}
+	tagNameEditDialog->setTagNames(index.data(Qt::EditRole).toString());
 
 	ExifItem::TagFlags flags = (ExifItem::TagFlags)index.data(OptGearTemplateModel::GetTagFlagsRole).toInt();
+	tagNameEditDialog->setFlags(flags);
 
-	if(flags)
-	{
-		int nItems = gbox->layout()->count();
-
-		int startItem = 0;
-		if(OptGearTemplateModel::ProtectBuiltInTags)
-			startItem = 1;
-
-		for(int i = 0; i < nItems; i++)
-		{
-			QCheckBox* cbx = static_cast<QCheckBox*>(gbox->layout()->itemAt(i)->widget());
-			if(cbx)
-			{
-				if(flags.testFlag((ExifItem::TagFlag)(1 << (i + startItem))))
-					cbx->setCheckState(Qt::Checked);
-				else
-					cbx->setCheckState(Qt::Unchecked);
-			}
-		}
-	}
-
-	// set edit text
-	QLineEdit* lineEdit;
-	if(swappedLayout)
-		 lineEdit = static_cast<QLineEdit*>(editor->layout()->itemAt(1)->widget());
-	else
-		lineEdit = static_cast<QLineEdit*>(editor->layout()->itemAt(0)->widget());
-
-	if(lineEdit)
-	{
-		lineEdit->setText(index.data(Qt::EditRole).toString());
-	}
+	if(flags.testFlag(ExifItem::Ascii))
+		tagNameEditDialog->setAltTagNames(index.data(OptGearTemplateModel::GetAltTagRole).toString());
 }
 
 void TagNameItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 	const QModelIndex &index) const
 {
-	QVariantList data;
+	TagNameEditDialog* tagNameEditDialog = static_cast<TagNameEditDialog*>(editor);
 
-	// set edit text
-	bool swappedLayout = false;
-	QLineEdit* lineEdit = dynamic_cast<QLineEdit*>(editor->layout()->itemAt(0)->widget());
-
-	if(!lineEdit)
+	if(tagNameEditDialog->result() == QDialog::Accepted)
 	{
-		swappedLayout = true;
-		lineEdit = static_cast<QLineEdit*>(editor->layout()->itemAt(1)->widget());
-	}
+		QVariantList data;
+		data << tagNameEditDialog->getTagNames() << (int)tagNameEditDialog->getFlags() << tagNameEditDialog->getAltTagNames();
 
-	if(lineEdit->text() == "")
-		data << QVariant();
-	else
-		data << lineEdit->text();
-
-	// scan through checkboxes and set them according to the flags
-	QGroupBox* gbox;
-	
-	if(swappedLayout)
-		gbox = static_cast<QGroupBox*>(editor->layout()->itemAt(0)->widget());
-	else
-		gbox = static_cast<QGroupBox*>(editor->layout()->itemAt(1)->widget());
-
-	int nItems = gbox->layout()->count();
-	ExifItem::TagFlags flags = 0;
-
-	for(int i = 0; i < nItems; i++)
-	{
-
-		int startItem = 0;
-		if(OptGearTemplateModel::ProtectBuiltInTags)
-			startItem = 1;
-
-		QCheckBox* cbx = static_cast<QCheckBox*>(gbox->layout()->itemAt(i)->widget());
-		if(cbx)
-		{
-			if(cbx->checkState() == Qt::Checked)
-				flags |= (ExifItem::TagFlag)(1 << (i + startItem));
-		}
-	}
-
-	data << (int)flags;
-	model->setData(index, data);
-}
-
-void TagNameItemDelegate::updateEditorGeometry(QWidget *editor,
-        const QStyleOptionViewItem &option, const QModelIndex &) const
-{
-	// set edit text
-	bool swappedLayout = false;
-	QLineEdit* lineEdit = dynamic_cast<QLineEdit*>(editor->layout()->itemAt(0)->widget());
-
-	if(!lineEdit)
-	{
-		swappedLayout = true;
-		lineEdit = static_cast<QLineEdit*>(editor->layout()->itemAt(1)->widget());
-	}
-
-	if(lineEdit)
-	{
-		lineEdit->setMaximumHeight(option.rect.height());
-		lineEdit->setMaximumWidth(option.rect.width());
-	}
-
-	// scan through checkboxes and set them according to the flags
-	QGroupBox* gbox;
-	
-	if(swappedLayout)
-		gbox = static_cast<QGroupBox*>(editor->layout()->itemAt(0)->widget());
-	else
-		gbox = static_cast<QGroupBox*>(editor->layout()->itemAt(1)->widget());
-
-	if(gbox)
-	{
-		int nItems = gbox->layout()->count();
-		int maxWidth = 0;
-		for(int i = 0; i < nItems; i++)
-		{
-			QCheckBox* cbx = static_cast<QCheckBox*>(gbox->layout()->itemAt(i)->widget());
-			if(cbx)
-			{
-				int width = option.fontMetrics.width(cbx->text()) + gbox->layout()->contentsMargins().left() + gbox->layout()->contentsMargins().right() + option.fontMetrics.width("WWW");
-				if(width > maxWidth)
-					maxWidth = width;
-			}
-		}
-
-		if(maxWidth > option.rect.width())
-			maxWidth -= option.rect.width();
-		else
-			maxWidth = 0;
-
-		QRect adjRect = option.rect.adjusted(0, 0, maxWidth, option.rect.height()*(nItems+3));
-		int parentHeight = editor->parentWidget()->geometry().height();
-
-		// if exceeds parent view, move checkbox menu on top of the edit row
-		if(adjRect.bottom() > parentHeight)
-		{
-			adjRect = adjRect.adjusted(0, -(adjRect.height() - option.rect.height()), 0, -(adjRect.height() - option.rect.height()));
-
-			editor->layout()->addWidget(editor->layout()->takeAt(0)->widget());
-		}
-			
-		editor->setGeometry(adjRect);
+		model->setData(index, data);	
 	}
 }

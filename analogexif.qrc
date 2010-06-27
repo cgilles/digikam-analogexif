@@ -16,6 +16,7 @@
         <file>icons/information.png</file>
         <file>icons/film_go.png</file>
         <file>icons/film.png</file>
+        <file>icons/arrow_undo.png</file>
     </qresource>
     <qresource prefix="/database">
         <file>AnalogExif.ael</file>

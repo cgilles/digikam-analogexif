@@ -18,6 +18,7 @@
 */
 
 #include "geartreemodel.h"
+#include "exifitem.h"
 
 #include <QSqlQuery>
 #include <QStandardItem>
@@ -97,10 +98,20 @@ QVariant GearTreeModel::data(const QModelIndex &item, int role) const
 		// get item parent properties
 		if(selItem)
 		{
-			QSqlQuery query(QString("SELECT b.TagName, a.TagValue FROM UserGearProperties a, MetaTags b WHERE a.GearId = %1 AND b.id = a.TagId").arg(selItem->data().toInt()));
+			QSqlQuery query(QString("SELECT b.TagName, a.TagValue, b.Flags, a.AltValue FROM UserGearProperties a, MetaTags b WHERE a.GearId = %1 AND b.id = a.TagId").arg(selItem->data().toInt()));
 
 		    while (query.next()) {
-				properties << query.value(0) << query.value(1);
+				QVariant value = query.value(1);
+
+				if(((ExifItem::TagFlags)query.value(2).toInt()).testFlag(ExifItem::Ascii))
+				{
+					QVariantList varList;
+					varList << value << query.value(3);
+
+					value = varList;
+				}
+
+				properties << query.value(0) << value;
 			}
 		}
 
@@ -109,10 +120,20 @@ QVariant GearTreeModel::data(const QModelIndex &item, int role) const
 		// get item properties
 		if(selItem)
 		{
-			QSqlQuery query(QString("SELECT b.TagName, a.TagValue FROM UserGearProperties a, MetaTags b WHERE a.GearId = %1 AND b.id = a.TagId").arg(selItem->data().toInt()));
+			QSqlQuery query(QString("SELECT b.TagName, a.TagValue, b.Flags, a.AltValue FROM UserGearProperties a, MetaTags b WHERE a.GearId = %1 AND b.id = a.TagId").arg(selItem->data().toInt()));
 
 		    while (query.next()) {
-				properties << query.value(0) << query.value(1);
+				QVariant value = query.value(1);
+
+				if(((ExifItem::TagFlags)query.value(2).toInt()).testFlag(ExifItem::Ascii))
+				{
+					QVariantList varList;
+					varList << value << query.value(3);
+
+					value = varList;
+				}
+
+				properties << query.value(0) << value;
 			}
 		}
 

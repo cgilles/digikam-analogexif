@@ -228,7 +228,7 @@ QModelIndex ExifTreeModel::parent(const QModelIndex &index) const
 	return createIndex(parentItem->childNumber(), 0, parentItem);
 }
 
-QVariant ExifTreeModel::getItemValue(const QVariant& itemValue, const QString& itemFormat, ExifItem::TagFlags, ExifItem::TagType itemType, int role)
+QVariant ExifTreeModel::getItemValue(const QVariant& itemValue, const QString& itemFormat, ExifItem::TagFlags tagFlags, ExifItem::TagType itemType, int role)
 {
 	// return value according to the tag type
 	switch(itemType)
@@ -237,7 +237,31 @@ QVariant ExifTreeModel::getItemValue(const QVariant& itemValue, const QString& i
 	case ExifItem::TagText:
 	case ExifItem::TagGPS:
 		if(role == Qt::DisplayRole)
-			return QString(itemFormat).arg(itemValue.toString()).replace(QRegExp("(\r|\n)"), " ").replace(QRegExp("(\\s)+"), " ");
+		{
+			// special care for alt-Ascii values
+			if(tagFlags.testFlag(ExifItem::Ascii))
+			{
+				QStringList strList = itemValue.toStringList();
+
+				if((strList != QStringList()) && (strList.count() > 1))
+				{
+					QString text = QString(itemFormat).arg(strList.at(0)).replace(QRegExp("(\r|\n)"), " ").replace(QRegExp("(\\s)+"), " ");
+					
+					if((strList.at(1) != "") && (strList.at(1) != strList.at(0)))
+						text += " (" + QString(itemFormat).arg(strList.at(1)).replace(QRegExp("(\r|\n)"), " ").replace(QRegExp("(\\s)+"), " ") + ")";
+
+					return text;
+				}
+				else
+				{
+					return QVariant();
+				}
+			}
+			else
+			{
+				return QString(itemFormat).arg(itemValue.toString()).replace(QRegExp("(\r|\n)"), " ").replace(QRegExp("(\\s)+"), " ");
+			}
+		}
 		else if(role == Qt::EditRole)
 			return itemValue;
 		break;
@@ -508,7 +532,6 @@ bool ExifTreeModel::setData(const QModelIndex &index, const QVariant &value, int
 			return false;
 
 		item->setValue(newValue, true);
-
 	}
 
 	emit dataChanged(index, index);
@@ -520,7 +543,7 @@ bool ExifTreeModel::setData(const QModelIndex &index, const QVariant &value, int
 void ExifTreeModel::populateModel()
 {
 	// connect to internal database
-	QSqlQuery query("SELECT a.GearType, b.TagName, b.TagText, b.PrintFormat, b.TagType, b.Flags FROM GearTemplate a, MetaTags b WHERE b.id=a.TagId ORDER BY a.GearType, a.OrderBy");
+	QSqlQuery query("SELECT a.GearType, b.TagName, b.TagText, b.PrintFormat, b.TagType, b.Flags, b.AltTag FROM GearTemplate a, MetaTags b WHERE b.id=a.TagId ORDER BY a.GearType, a.OrderBy");
 
 	int curCategoryId = -1, nRows = 0;
 	ExifItem* headerItem = NULL;
@@ -562,7 +585,7 @@ void ExifTreeModel::populateModel()
 		}
 
 		// insert a tag
-		headerItem->insertChild(query.value(1).toString(), query.value(2).toString(), QVariant(), query.value(3).toString(), (ExifItem::TagType)query.value(4).toInt(), (ExifItem::TagFlags)query.value(5).toInt());
+		headerItem->insertChild(query.value(1).toString(), query.value(2).toString(), QVariant(), query.value(3).toString(), (ExifItem::TagType)query.value(4).toInt(), (ExifItem::TagFlags)query.value(5).toInt(), query.value(6).toString());
 		nRows++;
 	}
 	beginInsertRows(QModelIndex(), 0, nRows);
@@ -771,29 +794,10 @@ QVariant ExifTreeModel::getTagValueFromExif(ExifItem::TagType tagType, const Exi
 	return QVariant();
 }
 
-// process passed tag with the given Exiv2 containers
-void ExifTreeModel::processTag(ExifItem* tag, Exiv2::ExifData& exifData, Exiv2::IptcData& iptcData,  Exiv2::XmpData& xmpData)
+QVariant ExifTreeModel::readTagValue(QString& tagNames, int& srcTagType, ExifItem::TagType type, ExifItem::TagFlags tagFlags, Exiv2::ExifData& exifData, Exiv2::IptcData& iptcData, Exiv2::XmpData& xmpData)
 {
-	QStringList tags = tag->tagName().remove(QChar(' ')).split(",", QString::SkipEmptyParts);
-
-	// special care for GPS tag
-	if(tag->tagType() == ExifItem::TagGPS)
-	{
-		// try to get GPS position from EXIF
-		QString gpsPosition = getGPSfromExif();
-
-		// if failed, try with XMP
-		if(gpsPosition == "")
-			gpsPosition = getGPSfromXmp();
-
-		// no GPS data found - clear the tag
-		if(gpsPosition == "")
-			tag->setValue(QVariant());
-		else
-			tag->setValue(gpsPosition);
-
-		return;
-	}
+	// get list of tags
+	QStringList tags = tagNames.remove(QChar(' ')).split(",", QString::SkipEmptyParts);
 
 	foreach(QString tagName, tags)
 	{
@@ -809,18 +813,14 @@ void ExifTreeModel::processTag(ExifItem* tag, Exiv2::ExifData& exifData, Exiv2::
 
 			if(pos == exifData.end())
 			{
-				// uncheck empty tags by default
-				tag->setChecked(false);
 				continue;
 			}
-
-                        tag->setChecked(true);
 
 			const Exiv2::Value& tagValue = pos->value();
 
 			Exiv2::TypeId typId = tagValue.typeId();
 
-			tag->setSrcTagType((int)typId);
+			srcTagType = (int)typId;
 
 			// need special care for comments
 			if(tagName == "Exif.Photo.UserComment")
@@ -840,7 +840,7 @@ void ExifTreeModel::processTag(ExifItem* tag, Exiv2::ExifData& exifData, Exiv2::
 					commentValue = commentValue.left(etagsStartIndex);
 				}
 
-				tag->setValueFromString(commentValue.replace(" \n", "\n"));
+				return commentValue.replace(" \n", "\n");
 			}
 			else if(tagName == "Exif.Image.XPComment")
 			{
@@ -859,31 +859,31 @@ void ExifTreeModel::processTag(ExifItem* tag, Exiv2::ExifData& exifData, Exiv2::
 					commentValue = commentValue.left(etagsStartIndex);
 				}
 
-				tag->setValueFromString(commentValue.replace(" \n", "\n"));
+				return commentValue.replace(" \n", "\n");
 			}
 			else if((tagName == "Exif.Image.XPTitle") || (tagName == "Exif.Image.XPAuthor") || (tagName == "Exif.Image.XPKeywords") || (tagName == "Exif.Image.XPSubject"))
 			{
 				// special care for XP* tags - they are stored in UTF-8
-				tag->setValueFromString(ExifUtfToQString(tagValue));
+				return ExifUtfToQString(tagValue);
 			}
 			else
 			{
 				// special care for multivalue tag
-				if(tag->tagFlags().testFlag(ExifItem::Multi))
+				if(tagFlags.testFlag(ExifItem::Multi))
 				{
 					QVariantList valueList;
 
 					// Read all components
 					for(int i = 0; i < tagValue.count(); i++)
 					{
-						valueList << getTagValueFromExif((ExifItem::TagType)tag->tagType(), tagValue, i);
+						valueList << getTagValueFromExif(type, tagValue, i);
 					}
 
-					tag->setValue(valueList);
+					return valueList;
 				}
 				else
 				{
-					tag->setValue(getTagValueFromExif((ExifItem::TagType)tag->tagType(), tagValue));
+					return getTagValueFromExif(type, tagValue);
 				}
 			}
 		}
@@ -897,20 +897,17 @@ void ExifTreeModel::processTag(ExifItem* tag, Exiv2::ExifData& exifData, Exiv2::
 
 			if(pos == iptcData.end())
 			{
-				// uncheck empty tags by default
-				tag->setChecked(false);
 				continue;
 			}
 
 			int tagId = iptcKey.tag();
-			tag->setChecked(true);
 
 			const Exiv2::Value& tagValue = pos->value();
 
-			tag->setSrcTagType((int)tagValue.typeId());
+			srcTagType = (int)tagValue.typeId();
 
 			// special care for multivalue tag
-			if(tag->tagFlags().testFlag(ExifItem::Multi))
+			if(tagFlags.testFlag(ExifItem::Multi))
 			{
 				QVariantList valueList;
 
@@ -918,15 +915,15 @@ void ExifTreeModel::processTag(ExifItem* tag, Exiv2::ExifData& exifData, Exiv2::
 				Exiv2::IptcData::const_iterator i = pos;
 				while((i != iptcData.end()) && (i->tag() == tagId))
 				{
-					valueList << getTagValueFromExif((ExifItem::TagType)tag->tagType(), i->value());
+					valueList << getTagValueFromExif(type, i->value());
 					i++;
 				}
 
-				tag->setValue(valueList);
+				return valueList;
 			}
 			else
 			{
-				tag->setValue(getTagValueFromExif((ExifItem::TagType)tag->tagType(), tagValue));
+				return getTagValueFromExif(type, tagValue);
 			}
 		}
 		else if(tagType == "Xmp")
@@ -937,25 +934,21 @@ void ExifTreeModel::processTag(ExifItem* tag, Exiv2::ExifData& exifData, Exiv2::
 
 			if(pos == xmpData.end())
 			{
-				// uncheck empty tags by default
-				tag->setChecked(false);
 				continue;
 			}
-
-			tag->setChecked(true);
 
 			const Exiv2::Value& tagValue = pos->value();
 
 			Exiv2::TypeId typId = tagValue.typeId();
 
 			// for multi-values from AnalogExif and user-defined namespaces use XMP seq type, since order is set when editing
-			if(tag->tagFlags().testFlag(ExifItem::Multi) &&
+			if(tagFlags.testFlag(ExifItem::Multi) &&
 				((pos->groupName() == "AnalogExif") || (pos->groupName() == settings.value("UserNsPrefix", "").toString().toStdString())))
 			{
 				typId = Exiv2::xmpSeq;
 			}
 
-			tag->setSrcTagType((int)typId);
+			srcTagType = (int)typId;
 
 			switch(typId)
 			{
@@ -964,14 +957,14 @@ void ExifTreeModel::processTag(ExifItem* tag, Exiv2::ExifData& exifData, Exiv2::
 				{
 					std::string str = tagValue.toString();
 					// do not convert real numbers to Exif fraction format
-					tag->setValueFromString(QString::fromUtf8(str.data(), str.length()), false, false);
+					return ExifItem::valueFromString(QString::fromUtf8(str.data(), str.length()), type, false, false);
 				}
 				break;
 			case Exiv2::xmpAlt:
 			case Exiv2::xmpBag:
 			case Exiv2::xmpSeq:
 				// XMP bag, seq and alt are supported only for multi-value tags
-				if(tag->tagFlags().testFlag(ExifItem::Multi))
+				if(tagFlags.testFlag(ExifItem::Multi))
 				{
 					QVariantList valueList;
 
@@ -979,21 +972,88 @@ void ExifTreeModel::processTag(ExifItem* tag, Exiv2::ExifData& exifData, Exiv2::
 					{
 						std::string str = tagValue.toString(i);
 						// do not convert real numbers to Exif fraction format
-						valueList << ExifItem::valueFromString(QString::fromUtf8(str.data(), str.length()), tag->tagType(), false);
+						valueList << ExifItem::valueFromString(QString::fromUtf8(str.data(), str.length()), type, false);
 					}
 
-					tag->setValue(valueList);
+					return valueList;
 				}
 				break;
 			default:
-				tag->setValue(QVariant());
+				return QVariant();
 				break;
 			}
 		}
+	}
 
-		// value found, continue with the next tag
+	return QVariant();
+}
+
+// process passed tag with the given Exiv2 containers
+void ExifTreeModel::processTag(ExifItem* tag, Exiv2::ExifData& exifData, Exiv2::IptcData& iptcData, Exiv2::XmpData& xmpData)
+{
+	// special care for GPS tag
+	if(tag->tagType() == ExifItem::TagGPS)
+	{
+		// try to get GPS position from EXIF
+		QString gpsPosition = getGPSfromExif();
+
+		// if failed, try with XMP
+		if(gpsPosition == "")
+			gpsPosition = getGPSfromXmp();
+
+		// no GPS data found - clear the tag
+		if(gpsPosition == "")
+		{
+			tag->setChecked(false);
+			tag->setValue(QVariant());
+		}
+		else
+		{
+			tag->setChecked(true);
+			tag->setValue(gpsPosition);
+		}
+
 		return;
 	}
+
+	int srcTagType;
+
+	// get tag value
+	QVariant tagValue = readTagValue(tag->tagName(), srcTagType, tag->tagType(), tag->tagFlags(), exifData, iptcData, xmpData);
+	tag->setSrcTagType(srcTagType);
+
+	// get alt tag value
+	if(tag->tagFlags().testFlag(ExifItem::Ascii))
+	{
+		// get alt value
+		QVariant altTagValue = readTagValue(tag->tagAltName(), srcTagType, tag->tagType(), tag->tagFlags() & ~ExifItem::Ascii, exifData, iptcData, xmpData);
+
+		// if alt value exists
+		if(tagValue == QVariant())
+		{
+			if(altTagValue != QVariant())
+				tagValue = altTagValue;
+		}
+
+		if(tagValue != QVariant())
+		{
+			QVariantList listValue;
+			listValue << tagValue << altTagValue;
+			tagValue = listValue;
+		}
+	}
+
+	// check only existing values
+	if(tagValue != QVariant())
+	{
+		tag->setChecked(true);
+	}
+	else
+	{
+		tag->setChecked(false);
+	}
+
+	tag->setValue(tagValue);
 }
 
 bool ExifTreeModel::readMetaValues(Exiv2::Image::AutoPtr& exivHandle)
@@ -1019,8 +1079,6 @@ bool ExifTreeModel::readMetaValues(Exiv2::Image::AutoPtr& exivHandle)
 		for(int j = 0; j < category->childCount(); j++)
 		{
 			ExifItem* tag = category->child(j);
-
-			QStringList tags = tag->tagName().remove(QChar(' ')).split(",", QString::SkipEmptyParts);
 
 			try
 			{
@@ -1051,7 +1109,7 @@ void ExifTreeModel::setValues(QVariantList& values)
 
 	for(int i = 0; i < values.count(); i += 2)
 	{
-		if(rootItem->findSetTagValueFromString(values.at(i).toString(), values.at(i+1).toString(), true))
+		if(rootItem->findSetTagValueFromString(values.at(i).toString(), values.at(i+1), true))
 			emit dataChanged(QModelIndex(), QModelIndex());
 	}
 }
@@ -1224,6 +1282,168 @@ void ExifTreeModel::tagValueToMetadata(QVariant value, ExifItem::TagType tagType
 	}
 }
 
+void ExifTreeModel::writeTagValue(QString& tagNames, const QVariant& tagValue, ExifItem::TagType type, ExifItem::TagFlags tagFlags, Exiv2::ExifData& exifData, Exiv2::IptcData& iptcData, Exiv2::XmpData& xmpData)
+{
+	QStringList tags = tagNames.remove(QChar(' ')).split(",", QString::SkipEmptyParts);
+
+	foreach(QString tagName, tags)
+	{
+		QString tagType = tagName.split(".").at(0);
+		if(tagType == "Exif")
+		{
+			// Exif data
+
+			Exiv2::ExifKey exifKey(tagName.toStdString());
+
+			// erase tag if it is empty
+			if(tagValue != QVariant())
+			{
+				Exiv2::Value::AutoPtr v;
+
+				// set tag data according to its Exiv2 type
+				Exiv2::TypeId typId = Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId());
+
+				// special care for multivalue tag
+				if(tagFlags.testFlag(ExifItem::Multi))
+				{
+					v = Exiv2::Value::create(typId);
+					QVariantList valueList = tagValue.toList();
+
+					// add each value to the tag
+					foreach(QVariant value, valueList)
+					{
+						tagValueToMetadata(value, type, *v);
+					}
+				}
+				else
+				{
+					// special care for comments
+					if(tagName == "Exif.Photo.UserComment")
+					{
+						// UTF-16, add charset marker
+						v = QStringToExifUtf(ExifItem::valueToString(tagValue, type).replace('\n', " \n"), true, false, typId);
+					}
+					else if(tagName == "Exif.Image.XPComment")
+					{
+						// UTF-16, no charset markers
+						v = QStringToExifUtf(ExifItem::valueToString(tagValue, type).replace('\n', " \n"));
+					}
+					else if((tagName == "Exif.Image.XPTitle") || (tagName == "Exif.Image.XPAuthor") || (tagName == "Exif.Image.XPKeywords") || (tagName == "Exif.Image.XPSubject"))
+					{
+						// UTF-16, no charset markers
+						v = QStringToExifUtf(ExifItem::valueToString(tagValue, type));
+					}
+					else
+					{
+						v = Exiv2::Value::create(typId);
+						tagValueToMetadata(tagValue, type, *v);
+					}
+				}
+
+				exifData[tagName.toStdString()] = *v;
+				v.reset();
+			}
+
+		}
+		else if(tagType == "Iptc")
+		{
+			// IPTC tags
+			Exiv2::IptcKey iptcKey(tagName.toStdString());
+
+			// erase tag if it is empty
+			if(tagValue != QVariant())
+			{
+				// set tag data according to its Exiv2 type
+				Exiv2::TypeId typId = Exiv2::IptcDataSets::dataSetType(iptcKey.tag(), iptcKey.record());
+
+				// special care for multivalue tag
+				if(tagFlags.testFlag(ExifItem::Multi))
+				{
+					// erase all existing tags
+					Exiv2::IptcData::iterator i = iptcData.findKey(iptcKey);
+					while(i != iptcData.end())
+					{
+						iptcData.erase(i);
+						i = iptcData.findKey(iptcKey);
+					}
+
+					QVariantList valueList = tagValue.toList();
+
+					// store each value as separate tag
+					foreach(QVariant value, valueList)
+					{
+						Exiv2::Value::AutoPtr v = Exiv2::Value::create(typId);
+						tagValueToMetadata(value, type, *v);
+						iptcData.add(iptcKey, v.get());
+						v.reset();
+					}
+				}
+				else
+				{
+					Exiv2::Value::AutoPtr v = Exiv2::Value::create(typId);
+					tagValueToMetadata(tagValue, type, *v);
+					iptcData[tagName.toStdString()] = *v;
+					v.reset();
+				}
+			}
+		}
+		else if(tagType == "Xmp")
+		{
+			// XMP tags
+
+			Exiv2::XmpKey xmpKey(tagName.toStdString());
+
+			// erase tag if it is empty
+			if(tagValue != QVariant())
+			{
+				Exiv2::TypeId typId = Exiv2::XmpProperties::propertyType(xmpKey);
+
+				// for multi-values from AnalogExif and user-defined namespaces use XMP seq type, since order is set when editing
+				if(tagFlags.testFlag(ExifItem::Multi) &&
+					((xmpKey.groupName() == "AnalogExif") || (xmpKey.groupName() == settings.value("UserNsPrefix", "").toString().toStdString())))
+				{
+					typId = Exiv2::xmpSeq;
+				}
+
+				Exiv2::Value::AutoPtr v;
+				
+				switch(typId)
+				{
+				case Exiv2::xmpText:
+				case Exiv2::langAlt:	// LangAlt gets the first value only
+					v = QStringToExifUtf(ExifItem::valueToString(tagValue, type, QVariant(), false), false, true, typId);
+					break;
+				case Exiv2::xmpAlt:
+				case Exiv2::xmpBag:
+				case Exiv2::xmpSeq:
+					// XMP bag, seq and alt are supported only for multi-value tags
+					if(tagFlags.testFlag(ExifItem::Multi))
+					{
+						v = Exiv2::Value::create(typId);
+
+						foreach(QVariant val, tagValue.toList())
+						{
+							QStringToExifUtf(*v, ExifItem::valueToString(val, type, QVariant(), false), false, true, typId);
+						}
+					}
+					else
+					{
+						v = QStringToExifUtf(ExifItem::valueToString(tagValue, type, QVariant(), false), false, true, typId);
+					}
+					break;
+				default:
+					break;
+				}
+
+				if(v.get())
+					xmpData[tagName.toStdString()] = *v;
+
+				v.reset();
+			}
+		}
+	}
+}
+
 bool ExifTreeModel::storeTag(ExifItem* tag, Exiv2::ExifData& exifData, Exiv2::IptcData& iptcData, Exiv2::XmpData& xmpData)
 {
 	// special care for GPS tag
@@ -1239,163 +1459,29 @@ bool ExifTreeModel::storeTag(ExifItem* tag, Exiv2::ExifData& exifData, Exiv2::Ip
 	}
 	else
 	{
-		QStringList tags = tag->tagName().remove(QChar(' ')).split(",", QString::SkipEmptyParts);
-
-		foreach(QString tagName, tags)
+		// for alt tags store value in different set of tags
+		if(tag->tagFlags().testFlag(ExifItem::Ascii))
 		{
-			QString tagType = tagName.split(".").at(0);
-			if(tagType == "Exif")
+			if(tag->value() == QVariant())
 			{
-				// Exif data
-
-				Exiv2::ExifKey exifKey(tagName.toStdString());
-
-				// erase tag if it is empty
-				if(tag->value() != QVariant())
-				{
-					Exiv2::Value::AutoPtr v;
-
-					// set tag data according to its Exiv2 type
-					Exiv2::TypeId typId = Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId());
-
-					// special care for multivalue tag
-					if(tag->tagFlags().testFlag(ExifItem::Multi))
-					{
-						v = Exiv2::Value::create(typId);
-						QVariantList valueList = tag->value().toList();
-
-						// add each value to the tag
-						foreach(QVariant value, valueList)
-						{
-							tagValueToMetadata(value, tag->tagType(), *v);
-						}
-					}
-					else
-					{
-						// special care for comments
-						if(tagName == "Exif.Photo.UserComment")
-						{
-							// UTF-16, add charset marker
-							v = QStringToExifUtf(tag->getValueAsString().replace('\n', " \n"), true, false, typId);
-						}
-						else if(tagName == "Exif.Image.XPComment")
-						{
-							// UTF-16, no charset markers
-							v = QStringToExifUtf(tag->getValueAsString().replace('\n', " \n"));
-						}
-						else if((tagName == "Exif.Image.XPTitle") || (tagName == "Exif.Image.XPAuthor") || (tagName == "Exif.Image.XPKeywords") || (tagName == "Exif.Image.XPSubject"))
-						{
-							// UTF-16, no charset markers
-							v = QStringToExifUtf(tag->getValueAsString());
-						}
-						else
-						{
-							v = Exiv2::Value::create(typId);
-							tagValueToMetadata(tag->value(), tag->tagType(), *v);
-						}
-					}
-
-					exifData[tagName.toStdString()] = *v;
-					v.reset();
-				}
-
+				// erase both sets of values
+				writeTagValue(tag->tagName(), QVariant(), tag->tagType(), tag->tagFlags(), exifData, iptcData, xmpData);
+				writeTagValue(tag->tagAltName(), QVariant(), tag->tagType(), tag->tagFlags(), exifData, iptcData, xmpData);
 			}
-			else if(tagType == "Iptc")
+			else
 			{
-				// IPTC tags
-				Exiv2::IptcKey iptcKey(tagName.toStdString());
+				// extract value, first item - original value, second item - alt value
+				QVariantList tagValue = tag->value().toList();
+				if(tagValue.isEmpty() || (tagValue.count() < 2))
+					return false;
 
-				// erase tag if it is empty
-				if(tag->value() != QVariant())
-				{
-					// set tag data according to its Exiv2 type
-					Exiv2::TypeId typId = Exiv2::IptcDataSets::dataSetType(iptcKey.tag(), iptcKey.record());
-
-					// special care for multivalue tag
-					if(tag->tagFlags().testFlag(ExifItem::Multi))
-					{
-						// erase all existing tags
-						Exiv2::IptcData::iterator i = iptcData.findKey(iptcKey);
-						while(i != iptcData.end())
-						{
-							iptcData.erase(i);
-							i = iptcData.findKey(iptcKey);
-						}
-
-						QVariantList valueList = tag->value().toList();
-
-						// store each value as separate tag
-						foreach(QVariant value, valueList)
-						{
-							Exiv2::Value::AutoPtr v = Exiv2::Value::create(typId);
-							tagValueToMetadata(value, tag->tagType(), *v);
-							iptcData.add(iptcKey, v.get());
-							v.reset();
-						}
-					}
-					else
-					{
-						Exiv2::Value::AutoPtr v = Exiv2::Value::create(typId);
-						tagValueToMetadata(tag->value(), tag->tagType(), *v);
-						iptcData[tagName.toStdString()] = *v;
-						v.reset();
-					}
-				}
+				writeTagValue(tag->tagName(), tagValue.at(0), tag->tagType(), tag->tagFlags(), exifData, iptcData, xmpData);
+				writeTagValue(tag->tagAltName(), tagValue.at(1), tag->tagType(), tag->tagFlags(), exifData, iptcData, xmpData);
 			}
-			else if(tagType == "Xmp")
-			{
-				// XMP tags
-
-				Exiv2::XmpKey xmpKey(tagName.toStdString());
-
-				// erase tag if it is empty
-				if(tag->value() != QVariant())
-				{
-					Exiv2::TypeId typId = Exiv2::XmpProperties::propertyType(xmpKey);
-
-					// for multi-values from AnalogExif and user-defined namespaces use XMP seq type, since order is set when editing
-					if(tag->tagFlags().testFlag(ExifItem::Multi) &&
-						((xmpKey.groupName() == "AnalogExif") || (xmpKey.groupName() == settings.value("UserNsPrefix", "").toString().toStdString())))
-					{
-						typId = Exiv2::xmpSeq;
-					}
-
-					Exiv2::Value::AutoPtr v;
-					
-					switch(typId)
-					{
-					case Exiv2::xmpText:
-					case Exiv2::langAlt:	// LangAlt gets the first value only
-						v = QStringToExifUtf(tag->getValueAsString(false), false, true, typId);
-						break;
-					case Exiv2::xmpAlt:
-					case Exiv2::xmpBag:
-					case Exiv2::xmpSeq:
-						// XMP bag, seq and alt are supported only for multi-value tags
-						if(tag->tagFlags().testFlag(ExifItem::Multi))
-						{
-							v = Exiv2::Value::create(typId);
-
-							foreach(QVariant val, tag->value().toList())
-							{
-								QStringToExifUtf(*v, ExifItem::valueToString(val, tag->tagType(), QVariant(), false), false, true, typId);
-							}
-						}
-						else
-						{
-							v = QStringToExifUtf(tag->getValueAsString(false), false, true, typId);
-						}
-						break;
-					default:
-						break;
-					}
-
-					if(v.get())
-						xmpData[tagName.toStdString()] = *v;
-
-					v.reset();
-				}
-			}
+		}
+		else
+		{
+			writeTagValue(tag->tagName(), tag->value(), tag->tagType(), tag->tagFlags(), exifData, iptcData, xmpData);
 		}
 	}
 
@@ -1791,7 +1877,13 @@ void ExifTreeModel::prepareEtags()
 
 void ExifTreeModel::eraseTag(ExifItem* tag, Exiv2::ExifData& exifData, Exiv2::IptcData& iptcData, Exiv2::XmpData& xmpData)
 {
-	QStringList tags = tag->tagName().remove(QChar(' ')).split(",", QString::SkipEmptyParts);
+	eraseTag(tag->tagName(), exifData, iptcData, xmpData);
+	eraseTag(tag->tagAltName(), exifData, iptcData, xmpData);
+}
+
+void ExifTreeModel::eraseTag(QString& tagNames, Exiv2::ExifData& exifData, Exiv2::IptcData& iptcData, Exiv2::XmpData& xmpData)
+{
+	QStringList tags = tagNames.remove(QChar(' ')).split(",", QString::SkipEmptyParts);
 
 	foreach(QString tagName, tags)
 	{

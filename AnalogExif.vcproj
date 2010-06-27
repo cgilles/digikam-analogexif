@@ -188,6 +188,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\asciistringdialog.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\autofillexpnum.cpp"
 				>
 			</File>
@@ -277,6 +281,10 @@
 			</File>
 			<File
 				RelativePath=".\progressdialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\tagnameeditdialog.cpp"
 				>
 			</File>
 			<File
@@ -370,6 +378,32 @@
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
 						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\analogexifoptions.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\asciistringdialog.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_NETWORK_LIB -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;.\exiv2-0.19\msvc\include&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;.\expat-2.0.1\lib&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -1054,6 +1088,32 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\tagnameeditdialog.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_NETWORK_LIB -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;.\exiv2-0.19\msvc\include&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot; -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_THREAD_SUPPORT -DUNICODE -DWIN32 -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;.\expat-2.0.1\lib&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\tagnameitemdelegate.h"
 				>
 				<FileConfiguration
@@ -1191,6 +1251,32 @@
 			</File>
 			<File
 				RelativePath=".\analogexifoptions.ui"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
+						Outputs="&quot;.\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
+						Outputs="&quot;.\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\asciistringdialog.ui"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1371,6 +1457,32 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath=".\tagnameeditdialog.ui"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
+						Outputs="&quot;.\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
+						Outputs="&quot;.\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
@@ -1424,6 +1536,7 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -1444,7 +1557,7 @@
 						Name="VCCustomBuildTool"
 						Description="Rcc&apos;ing $(InputFileName)..."
 						CommandLine="&quot;$(QTDIR)\bin\rcc.exe&quot; -name &quot;$(InputName)&quot; -no-compress &quot;$(InputPath)&quot; -o .\qrc_$(InputName).cpp&#x0D;&#x0A;"
-						AdditionalDependencies="$(InputPath);.\icons\camera_edit.png;.\icons\film_edit.png;.\icons\folder_camera.png;.\icons\cog.png;.\icons\disk.png;.\icons\arrow_rotate_anticlockwise.png;.\icons\camera_go.png;.\icons\add.png;.\icons\delete.png;.\icons\camera_add.png;.\icons\page_copy.png;.\icons\bullet_arrow_up.png;.\icons\bullet_arrow_down.png;.\icons\information.png;.\icons\film_go.png;.\icons\film.png;.\AnalogExif.ael;.\version.xml;.\not-supported.txt"
+						AdditionalDependencies="$(InputPath);.\icons\camera_edit.png;.\icons\film_edit.png;.\icons\folder_camera.png;.\icons\cog.png;.\icons\disk.png;.\icons\arrow_rotate_anticlockwise.png;.\icons\camera_go.png;.\icons\add.png;.\icons\delete.png;.\icons\camera_add.png;.\icons\page_copy.png;.\icons\bullet_arrow_up.png;.\icons\bullet_arrow_down.png;.\icons\information.png;.\icons\film_go.png;.\icons\film.png;.\icons\arrow_undo.png;.\AnalogExif.ael;.\version.xml;.\not-supported.txt"
 						Outputs=".\qrc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
@@ -1455,7 +1568,7 @@
 						Name="VCCustomBuildTool"
 						Description="Rcc&apos;ing $(InputFileName)..."
 						CommandLine="&quot;$(QTDIR)\bin\rcc.exe&quot; -name &quot;$(InputName)&quot; -no-compress &quot;$(InputPath)&quot; -o .\qrc_$(InputName).cpp&#x0D;&#x0A;"
-						AdditionalDependencies="$(InputPath);.\icons\camera_edit.png;.\icons\film_edit.png;.\icons\folder_camera.png;.\icons\cog.png;.\icons\disk.png;.\icons\arrow_rotate_anticlockwise.png;.\icons\camera_go.png;.\icons\add.png;.\icons\delete.png;.\icons\camera_add.png;.\icons\page_copy.png;.\icons\bullet_arrow_up.png;.\icons\bullet_arrow_down.png;.\icons\information.png;.\icons\film_go.png;.\icons\film.png;.\AnalogExif.ael;.\version.xml;.\not-supported.txt"
+						AdditionalDependencies="$(InputPath);.\icons\camera_edit.png;.\icons\film_edit.png;.\icons\folder_camera.png;.\icons\cog.png;.\icons\disk.png;.\icons\arrow_rotate_anticlockwise.png;.\icons\camera_go.png;.\icons\add.png;.\icons\delete.png;.\icons\camera_add.png;.\icons\page_copy.png;.\icons\bullet_arrow_up.png;.\icons\bullet_arrow_down.png;.\icons\information.png;.\icons\film_go.png;.\icons\film.png;.\icons\arrow_undo.png;.\AnalogExif.ael;.\version.xml;.\not-supported.txt"
 						Outputs=".\qrc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
@@ -1485,6 +1598,26 @@
 						CommandLine=""
 						AdditionalDependencies=""
 						Outputs=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\icons\arrow_undo.png"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
 			</File>
@@ -1888,6 +2021,10 @@
 			SourceControlFiles="false"
 			>
 			<File
+				RelativePath=".\AnalogExif.nsh"
+				>
+			</File>
+			<File
 				RelativePath=".\qrc_analogexif.cpp"
 				>
 				<FileConfiguration
@@ -1984,6 +2121,10 @@
 						Outputs=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\ui_asciistringdialog.h"
+				>
 			</File>
 			<File
 				RelativePath=".\ui_autofillexpnum.h"
@@ -2141,6 +2282,36 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath=".\ui_tagnameeditdialog.h"
+				>
+			</File>
+			<File
+				RelativePath=".\version.xml"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Performing Custom Build Step"
+						CommandLine=""
+						AdditionalDependencies=""
+						Outputs=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Performing Custom Build Step"
+						CommandLine=""
+						AdditionalDependencies=""
+						Outputs=""
+					/>
+				</FileConfiguration>
+			</File>
 			<Filter
 				Name="Release"
 				Filter="cpp;moc"
@@ -2172,6 +2343,18 @@
 				</File>
 				<File
 					RelativePath=".\Release\moc_analogexifoptions.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Release\moc_asciistringdialog.cpp"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -2455,6 +2638,18 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\Release\moc_tagnameeditdialog.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath=".\Release\moc_tagnameitemdelegate.cpp"
 					>
 					<FileConfiguration
@@ -2522,6 +2717,18 @@
 				</File>
 				<File
 					RelativePath=".\Debug\moc_analogexifoptions.cpp"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Debug\moc_asciistringdialog.cpp"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
@@ -2805,6 +3012,18 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\Debug\moc_tagnameeditdialog.cpp"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath=".\Debug\moc_tagnameitemdelegate.cpp"
 					>
 					<FileConfiguration
@@ -2871,6 +3090,14 @@
 		<File
 			RelativePath=".\AnalogExif.nsi"
 			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
+					AdditionalDependencies="AnalogExif.nsh;$(TargetPath)"
+				/>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\AnalogExif.rc"
@@ -2953,9 +3180,9 @@
 				<Tool
 					Name="VCCustomBuildTool"
 					Description="Updating version information"
-					CommandLine="parseVersions.vbs $(PlatformName)"
+					CommandLine="parseVersions.vbs $(PlatformName)&#x0D;&#x0A;"
 					AdditionalDependencies=""
-					Outputs=""
+					Outputs="version.xml;AnalogExif.nsh"
 				/>
 			</FileConfiguration>
 		</File>
@@ -2991,32 +3218,6 @@
 		</File>
 		<File
 			RelativePath=".\TODO"
-			>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCustomBuildTool"
-					Description="Performing Custom Build Step"
-					CommandLine=""
-					AdditionalDependencies=""
-					Outputs=""
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCustomBuildTool"
-					Description="Performing Custom Build Step"
-					CommandLine=""
-					AdditionalDependencies=""
-					Outputs=""
-				/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath=".\version.xml"
 			>
 			<FileConfiguration
 				Name="Release|Win32"
