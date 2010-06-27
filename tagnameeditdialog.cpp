@@ -36,19 +36,25 @@ TagNameEditDialog::TagNameEditDialog(QWidget *parent, const QString& tagNames, E
 		if((i == ExifItem::Protected) && OptGearTemplateModel::ProtectBuiltInTags)
 			cbx->setEnabled(false);
 
-		if(i == ExifItem::Ascii)
+		if(i == ExifItem::AsciiAlt)
 		{
 			altTagNames = new QLineEdit(ui.optionsBox);
 			altTagNames->setEnabled(false);
 			altTagNames->setText(altTags);
 
+			altTagCbox = cbx;
+
 			ui.optionsBox->layout()->addWidget(altTagNames);
 
 			connect(cbx, SIGNAL(stateChanged(int)), this, SLOT(altTag_stateChanged(int)));
 		}
-	}
 
-	static_cast<QHBoxLayout*>(ui.optionsBox->layout())->addStretch();
+		if(i == ExifItem::Ascii)
+		{
+			asciiTagCbox = cbx;
+			connect(cbx, SIGNAL(stateChanged(int)), this, SLOT(ascii_stateChanged(int)));
+		}
+	}
 }
 
 void TagNameEditDialog::setFlags(ExifItem::TagFlags flags)
@@ -58,7 +64,7 @@ void TagNameEditDialog::setFlags(ExifItem::TagFlags flags)
 		QCheckBox* cbx = static_cast<QCheckBox*>(ui.optionsBox->layout()->itemAt(j)->widget());
 		cbx->setChecked(flags.testFlag((ExifItem::TagFlag)i));
 
-		if(i == ExifItem::Ascii)
+		if(i == ExifItem::AsciiAlt)
 			altTagNames->setEnabled(cbx->isChecked());
 	}
 }
@@ -93,4 +99,30 @@ void TagNameEditDialog::altTag_stateChanged(int state)
 {
 	if(altTagNames)
 		altTagNames->setEnabled(state == Qt::Checked);
+
+	if(state == Qt::Checked)
+		asciiTagCbox->setChecked(false);
+}
+
+void TagNameEditDialog::ascii_stateChanged(int state)
+{
+	if(state == Qt::Checked)
+		altTagCbox->setChecked(false);
+}
+
+void TagNameEditDialog::setFlagEnabled(ExifItem::TagFlag flag, bool isEnabled)
+{
+	for(int i = 1, j = 0; i < ExifItem::Last; i *= 2, j++)
+	{
+		if(i == flag)
+		{
+			QCheckBox* cbx = static_cast<QCheckBox*>(ui.optionsBox->layout()->itemAt(j)->widget());
+			cbx->setEnabled(isEnabled);
+
+			if((i == ExifItem::AsciiAlt) && !isEnabled && cbx->isChecked())
+				altTagNames->setEnabled(false);
+
+			break;
+		}
+	}
 }

@@ -239,7 +239,7 @@ QVariant ExifTreeModel::getItemValue(const QVariant& itemValue, const QString& i
 		if(role == Qt::DisplayRole)
 		{
 			// special care for alt-Ascii values
-			if(tagFlags.testFlag(ExifItem::Ascii))
+			if(tagFlags.testFlag(ExifItem::AsciiAlt))
 			{
 				QStringList strList = itemValue.toStringList();
 
@@ -963,7 +963,7 @@ QVariant ExifTreeModel::readTagValue(QString& tagNames, int& srcTagType, ExifIte
 				{
 					std::string str = tagValue.toString();
 					// do not convert real numbers to Exif fraction format
-					return ExifItem::valueFromString(QString::fromUtf8(str.data(), str.length()).remove(QRegExp("^lang=(\")?(\\w)*(\")? ")), type, false, false);
+					return ExifItem::valueFromString(QString::fromUtf8(str.data(), str.length()).remove(QRegExp("^lang=(\\\")?.*(\\\")? ")), type, false, false);
 				}
 				break;
 			case Exiv2::xmpAlt:
@@ -1029,10 +1029,10 @@ void ExifTreeModel::processTag(ExifItem* tag, Exiv2::ExifData& exifData, Exiv2::
 	tag->setSrcTagType(srcTagType);
 
 	// get alt tag value
-	if(tag->tagFlags().testFlag(ExifItem::Ascii))
+	if(tag->tagFlags().testFlag(ExifItem::AsciiAlt))
 	{
 		// get alt value
-		QVariant altTagValue = readTagValue(tag->tagAltName(), srcTagType, tag->tagType(), tag->tagFlags() & ~ExifItem::Ascii, exifData, iptcData, xmpData);
+		QVariant altTagValue = readTagValue(tag->tagAltName(), srcTagType, tag->tagType(), tag->tagFlags() & ~ExifItem::AsciiAlt, exifData, iptcData, xmpData);
 
 		// if alt value exists
 		if(tagValue == QVariant())
@@ -1466,7 +1466,7 @@ bool ExifTreeModel::storeTag(ExifItem* tag, Exiv2::ExifData& exifData, Exiv2::Ip
 	else
 	{
 		// for alt tags store value in different set of tags
-		if(tag->tagFlags().testFlag(ExifItem::Ascii))
+		if(tag->tagFlags().testFlag(ExifItem::AsciiAlt))
 		{
 			if(tag->value() == QVariant())
 			{

@@ -65,6 +65,7 @@ public:
 	static const int GetTagId = Qt::UserRole + 1;
 	static const int GetTagFlagsRole = Qt::UserRole + 2;
 	static const int GetAltTagRole = Qt::UserRole + 3;
+	static const int GetTagTypeRole = Qt::UserRole + 4;
 
 	// Protect built-in tags
 	static const bool ProtectBuiltInTags = false;

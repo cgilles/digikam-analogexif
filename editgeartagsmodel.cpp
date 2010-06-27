@@ -64,7 +64,7 @@ QVariant EditGearTagsModel::data(const QModelIndex &index, int role) const
 	{
 		QVariant itemValue = ExifItem::valueFromString(query().value(1).toString(), tagType, true, tagFlags);
 
-		if(tagFlags.testFlag(ExifItem::Ascii))
+		if(tagFlags.testFlag(ExifItem::AsciiAlt))
 		{
 			QVariantList varList;
 			varList << itemValue << ExifItem::valueFromString(query().value(6).toString(), tagType, true, tagFlags);
@@ -103,7 +103,7 @@ bool EditGearTagsModel::setData(const QModelIndex &index, const QVariant &dataVa
 
 	QVariantList varList;
 
-	if(tagFlags.testFlag(ExifItem::Ascii) && (dataValue != QVariant()))
+	if(tagFlags.testFlag(ExifItem::AsciiAlt) && (dataValue != QVariant()))
 	{
 		varList = dataValue.toList();
 		if(!varList.isEmpty())
@@ -116,7 +116,7 @@ bool EditGearTagsModel::setData(const QModelIndex &index, const QVariant &dataVa
 		QVariant apexValue = 2*log(value.toDouble())/log(2.0);
 		updateValue = ExifItem::valueToStringMulti(apexValue, tagType, tagFlags, oldValue);
 
-		if(tagFlags.testFlag(ExifItem::Ascii) && (varList.count() > 1))
+		if(tagFlags.testFlag(ExifItem::AsciiAlt) && (varList.count() > 1))
 		{
 			QVariant apexAltValue = 2*log(varList.at(1).toDouble())/log(2.0);
 			updateAltValue = ExifItem::valueToStringMulti(apexAltValue, tagType, tagFlags, oldValue);
@@ -126,7 +126,7 @@ bool EditGearTagsModel::setData(const QModelIndex &index, const QVariant &dataVa
 	{
 		updateValue = ExifItem::valueToStringMulti(value, tagType, tagFlags, oldValue);
 
-		if(tagFlags.testFlag(ExifItem::Ascii) && (varList.count() > 1))
+		if(tagFlags.testFlag(ExifItem::AsciiAlt) && (varList.count() > 1))
 		{
 			updateAltValue = ExifItem::valueToStringMulti(varList.at(1), tagType, tagFlags, oldValue);
 		}

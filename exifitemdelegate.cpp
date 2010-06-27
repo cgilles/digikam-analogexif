@@ -23,6 +23,7 @@
 #include "emptyspinbox.h"
 #include "multitagvaluesdialog.h"
 #include "asciistringdialog.h"
+#include "asciitextdialog.h"
 
 #include <QComboBox>
 #include <QLineEdit>
@@ -77,7 +78,7 @@ QWidget* ExifItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 	{
 	case ExifItem::TagString:
 		{
-			if(tagFlags.testFlag(ExifItem::Ascii))
+			if(tagFlags.testFlag(ExifItem::AsciiAlt))
 			{
 				// check the list
 				QStringList strList = index.data(Qt::EditRole).toStringList();
@@ -87,6 +88,12 @@ QWidget* ExifItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 					AsciiStringDialog* asciiDialog = new AsciiStringDialog(strList.at(0), strList.at(1), parent);
 					return asciiDialog;
 				}
+			}
+
+			if(tagFlags.testFlag(ExifItem::Ascii))
+			{
+				AsciiLineEdit* edit = new AsciiLineEdit(parent);
+				return edit;
 			}
 
 			QLineEdit* edit = new QLineEdit(parent);
@@ -223,6 +230,18 @@ QWidget* ExifItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 		break;
 	case ExifItem::TagText:
 		{
+			if(tagFlags.testFlag(ExifItem::AsciiAlt))
+			{
+				// check the list
+				QStringList strList = index.data(Qt::EditRole).toStringList();
+
+				if((strList != QStringList()) && (strList.size() > 1) && (!strList.at(1).isEmpty()) && (strList.at(0) != strList.at(1)))
+				{
+					AsciiTextDialog* asciiDialog = new AsciiTextDialog(strList.at(0), strList.at(1), parent);
+					return asciiDialog;
+				}
+			}
+
 			QPlainTextEdit* tEdit = new QPlainTextEdit(parent);
 
 			return tEdit;
@@ -294,7 +313,7 @@ void ExifItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
 			QVariant value = index.data(Qt::EditRole);
 
 			// BUG? If model data changes between createEditor() and setEditorData() - we are doomed
-			if(tagFlags.testFlag(ExifItem::Ascii))
+			if(tagFlags.testFlag(ExifItem::AsciiAlt))
 			{
 				if(value != QVariant())
 				{
@@ -469,11 +488,43 @@ void ExifItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
 
 	case ExifItem::TagText:
 		{
+			QString text;
+			QVariant value = index.data(Qt::EditRole);
+
+			// BUG? If model data changes between createEditor() and setEditorData() - we are doomed
+			if(tagFlags.testFlag(ExifItem::AsciiAlt))
+			{
+				if(value != QVariant())
+				{
+					AsciiTextDialog* asciiDialog = dynamic_cast<AsciiTextDialog*>(editor);
+					QStringList strList = value.toStringList();
+
+					if(asciiDialog)
+					{
+						if((strList != QStringList()) && (strList.size() > 1))
+						{
+							asciiDialog->setUnicodeValue(strList.at(0));
+							asciiDialog->setAsciiValue(strList.at(1));
+
+							return;
+						}
+					}
+					else
+					{
+						if((strList != QStringList()) && (strList.size() > 1))
+							text = strList.at(0);
+					}
+				}
+			}
+			else
+			{
+				text = value.toString();
+			}
+
 			QPlainTextEdit* tEdit = static_cast<QPlainTextEdit*>(editor);
 
-			QVariant value = index.model()->data(index, Qt::EditRole);
 			if(value != QVariant())
-				tEdit->setPlainText(value.toString());
+				tEdit->setPlainText(text);
 		}
 		break;
 
@@ -522,7 +573,7 @@ void ExifItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 	{
 	case ExifItem::TagString:
 		{
-			if(tagFlags.testFlag(ExifItem::Ascii))
+			if(tagFlags.testFlag(ExifItem::AsciiAlt))
 			{
 				AsciiStringDialog* asciiDialog = dynamic_cast<AsciiStringDialog*>(editor);
 
@@ -555,7 +606,7 @@ void ExifItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 			}
 			else
 			{
-				if(tagFlags.testFlag(ExifItem::Ascii))
+				if(tagFlags.testFlag(ExifItem::AsciiAlt))
 				{
 					QStringList strList;
 					// check whether non-ascii entered
@@ -806,13 +857,78 @@ void ExifItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 
 	case ExifItem::TagText:
 		{
+			if(tagFlags.testFlag(ExifItem::AsciiAlt))
+			{
+				AsciiTextDialog* asciiDialog = dynamic_cast<AsciiTextDialog*>(editor);
+
+				if(asciiDialog)
+				{
+					if(asciiDialog->result() == QDialogButtonBox::AcceptRole)
+					{
+						QStringList strList;
+						strList << asciiDialog->getUnicodeValue() << asciiDialog->getAsciiValue();
+
+						model->setData(index, strList);
+					} else if(asciiDialog->result() == QDialogButtonBox::DestructiveRole)
+					{
+						QStringList strList;
+						strList << asciiDialog->getUnicodeValue() << QString();
+
+						model->setData(index, strList);
+					}
+
+					return;
+				}
+			}
+
 			QPlainTextEdit* tEdit = static_cast<QPlainTextEdit*>(editor);
 			QString text = tEdit->toPlainText();
 
 			if(text == "")
+			{
 				model->setData(index, QVariant());
+			}
 			else
-				model->setData(index, text);
+			{
+				if(tagFlags.testFlag(ExifItem::AsciiAlt))
+				{
+					QStringList strList;
+					// check whether non-ascii entered
+					if(ExifUtils::containsNonAscii(text))
+					{
+						// show AsciiDialog
+						AsciiTextDialog asciiDialog(text, "", editor->parentWidget());
+
+						asciiDialog.exec();
+						switch(asciiDialog.result())
+						{
+						case QDialogButtonBox::AcceptRole:
+							// entered alternative value for ascii
+							strList << asciiDialog.getUnicodeValue() << asciiDialog.getAsciiValue();
+							break;
+						case QDialogButtonBox::DestructiveRole:
+							// forced to ignore alternative value
+							strList << text << QString();
+							break;
+						default:
+							// either cancelled or non-supported role
+							return;
+							break;
+						}
+					}
+					else
+					{
+						// if all characters are 7bit, set the same value for alternative
+						strList << text << text;
+					}
+
+					model->setData(index, strList);
+				}
+				else
+				{
+					model->setData(index, text);
+				}
+			}
 		}
 		break;
 
@@ -832,11 +948,16 @@ void ExifItemDelegate::updateEditorGeometry(QWidget *editor,
 	if(tagFlags.testFlag(ExifItem::Multi) && !tagFlags.testFlag(ExifItem::Choice))
 		return;
 
-	if(tagFlags.testFlag(ExifItem::Ascii))
+	if(tagFlags.testFlag(ExifItem::AsciiAlt))
 	{
 		AsciiStringDialog* asciiDialog = dynamic_cast<AsciiStringDialog*>(editor);
 
 		if(asciiDialog)
+			return;
+
+		AsciiTextDialog* asciiTextDialog = dynamic_cast<AsciiTextDialog*>(editor);
+
+		if(asciiTextDialog)
 			return;
 	}
 

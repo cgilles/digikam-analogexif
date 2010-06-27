@@ -79,7 +79,7 @@ QVariant GearListModel::data(const QModelIndex &item, int role) const
 		    while (query.next()) {
 				QVariant value = query.value(1);
 
-				if(((ExifItem::TagFlags)query.value(2).toInt()).testFlag(ExifItem::Ascii))
+				if(((ExifItem::TagFlags)query.value(2).toInt()).testFlag(ExifItem::AsciiAlt))
 				{
 					QVariantList varList;
 					varList << value << query.value(3);

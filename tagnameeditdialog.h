@@ -22,6 +22,7 @@
 
 #include <QDialog>
 #include <QLineEdit>
+#include <QCheckBox>
 #include "ui_tagnameeditdialog.h"
 #include "exifitem.h"
 
@@ -62,10 +63,14 @@ public:
 		}
 	}
 
+	void setFlagEnabled(ExifItem::TagFlag flag, bool isEnabled);
+
 private:
 	Ui::TagNameEditDialogClass ui;
 
 	QLineEdit* altTagNames;
+	QCheckBox* altTagCbox;
+	QCheckBox* asciiTagCbox;
 
 private slots:
 	// ok/cancel
@@ -74,6 +79,8 @@ private slots:
 
 	// alt tag enabled/disabled
 	void altTag_stateChanged(int);
+	// ascii enabled/disabled
+	void ascii_stateChanged(int);
 };
 
 #endif // TAGNAMEEDITDIALOG_H

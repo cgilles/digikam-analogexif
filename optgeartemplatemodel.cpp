@@ -90,6 +90,14 @@ QVariant OptGearTemplateModel::data(const QModelIndex &index, int role) const
 		return query().value(8).toString();
 	}
 
+	if(role == GetTagTypeRole)
+	{
+		if(!query().seek(index.row()))
+			return QVariant();
+
+		return query().value(3).toInt();
+	}
+
 	QVariant v = QSqlQueryModel::data(index, role);
 
 	if(((role == Qt::ToolTipRole) || (role == Qt::DisplayRole)) && (index.column() == 1))
@@ -99,7 +107,7 @@ QVariant OptGearTemplateModel::data(const QModelIndex &index, int role) const
 
 		QString text = query().value(1).toString();
 
-		if(((ExifItem::TagFlags)query().value(5).toInt()).testFlag(ExifItem::Ascii))
+		if(((ExifItem::TagFlags)query().value(5).toInt()).testFlag(ExifItem::AsciiAlt))
 		{
 			if(query().value(8).toString() != "")
 				text += " (" + query().value(8).toString() + ")";
@@ -239,7 +247,7 @@ bool OptGearTemplateModel::setData(const QModelIndex &index, const QVariant &val
 				// TODO: bad, should be checked in item delegate
 				if((query().value(1).toString() == vallist.at(0).toString()) && (query().value(5).toInt() == vallist.at(1).toInt()))
 				{
-					if(((ExifItem::TagFlags)vallist.at(1).toInt()).testFlag(ExifItem::Ascii))
+					if(((ExifItem::TagFlags)vallist.at(1).toInt()).testFlag(ExifItem::AsciiAlt))
 					{
 						if(query().value(8).toString() == vallist.at(2).toString())
 							return false;
@@ -263,7 +271,7 @@ bool OptGearTemplateModel::setData(const QModelIndex &index, const QVariant &val
 
 				queryStr += QString("TagName = '%1', Flags = %2").arg(vallist.at(0).toString().replace("'", "''")).arg(vallist.at(1).toInt());
 
-				if(((ExifItem::TagFlags)vallist.at(1).toInt()).testFlag(ExifItem::Ascii))
+				if(((ExifItem::TagFlags)vallist.at(1).toInt()).testFlag(ExifItem::AsciiAlt))
 				{
 					// browse through tags and verify them
 					QStringList tags = vallist.at(2).toString().remove(QRegExp("(\\s?)")).split(",", QString::SkipEmptyParts);

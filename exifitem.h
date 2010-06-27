@@ -54,6 +54,7 @@ public:
 		Choice		= 4,
 		Multi		= 8,
 		Ascii		= 16,
+		AsciiAlt	= 32,
 		Last
 	};
 	Q_DECLARE_FLAGS(TagFlags, TagFlag);

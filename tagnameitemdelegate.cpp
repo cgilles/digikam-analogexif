@@ -44,10 +44,25 @@ void TagNameItemDelegate::setEditorData(QWidget *editor, const QModelIndex &inde
 	tagNameEditDialog->setTagNames(index.data(Qt::EditRole).toString());
 
 	ExifItem::TagFlags flags = (ExifItem::TagFlags)index.data(OptGearTemplateModel::GetTagFlagsRole).toInt();
+
+	ExifItem::TagType tagType = (ExifItem::TagType)index.data(OptGearTemplateModel::GetTagTypeRole).toInt();
+	if((tagType != ExifItem::TagString) && (tagType != ExifItem::TagText))
+	{
+		if(flags.testFlag(ExifItem::AsciiAlt))
+			flags &= ~ExifItem::AsciiAlt;
+
+		if(flags.testFlag(ExifItem::Ascii))
+			flags &= ~ExifItem::Ascii;
+
+		tagNameEditDialog->setFlagEnabled(ExifItem::AsciiAlt, false);
+		tagNameEditDialog->setFlagEnabled(ExifItem::Ascii, false);
+	}
+
 	tagNameEditDialog->setFlags(flags);
 
-	if(flags.testFlag(ExifItem::Ascii))
+	if(flags.testFlag(ExifItem::AsciiAlt))
 		tagNameEditDialog->setAltTagNames(index.data(OptGearTemplateModel::GetAltTagRole).toString());
+
 }
 
 void TagNameItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,

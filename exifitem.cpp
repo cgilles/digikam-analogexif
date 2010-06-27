@@ -70,7 +70,7 @@ void ExifItem::reset()
 // set value from string
 void ExifItem::setValueFromString(const QVariant& value, bool setDirty, bool convertReal)
 {
-	if((value != QVariant()) && flags.testFlag(Ascii))
+	if((value != QVariant()) && flags.testFlag(AsciiAlt))
 	{
 		QVariantList varList = value.toList();
 		if(varList.count() > 1)
@@ -229,7 +229,11 @@ QString ExifItem::flagName(TagFlag flag)
 			break;
 
 	case Ascii:
-			return QT_TR_NOOP("ASCII value");
+			return QT_TR_NOOP("7-bit Ascii-only value");
+			break;
+
+	case AsciiAlt:
+			return QT_TR_NOOP("Ascii-only alternative value");
 			break;
 
 	default:
