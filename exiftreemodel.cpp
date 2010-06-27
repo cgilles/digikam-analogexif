@@ -953,11 +953,17 @@ QVariant ExifTreeModel::readTagValue(QString& tagNames, int& srcTagType, ExifIte
 			switch(typId)
 			{
 			case Exiv2::xmpText:
-			case Exiv2::langAlt:	// LangAlt gets the first value only
 				{
 					std::string str = tagValue.toString();
 					// do not convert real numbers to Exif fraction format
 					return ExifItem::valueFromString(QString::fromUtf8(str.data(), str.length()), type, false, false);
+				}
+				break;
+			case Exiv2::langAlt:	// LangAlt gets the first value only
+				{
+					std::string str = tagValue.toString();
+					// do not convert real numbers to Exif fraction format
+					return ExifItem::valueFromString(QString::fromUtf8(str.data(), str.length()).remove(QRegExp("^lang=(\")?(\\w)*(\")? ")), type, false, false);
 				}
 				break;
 			case Exiv2::xmpAlt:
