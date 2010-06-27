@@ -145,7 +145,7 @@ void OnlineVersionChecker::openDownloadPage()
 	QDesktopServices::openUrl(downloadUrl);
 }
 
-VersionFileParser::VersionFileParser(QObject *parent) : QObject(parent), version(QString()), platform(QString()), details(QString()), date(QString()), releaseNumber(QString())
+VersionFileParser::VersionFileParser(QObject *parent) : QObject(parent), version(QString()), releaseNumber(QString()), platform(QString()), details(QString()), date(QString())
 {
 	xmlParser = XML_ParserCreate(NULL);
 }

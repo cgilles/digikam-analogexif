@@ -28,7 +28,7 @@
 #include <QVBoxLayout>
 #include <QLineEdit>
 
-QWidget* TagNameItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option,
+QWidget* TagNameItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &,
         const QModelIndex &) const
 {
 

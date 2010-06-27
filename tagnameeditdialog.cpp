@@ -21,7 +21,7 @@
 #include "optgeartemplatemodel.h"
 #include <QCheckBox>
 
-TagNameEditDialog::TagNameEditDialog(QWidget *parent, const QString& tagNames, ExifItem::TagFlags flags, const QString& altTags)
+TagNameEditDialog::TagNameEditDialog(QWidget *parent, const QString& tagNames, ExifItem::TagFlags, const QString& altTags)
 	: QDialog(parent), altTagNames(NULL)
 {
 	ui.setupUi(this);

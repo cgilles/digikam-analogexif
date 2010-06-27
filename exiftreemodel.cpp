@@ -794,7 +794,7 @@ QVariant ExifTreeModel::getTagValueFromExif(ExifItem::TagType tagType, const Exi
 	return QVariant();
 }
 
-QVariant ExifTreeModel::readTagValue(QString& tagNames, int& srcTagType, ExifItem::TagType type, ExifItem::TagFlags tagFlags, Exiv2::ExifData& exifData, Exiv2::IptcData& iptcData, Exiv2::XmpData& xmpData)
+QVariant ExifTreeModel::readTagValue(QString tagNames, int& srcTagType, ExifItem::TagType type, ExifItem::TagFlags tagFlags, Exiv2::ExifData& exifData, Exiv2::IptcData& iptcData, Exiv2::XmpData& xmpData)
 {
 	// get list of tags
 	QStringList tags = tagNames.remove(QChar(' ')).split(",", QString::SkipEmptyParts);
@@ -1288,7 +1288,7 @@ void ExifTreeModel::tagValueToMetadata(QVariant value, ExifItem::TagType tagType
 	}
 }
 
-void ExifTreeModel::writeTagValue(QString& tagNames, const QVariant& tagValue, ExifItem::TagType type, ExifItem::TagFlags tagFlags, Exiv2::ExifData& exifData, Exiv2::IptcData& iptcData, Exiv2::XmpData& xmpData)
+void ExifTreeModel::writeTagValue(QString tagNames, const QVariant& tagValue, ExifItem::TagType type, ExifItem::TagFlags tagFlags, Exiv2::ExifData& exifData, Exiv2::IptcData& iptcData, Exiv2::XmpData& xmpData)
 {
 	QStringList tags = tagNames.remove(QChar(' ')).split(",", QString::SkipEmptyParts);
 
@@ -1887,7 +1887,7 @@ void ExifTreeModel::eraseTag(ExifItem* tag, Exiv2::ExifData& exifData, Exiv2::Ip
 	eraseTag(tag->tagAltName(), exifData, iptcData, xmpData);
 }
 
-void ExifTreeModel::eraseTag(QString& tagNames, Exiv2::ExifData& exifData, Exiv2::IptcData& iptcData, Exiv2::XmpData& xmpData)
+void ExifTreeModel::eraseTag(QString tagNames, Exiv2::ExifData& exifData, Exiv2::IptcData& iptcData, Exiv2::XmpData& xmpData)
 {
 	QStringList tags = tagNames.remove(QChar(' ')).split(",", QString::SkipEmptyParts);
 

@@ -21,7 +21,7 @@
 #include <QMessageBox>
 
 AsciiStringDialog::AsciiStringDialog(const QString& uValue, const QString& aValue, QWidget *parent)
-	: unicodeValue(uValue), QDialog(parent)
+	: QDialog(parent), unicodeValue(uValue)
 {
 	ui.setupUi(this);
 
