@@ -78,6 +78,9 @@ int GearTreeModel::bodyCount() const
 
 QVariant GearTreeModel::data(const QModelIndex &item, int role) const
 {
+	if(!item.isValid())
+		return QVariant();
+
 	if(((item == selected) || (item == selected.parent())) && (role == Qt::FontRole))
 	{
 		QFont f;

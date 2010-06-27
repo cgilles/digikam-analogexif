@@ -402,6 +402,7 @@ void AnalogExif::fileView_selectionChanged(const QItemSelection&, const QItemSel
 	// clear current file name
 	curFileName = "";
 	previewIndex = QModelIndex();
+
 }
 
 // open file for editing
@@ -839,6 +840,18 @@ void AnalogExif::filmAndGearView_selectionChanged(const QItemSelection&, const Q
 	bool validSelection = ui.gearView->selectionModel()->hasSelection() | ui.filmView->selectionModel()->hasSelection() | ui.developerView->selectionModel()->hasSelection() | ui.authorView->selectionModel()->hasSelection();
 	ui.actionApply_gear->setEnabled(validSelection);
 	ui.applyGearBtn->setEnabled(validSelection);
+
+	if(!ui.gearView->selectionModel()->hasSelection())
+		gearList->setSelectedIndex(QModelIndex());
+
+	if(!ui.filmView->selectionModel()->hasSelection())
+		filmsList->setSelectedIndex(QModelIndex());
+
+	if(!ui.developerView->selectionModel()->hasSelection())
+		developersList->setSelectedIndex(QModelIndex());
+
+	if(!ui.authorView->selectionModel()->hasSelection())
+		authorsList->setSelectedIndex(QModelIndex());
 }
 
 // Apply action triggered
