@@ -20,7 +20,6 @@ FUTURE FEATURES
 * x64 support
 * write and read correct IPTC encoding
 * duplicate Exif/IPTC/XMP intersections
-* Add non-unicode tag values
 
 DEVELOPMENT
 * Fill-in the metatags database
@@ -45,4 +44,3 @@ BUGS
 * in the equipment template edit, when tag flags checkboxes and line edit got swapped out, editor does not close properly when loses focus
 * when pasting Google map coordinates cursor should be on the first character to pass the validator
 * image metadata is not reloaded when options dialog opened/closed
-* handle langAlt tags properly (remove "lang=" prefix)
