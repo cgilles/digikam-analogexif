@@ -638,6 +638,10 @@ void EditGear::on_delGearBtn_clicked()
 	{
 		contextIndex = ui.gearView->selectionModel()->currentIndex();
 		ui.actionDelete->trigger();
+
+		ui.gearView->clearSelection();
+		ui.delGearBtn->setEnabled(false);
+		ui.dupGearBtn->setEnabled(false);
 	}
 }
 
@@ -648,6 +652,10 @@ void EditGear::on_delFilmBtn_clicked()
 	{
 		contextIndex = ui.filmView->selectionModel()->currentIndex();
 		ui.actionDelete->trigger();
+		
+		ui.filmView->clearSelection();
+		ui.delFilmBtn->setEnabled(false);
+		ui.dupFilmBtn->setEnabled(false);
 	}
 }
 
@@ -658,6 +666,10 @@ void EditGear::on_delDevBtn_clicked()
 	{
 		contextIndex = ui.developerView->selectionModel()->currentIndex();
 		ui.actionDelete->trigger();
+
+		ui.developerView->clearSelection();
+		ui.delDevBtn->setEnabled(false);
+		ui.dupDevBtn->setEnabled(false);
 	}
 }
 
@@ -668,6 +680,10 @@ void EditGear::on_delAuthorBtn_clicked()
 	{
 		contextIndex = ui.authorView->selectionModel()->currentIndex();
 		ui.actionDelete->trigger();
+
+		ui.authorView->clearSelection();
+		ui.delAuthorBtn->setEnabled(false);
+		ui.dupAuthorBtn->setEnabled(false);
 	}
 }
 
