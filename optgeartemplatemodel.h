@@ -68,7 +68,7 @@ public:
 	static const int GetTagTypeRole = Qt::UserRole + 4;
 
 	// Protect built-in tags
-	static const bool ProtectBuiltInTags = false;
+	static const bool ProtectBuiltInTags = true;
 signals:
 	// unsupported tag
 	void unsupportedTag(const QModelIndex& idx, const QString& tagName);
