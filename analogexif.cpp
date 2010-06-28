@@ -900,6 +900,8 @@ void AnalogExif::on_actionPreferences_triggered(bool)
 	if(!checkForDirty())
 		return;
 
+	QModelIndex prevIdx = ui.fileView->currentIndex();
+
 	AnalogExifOptions options(this);
 	options.setModal(true);
 
@@ -907,6 +909,10 @@ void AnalogExif::on_actionPreferences_triggered(bool)
 	{
 		exifTreeModel->repopulate();
 		ui.metadataView->expandAll();
+
+		ui.fileView->clearSelection();
+		ui.fileView->selectionModel()->select(prevIdx, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
+		ui.fileView->selectionModel()->setCurrentIndex(prevIdx, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
 	}
 }
 
