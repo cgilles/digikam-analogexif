@@ -82,6 +82,8 @@ private:
 	bool initialState_etagsCboxStorageUser;
 	bool initialState_updProxyGBox;
 	int initialState_proxyPort;
+	int initialState_proxyType;
+	int initialState_updCheck;
 
 	QString originalNs;
 	QString originalNsPrefix;

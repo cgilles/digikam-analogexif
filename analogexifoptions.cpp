@@ -317,16 +317,19 @@ void AnalogExifOptions::loadOptions()
 	}
 
 	// load update period
-	ui.updCheckInterval->setCurrentIndex(settings.value("CheckForUpdatePeriod", 2).toInt());
+	initialState_updCheck = settings.value("CheckForUpdatePeriod", 2).toInt();
+	ui.updCheckInterval->setCurrentIndex(initialState_updCheck);
 
 	// load network proxy settings
 	ui.updProxyGBox->setChecked(settings.value("UseProxy", false).toBool());
 	initialState_updProxyGBox = ui.updProxyGBox->isChecked();
 
 	if(settings.value("ProxyType", QNetworkProxy::HttpProxy).toInt() == QNetworkProxy::HttpProxy)
-		ui.proxyTypeCBox->setCurrentIndex(0);
+		initialState_proxyType = 0;
 	else
-		ui.proxyTypeCBox->setCurrentIndex(1);	// SOCKS5
+		initialState_proxyType = 1;	// SOCKS5
+
+	ui.proxyTypeCBox->setCurrentIndex(initialState_proxyType);
 
 	ui.proxyAddress->setText(settings.value("ProxyHostName", QString()).toString());
 	initialState_proxyPort = settings.value("ProxyPort", 0).toInt();
@@ -523,6 +526,8 @@ bool AnalogExifOptions::saveOptions()
 	initialState_updProxyGBox = ui.updProxyGBox->isChecked();
 
 	initialState_proxyPort = ui.proxyPort->value();
+	initialState_proxyType = ui.proxyTypeCBox->currentIndex();
+	initialState_updCheck = ui.updCheckInterval->currentIndex();
 
 	//query.exec("COMMIT TRANSACTION");
 	query.exec("RELEASE EditOptionsStart");
@@ -712,14 +717,16 @@ void AnalogExifOptions::on_proxyPort_valueChanged(int newValue)
 		setDirty();
 }
 
-void AnalogExifOptions::on_proxyTypeCBox_currentIndexChanged(int)
+void AnalogExifOptions::on_proxyTypeCBox_currentIndexChanged(int newValue)
 {
-	setDirty();
+	if(newValue != initialState_proxyType)
+		setDirty();
 }
 
-void AnalogExifOptions::on_updCheckInterval_currentIndexChanged(int)
+void AnalogExifOptions::on_updCheckInterval_currentIndexChanged(int newValue)
 {
-	setDirty();
+	if(newValue != initialState_updCheck)
+		setDirty();
 }
 
 void AnalogExifOptions::setupProxy()
