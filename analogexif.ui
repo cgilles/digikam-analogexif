@@ -66,6 +66,7 @@
          <widget class="QLineEdit" name="directoryLine">
           <property name="font">
            <font>
+            <pointsize>9</pointsize>
             <kerning>true</kerning>
            </font>
           </property>
