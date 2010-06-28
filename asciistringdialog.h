@@ -21,7 +21,12 @@
 #define ASCIISTRINGDIALOG_H
 
 #include <QDialog>
+
+#ifdef Q_WS_MAC
+#include "ui_asciistringdialog_mac.h"
+#else
 #include "ui_asciistringdialog.h"
+#endif
 
 class AsciiStringDialog : public QDialog
 {

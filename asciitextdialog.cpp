@@ -31,16 +31,30 @@ AsciiTextDialog::AsciiTextDialog(const QString& uValue, const QString& aValue, Q
 	ui.unicodeEdit->setPlainText(uValue);
 
 	if(aValue.isEmpty())
+	{
+		// for some reason Local8Bit on Mac still Unicode
+#ifdef Q_WS_MAC
+		ui.asciiEdit->setPlainText(QString::fromLatin1(uValue.toLatin1().constData()));
+#else
 		ui.asciiEdit->setPlainText(QString::fromLocal8Bit(uValue.toLocal8Bit().constData()));
+#endif
+	}
 	else
+	{
 		ui.asciiEdit->setPlainText(aValue);
+	}
 
 	setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint);
 }
 
 void AsciiTextDialog::on_copyBtn_clicked()
 {
+	// for some reason Local8Bit on Mac still Unicode
+#ifdef Q_WS_MAC
+	ui.asciiEdit->setPlainText(QString::fromLatin1(ui.unicodeEdit->toPlainText().toLatin1().constData()));
+#else
 	ui.asciiEdit->setPlainText(QString::fromLocal8Bit(ui.unicodeEdit->toPlainText().toLocal8Bit().constData()));
+#endif
 }
 
 void AsciiTextDialog::on_buttonBox_clicked(QAbstractButton* button)

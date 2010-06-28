@@ -50,18 +50,18 @@ HEADERS += aboutdialog.h \
     asciitextdialog.h \
     asciistringdialog.h \
     tagnameeditdialog.h
-FORMS += aboutdialog.ui \
-    analogexif.ui \
-    analogexifoptions.ui \
+FORMS += analogexifoptions.ui \
     autofillexpnum.ui \
     copymetadatadialog.ui \
-    editgear.ui \
     edittagselectvalues.ui \
     multitagvaluesdialog.ui \
     progressdialog.ui \
-    asciitextdialog.ui \
-    asciistringdialog.ui \
-    tagnameeditdialog.ui
+    tagnameeditdialog.ui \
+    aboutdialog_mac.ui \
+    analogexif_mac.ui \
+    editgear_mac.ui \
+    asciistringdialog_mac.ui \
+    asciitextdialog_mac.ui
 SOURCES += aboutdialog.cpp \
     analogexif.cpp \
     analogexifoptions.cpp \

@@ -29,7 +29,11 @@
 #include <QCompleter>
 #include <QMessageBox>
 
+#ifdef Q_WS_MAC
+#include "ui_analogexif_mac.h"
+#else
 #include "ui_analogexif.h"
+#endif
 
 #include "dirsortfilterproxymodel.h"
 #include "exiftreemodel.h"

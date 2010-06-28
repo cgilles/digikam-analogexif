@@ -23,7 +23,12 @@
 #include <QDialog>
 #include <QAction>
 #include <QPushButton>
+
+#ifdef Q_WS_MAC
+#include "ui_editgear_mac.h"
+#else
 #include "ui_editgear.h"
+#endif
 
 #include "editgeartreemodel.h"
 #include "exifitemdelegate.h"

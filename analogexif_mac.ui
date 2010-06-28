@@ -389,6 +389,7 @@ QTreeView::item:selected:!active{
            <widget class="GearListView" name="filmView">
             <property name="font">
              <font>
+              <pointsize>13</pointsize>
               <kerning>true</kerning>
              </font>
             </property>
@@ -433,6 +434,7 @@ QListView::item:selected:!active{
            <widget class="GearListView" name="developerView">
             <property name="font">
              <font>
+              <pointsize>13</pointsize>
               <kerning>true</kerning>
              </font>
             </property>
@@ -465,6 +467,7 @@ QListView::item:selected:!active{
            <widget class="GearListView" name="authorView">
             <property name="font">
              <font>
+              <pointsize>13</pointsize>
               <kerning>true</kerning>
              </font>
             </property>
@@ -533,7 +536,7 @@ QListView::item:selected:!active{
      <x>0</x>
      <y>0</y>
      <width>909</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">

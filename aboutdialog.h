@@ -21,7 +21,12 @@
 #define ABOUTDIALOG_H
 
 #include <QDialog>
+
+#ifdef Q_WS_MAC
+#include "ui_aboutdialog_mac.h"
+#else
 #include "ui_aboutdialog.h"
+#endif
 
 class AboutDialog : public QDialog
 {
