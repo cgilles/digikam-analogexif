@@ -378,7 +378,7 @@ void EditGear::on_actionDuplicate_triggered(bool)
 	}
 
 	if(selModel)
-		selectedItems = selModel->selectedIndexes();
+		selectedItems = selModel->selectedRows();
 	else
 		return;
 
@@ -463,7 +463,7 @@ void EditGear::on_actionDelete_triggered(bool)
 	}
 
 	if(selModel)
-		selectedItems = selModel->selectedIndexes();
+		selectedItems = selModel->selectedRows();
 	else
 		return;
 
@@ -808,7 +808,7 @@ void EditGear::metadataList_cleared()
 
 void EditGear::on_actionDelete_meta_tag_triggered(bool)
 {
-	QModelIndexList idxList = ui.metadataView->selectionModel()->selectedIndexes();
+	QModelIndexList idxList = ui.metadataView->selectionModel()->selectedRows();
 	if(idxList.count() == 0)
 		return;
 
