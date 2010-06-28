@@ -731,7 +731,7 @@ QListView::item:selected:!active{
   </action>
   <action name="actionHelp">
    <property name="enabled">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="text">
     <string>&amp;Online help</string>
@@ -840,6 +840,9 @@ QListView::item:selected:!active{
    </property>
   </action>
   <action name="action_Online_help">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>&amp;Online help</string>
    </property>
