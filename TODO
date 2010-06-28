@@ -22,7 +22,7 @@ FUTURE FEATURES
 * duplicate Exif/IPTC/XMP intersections
 
 DEVELOPMENT
-* Fill-in the metatags database
+
 
 TESTS
 * verify against metadata corruption
@@ -41,6 +41,4 @@ BUGS
 * when copying metadata and destination is one file, copied tags flicker as "dirty" for a moment
 * when auto-filling exposure number and asking for backup - metadata of the changed file may be reflected in the metadata view
 * handle all unsuccessfull returns
-* in the equipment template edit, when tag flags checkboxes and line edit got swapped out, editor does not close properly when loses focus
 * when pasting Google map coordinates cursor should be on the first character to pass the validator
-* image metadata is not reloaded when options dialog opened/closed
