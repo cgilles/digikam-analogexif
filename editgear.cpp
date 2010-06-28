@@ -812,16 +812,25 @@ void EditGear::on_actionDelete_meta_tag_triggered(bool)
 	if(idxList.count() == 0)
 		return;
 
+	QList<int> idList;
+
+	// collect all ids
 	foreach(QModelIndex idx, idxList)
 	{
 		// get tag id
 		QVariant tagId = idx.data(EditGearTagsModel::GetTagIdRole);
 		if(tagId != QVariant())
 		{
-			// delete and set dirty on success
-			if(!metadataList->deleteTag(tagId.toInt()))
-				return;
+			idList << tagId.toInt();
 		}
+	}
+
+	// delete accordingly
+	foreach(int i, idList)
+	{
+		// delete and set dirty on success
+		if(!metadataList->deleteTag(i))
+			return;
 	}
 
 	setDirty();
