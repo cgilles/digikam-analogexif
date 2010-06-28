@@ -7,7 +7,7 @@
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\AnalogExif.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
-!define PRODUCT_STARTMENU_REGVAL "NSIS:StartMenuDir"
+!define PRODUCT_STARTMENU_REGVAL "StartMenuDir"
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
@@ -45,6 +45,7 @@ var ICONS_GROUP
 !insertmacro MUI_PAGE_FINISH
 
 ; Uninstaller pages
+UninstPage custom un.ShowDeleteDb un.LeaveDeleteDb
 !insertmacro MUI_UNPAGE_INSTFILES
 
 ; Language files
@@ -58,8 +59,10 @@ InstallDir "$PROGRAMFILES\AnalogExif"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
+RequestExecutionLevel admin
 
 Section "MainSection" SEC01
+  SetShellVarContext all
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
   File "Release\AnalogExif.exe"
@@ -77,6 +80,7 @@ Section "MainSection" SEC01
 SectionEnd
 
 Section -AdditionalIcons
+  SetShellVarContext all
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk" "$INSTDIR\uninst.exe"
   !insertmacro MUI_STARTMENU_WRITE_END
@@ -105,10 +109,10 @@ Function un.onInit
 FunctionEnd
 
 Section Uninstall
+  SetShellVarContext all
   !insertmacro MUI_STARTMENU_GETFOLDER "Application" $ICONS_GROUP
   Delete "$INSTDIR\uninst.exe"
   Delete "$INSTDIR\COPYING"
-  Delete "$INSTDIR\AnalogExif.ael"
   Delete "$INSTDIR\AnalogExif.exe"
 
   Delete "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk"
@@ -120,7 +124,9 @@ Section Uninstall
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
-  SetAutoClose true
+  DeleteRegKey HKCU "Software\${PRODUCT_PUBLISHER}\${PRODUCT_NAME}"
+
+  ;SetAutoClose true
 SectionEnd
 
 LangString PAGE_TITLE ${LANG_ENGLISH} "Program version"
@@ -147,4 +153,42 @@ Function ShowSetupDetails
   SendMessage $ReleaseNotes ${EM_SETREADONLY} 1 0
 
   nsDialogs::Show
+FunctionEnd
+
+LangString UNPAGE_TITLE ${LANG_ENGLISH} "Equipment database"
+LangString UNPAGE_SUBTITLE ${LANG_ENGLISH} "Please select whether you want to delete user files."
+
+Var UnDialog
+Var YesDeleteDb
+Var NoDeleteDb
+
+Function un.ShowDeleteDb
+  !insertmacro MUI_HEADER_TEXT $(UNPAGE_TITLE) $(UNPAGE_SUBTITLE)
+
+  nsDialogs::Create 1018
+  Pop $UnDialog
+
+  ${If} $UnDialog == error
+    Abort
+  ${EndIf}
+
+  ${NSD_CreateLabel} 0 0 100% 12u "Do you want to delete equipment database files as well?"
+
+  ${NSD_CreateRadioButton} 0 12u 100% 12u "Yes"
+  Pop $YesDeleteDb
+  ${NSD_CreateRadioButton} 0 24u 100% 12u "No"
+  Pop $NoDeleteDb
+
+  ${NSD_Check} $NoDeleteDb
+  ${NSD_Uncheck} $YesDeleteDb
+
+  nsDialogs::Show
+FunctionEnd
+
+Function un.LeaveDeleteDb
+  ${NSD_GetState} $YesDeleteDb $0
+  
+  ${If} $0 == ${BST_CHECKED}
+    Delete "$INSTDIR\AnalogExif.ael"
+  ${EndIf}
 FunctionEnd
