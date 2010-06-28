@@ -317,7 +317,7 @@ void AnalogExifOptions::loadOptions()
 	}
 
 	// load update period
-	ui.updCheckInterval->setCurrentIndex(settings.value("CheckForUpdatePeriod", 0).toInt());
+	ui.updCheckInterval->setCurrentIndex(settings.value("CheckForUpdatePeriod", 2).toInt());
 
 	// load network proxy settings
 	ui.updProxyGBox->setChecked(settings.value("UseProxy", false).toBool());

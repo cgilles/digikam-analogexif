@@ -38,7 +38,7 @@ void OnlineVersionChecker::checkForNewVersion(bool force)
 
 	if(!force)
 	{
-		int checkInterval = settings.value("CheckForUpdatePeriod", 0).toInt();
+		int checkInterval = settings.value("CheckForUpdatePeriod", 2).toInt();
 
 		if(!checkInterval)
 			return;
