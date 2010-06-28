@@ -40,26 +40,22 @@ void GearTreeModel::reload()
 	}
 	else
 	{
-		QSqlQuery query("SELECT a.GearName, a.id, b.GearName, b.id FROM UserGearItems a, UserGearItems b WHERE a.GearType = 0 AND b.ParentId = a.id ORDER BY a.OrderBy, b.OrderBy");
-		int previousParentId = -1;
-		QStandardItem* previousParent = NULL;
-		QStandardItem* child;
-
+		QSqlQuery query("SELECT GearName, id FROM UserGearItems WHERE GearType = 0 ORDER BY OrderBy");
 		while(query.next())
 		{
-			if(query.value(1).toInt() != previousParentId)
+			QStandardItem* parent = new QStandardItem(query.value(0).toString());
+			parent->setData(query.value(1).toInt());
+			invisibleRootItem()->appendRow(parent);
+
+			QSqlQuery subQuery(QString("SELECT GearName, id FROM UserGearItems WHERE GearType = 1 AND ParentId = %1 ORDER BY OrderBy").arg(query.value(1).toInt()));
+
+			while(subQuery.next())
 			{
-				previousParentId = query.value(1).toInt();
-				previousParent = new QStandardItem(query.value(0).toString());
-				previousParent->setData(previousParentId);
+				QStandardItem* child = new QStandardItem(subQuery.value(0).toString());
+				child->setData(subQuery.value(1).toInt());
 
-				invisibleRootItem()->appendRow(previousParent);
+				parent->appendRow(child);
 			}
-
-			child = new QStandardItem(query.value(2).toString());
-			child->setData(query.value(3).toInt());
-
-			previousParent->appendRow(child);
 		}
 	}
 }
