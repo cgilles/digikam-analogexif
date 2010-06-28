@@ -216,14 +216,14 @@ bool AnalogExif::initialize()
 	connect(ui.filmView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(filmAndGearView_selectionChanged(const QItemSelection&, const QItemSelection&)));
 
 	// authors view
-	authorsList = new GearListModel(this, 3, tr("No authors defined"));
+	authorsList = new GearListModel(this, 4, tr("No authors defined"));
 	authorsList->reload();
 
 	ui.authorView->setModel(authorsList);
 	connect(ui.authorView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(filmAndGearView_selectionChanged(const QItemSelection&, const QItemSelection&)));
 
 	// developers view
-	developersList = new GearListModel(this, 4, tr("No developers defined"));
+	developersList = new GearListModel(this, 3, tr("No developers defined"));
 	developersList->reload();
 
 	ui.developerView->setModel(developersList);
