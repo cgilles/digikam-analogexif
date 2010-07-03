@@ -37,7 +37,7 @@
 #include <QSysInfo>
 
 AnalogExif::AnalogExif(QWidget *parent, Qt::WFlags flags)
-	: QMainWindow(parent, flags)
+	: QMainWindow(parent, flags), progressBox(QMessageBox::NoIcon, tr("New program version"), tr("Checking for the new version..."), QMessageBox::Cancel, this)
 {
 	ui.setupUi(this);
 
@@ -111,6 +111,7 @@ AnalogExif::AnalogExif(QWidget *parent, Qt::WFlags flags)
 
 	verChecker = new OnlineVersionChecker(this);
 	connect(verChecker, SIGNAL(newVersionAvailable(QString, QString, QDateTime, QString)), this, SLOT(newVersionAvailable(QString, QString, QDateTime, QString)));
+	connect(verChecker, SIGNAL(newVersionCheckError(QNetworkReply::NetworkError)), this, SLOT(newVersionCheckError(QNetworkReply::NetworkError)));
 
 #ifdef Q_WS_WIN
 	if(QSysInfo::windowsVersion() >= QSysInfo::WV_VISTA)
@@ -263,7 +264,11 @@ bool AnalogExif::initialize()
 	}
 
 	// check for the new version
-	verChecker->checkForNewVersion();
+	if(verChecker->needToCheckVersion())
+	{
+		progressBox.open(this, SLOT(cancelVersionCheck()));
+		verChecker->checkForNewVersion();
+	}
 
 	return true;
 }
@@ -1564,6 +1569,8 @@ void AnalogExif::on_action_About_triggered(bool)
 
 void AnalogExif::newVersionAvailable(QString selfTag, QString newTag, QDateTime newTime, QString newSummary)
 {
+	progressBox.close();
+
     QMessageBox info(QMessageBox::Question, tr("New program version available"), tr("New version of AnalogExif is available.\n"
                "Current version is %1, new version is %2 from %3.\n\n"
                "Do you want to open the program website?").arg(selfTag).arg(newTag).arg(newTime.toString("dd.MM.yyyy")), QMessageBox::Yes | QMessageBox::No, this);
@@ -1573,4 +1580,19 @@ void AnalogExif::newVersionAvailable(QString selfTag, QString newTag, QDateTime 
     {
             OnlineVersionChecker::openDownloadPage();
     }
+}
+
+void AnalogExif::cancelVersionCheck()
+{
+	verChecker->cancelCheck();
+}
+
+void AnalogExif::newVersionCheckError(QNetworkReply::NetworkError error)
+{
+	progressBox.close();
+
+	if(error != QNetworkReply::NoError)
+	{
+		QMessageBox::critical(this, tr("New program version"), tr("Error checking for the new program version."));
+	}
 }

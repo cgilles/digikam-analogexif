@@ -90,6 +90,7 @@ public:
 	OnlineVersionChecker(QObject *parent);
 
 	void checkForNewVersion(bool force = false);
+	bool needToCheckVersion();
 	void cancelCheck();
 	static void openDownloadPage();
 

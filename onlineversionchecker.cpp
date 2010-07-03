@@ -32,42 +32,49 @@ OnlineVersionChecker::OnlineVersionChecker(QObject *parent) : QObject(parent), c
 	connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(downloadFinished(QNetworkReply*)));
 }
 
+bool OnlineVersionChecker::needToCheckVersion()
+{
+	QSettings settings;
+
+	int checkInterval = settings.value("CheckForUpdatePeriod", 0).toInt();
+
+	if(!checkInterval)
+		return false;
+
+	QDateTime lastCheck = settings.value("LastCheckForUpdate", QDateTime()).toDateTime();
+
+	if(lastCheck.isValid())
+	{
+		int daysBetween = lastCheck.daysTo(QDateTime::currentDateTime());
+
+		switch(checkInterval)
+		{
+		case 1:	// every day
+			if(daysBetween < 1)
+				return false;
+			break;
+		case 2: // every week
+			if(daysBetween < 7)
+				return false;
+			break;
+		case 3: // every month
+			if(daysBetween < 31)
+				return false;
+			break;
+		default:
+			return false;
+		}
+	}
+
+	return true;
+}
+
 void OnlineVersionChecker::checkForNewVersion(bool force)
 {
 	QSettings settings;
 
-	if(!force)
-	{
-		int checkInterval = settings.value("CheckForUpdatePeriod", 2).toInt();
-
-		if(!checkInterval)
-			return;
-
-		QDateTime lastCheck = settings.value("LastCheckForUpdate", QDateTime()).toDateTime();
-
-		if(lastCheck.isValid())
-		{
-			int daysBetween = lastCheck.daysTo(QDateTime::currentDateTime());
-
-			switch(checkInterval)
-			{
-			case 1:	// every day
-				if(daysBetween < 1)
-					return;
-				break;
-			case 2: // every week
-				if(daysBetween < 7)
-					return;
-				break;
-			case 3: // every month
-				if(daysBetween < 31)
-					return;
-				break;
-			default:
-				return;
-			}
-		}
-	}
+	if(!force && !needToCheckVersion())
+		return;
 
 	settings.setValue("LastCheckForUpdate", QDateTime::currentDateTime());
 	settings.sync();

@@ -28,6 +28,7 @@
 #include <QCloseEvent>
 #include <QCompleter>
 #include <QMessageBox>
+#include <QNetworkReply>
 
 #ifdef Q_WS_MAC
 #include "ui_analogexif_mac.h"
@@ -165,6 +166,7 @@ private:
 	int filesFound;
 
 	OnlineVersionChecker* verChecker;
+	QMessageBox progressBox;
 
 signals:
 	void updatePreview();
@@ -230,6 +232,10 @@ private slots:
 
 	// new version available
 	void newVersionAvailable(QString selfTag, QString newTag, QDateTime newTime, QString newSummary);
+	void newVersionCheckError(QNetworkReply::NetworkError error);
+
+	// cancel version check
+	void cancelVersionCheck();
 };
 
 #endif // ANALOGEXIF_H
