@@ -963,7 +963,7 @@ QVariant ExifTreeModel::readTagValue(QString tagNames, int& srcTagType, ExifItem
 				{
 					std::string str = tagValue.toString();
 					// do not convert real numbers to Exif fraction format
-					return ExifItem::valueFromString(QString::fromUtf8(str.data(), str.length()).remove(QRegExp("^lang=(\\\")?.*(\\\")? ")), type, false, false);
+					return ExifItem::valueFromString(QString::fromUtf8(str.data(), str.length()).remove(QRegExp("^lang=\".*\" ")), type, false, false);
 				}
 				break;
 			case Exiv2::xmpAlt:
