@@ -14,6 +14,17 @@ UI_DIR = .
 LIBS += -lexiv2 \
     -lexpat
 
+# Parse version information
+parseversions.depends = current-version.xml
+parseversions.target = version.xml
+macx:parseversions.commands = ./parseVersions.sh \
+    Mac
+QMAKE_EXTRA_TARGETS += parseversions
+parseversionsbuildhook.depends = parseversions
+CONFIG(debug,debug|release):parseversionsbuildhook.target = Makefile.Debug
+CONFIG(release,debug|release):parseversionsbuildhook.target = Makefile.Release
+QMAKE_EXTRA_TARGETS += parseversionsbuildhook
+
 # Input
 HEADERS += aboutdialog.h \
     analogexif.h \
@@ -89,4 +100,3 @@ SOURCES += aboutdialog.cpp \
     asciistringdialog.cpp \
     tagnameeditdialog.cpp
 RESOURCES += analogexif.qrc
-OTHER_FILES += version.xml
