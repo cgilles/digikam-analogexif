@@ -42,8 +42,6 @@ HEADERS += aboutdialog.h \
     optgeartemplatemodel.h \
     optgeartemplateview.h \
     progressdialog.h \
-    resource.h \
-    resource1.h \
     tagnameitemdelegate.h \
     tagselectvalsitemdelegate.h \
     tagtypeitemdelegate.h \
