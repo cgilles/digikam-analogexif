@@ -13,6 +13,7 @@ QT += network \
 UI_DIR = .
 LIBS += -lexiv2 \
     -lexpat
+ICON = AnalogExif.icns
 
 # Parse version information
 parseversions.depends = current-version.xml
