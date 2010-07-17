@@ -241,6 +241,9 @@ private slots:
 
 	// cancel version check
 	void cancelVersionCheck();
+
+	// scroll to the selected directory
+	void scrollToSelectedDir();
 };
 
 #endif // ANALOGEXIF_H

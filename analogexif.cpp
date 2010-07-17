@@ -279,7 +279,7 @@ bool AnalogExif::initialize()
 		ui.directoryLine->setText(QDir::toNativeSeparators(lastFolder));
 		ui.dirView->setCurrentIndex(curDirIndex);
 		ui.dirView->setExpanded(curDirIndex, true);
-		ui.dirView->scrollTo(curDirIndex, QAbstractItemView::PositionAtTop);
+		QTimer::singleShot(200, this, SLOT(scrollToSelectedDir()));
 
 		QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 		fileViewModel->setRootPath(lastFolder);
@@ -297,6 +297,12 @@ bool AnalogExif::initialize()
 	}
 
 	return true;
+}
+
+void AnalogExif::scrollToSelectedDir()
+{
+	if(curDirIndex.isValid())
+		ui.dirView->scrollTo(curDirIndex, QAbstractItemView::PositionAtCenter);
 }
 
 void AnalogExif::dirView_selectionChanged(const QItemSelection& selected, const QItemSelection&)
@@ -491,10 +497,10 @@ void AnalogExif::fileView_selectionChanged(const QItemSelection&, const QItemSel
 			// load preview in the background
 			ui.filePreview->setPixmap(NULL);
 #ifdef Q_WS_MAC
-                        // Background loading doesn't work properly for Mac
-                        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-                        loadPreview(curFileName);
-                        QApplication::restoreOverrideCursor();
+            // Background loading doesn't work properly for Mac
+            QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+            loadPreview(curFileName);
+            QApplication::restoreOverrideCursor();
 #else
 			QFuture<void> future = QtConcurrent::run(this, &AnalogExif::loadPreview, curFileName);
 #endif
@@ -901,13 +907,13 @@ void AnalogExif::closeEvent(QCloseEvent *event)
 	// save required settings
 	settings.setValue("dbName", db.databaseName());
 
-	QModelIndex curFolder = ui.fileView->selectionModel()->currentIndex();
+	QModelIndex curFolder = ui.dirView->selectionModel()->currentIndex();
 	if(curFolder != QModelIndex())
 	{
-		if(!fileViewModel->isDir(dirSorter->mapToSource(curFolder)))
-			settings.setValue("lastFolder", QDir::toNativeSeparators(fileViewModel->fileInfo(dirSorter->mapToSource(curFolder)).canonicalPath()));
+		if(!dirViewModel->isDir(dirSorter->mapToSource(curFolder)))
+			settings.setValue("lastFolder", QDir::toNativeSeparators(dirViewModel->fileInfo(dirSorter->mapToSource(curFolder)).canonicalPath()));
 		else
-			settings.setValue("lastFolder", QDir::toNativeSeparators(fileViewModel->filePath(dirSorter->mapToSource(curFolder))));
+			settings.setValue("lastFolder", QDir::toNativeSeparators(dirViewModel->filePath(dirSorter->mapToSource(curFolder))));
 	}
 
 	// save window state and geometry
