@@ -307,6 +307,7 @@ void EditGear::on_actionAdd_new_camera_lens_triggered(bool)
 	metadataList->reload(newId);
 	setDirty();
 
+	ui.gearView->scrollTo(newIdx, QAbstractItemView::EnsureVisible);
 	ui.gearView->edit(newIdx);
 }
 
@@ -319,6 +320,7 @@ void EditGear::on_actionAdd_new_film_triggered(bool)
 	metadataList->reload(newId);
 	setDirty();
 
+	ui.filmView->scrollTo(newIdx, QAbstractItemView::EnsureVisible);
 	ui.filmView->edit(newIdx);
 }
 
@@ -331,6 +333,7 @@ void EditGear::on_actionAdd_new_developer_triggered(bool)
 	metadataList->reload(newId);
 	setDirty();
 
+	ui.developerView->scrollTo(newIdx, QAbstractItemView::EnsureVisible);
 	ui.developerView->edit(newIdx);
 }
 
@@ -343,6 +346,7 @@ void EditGear::on_actionAdd_new_author_triggered(bool)
 	metadataList->reload(newId);
 	setDirty();
 
+	ui.authorView->scrollTo(newIdx, QAbstractItemView::EnsureVisible);
 	ui.authorView->edit(newIdx);
 }
 
