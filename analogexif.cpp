@@ -540,7 +540,7 @@ void AnalogExif::fileView_selectionChanged(const QItemSelection&, const QItemSel
 
 }
 
-void AnalogExif::on_fileView_clicked(const QModelIndex& index)
+void AnalogExif::on_fileView_clicked(const QModelIndex&)
 {
 	ui.dirView->selectionModel()->clearSelection();
 }
