@@ -59,9 +59,11 @@ private:
 
 	// directory model
 	QFileSystemModel* fileViewModel;
+	QFileSystemModel* dirViewModel;
 	// pixmap to hold file preview
 	QPixmap filePreviewPixmap;
 	// custom directory sorter
+	DirSortFilterProxyModel* fileSorter;
 	DirSortFilterProxyModel* dirSorter;
 	// current filename
 	QString curFileName;
@@ -97,6 +99,7 @@ private:
 
 	// preview file index
 	QModelIndex previewIndex;
+	QModelIndex curDirIndex;
 
 	// setup tree view
 	void setupTreeView();
@@ -172,8 +175,6 @@ signals:
 	void updatePreview();
 
 private slots:
-	// expansion of the tree
-	void on_fileView_expanded(const QModelIndex& sortIndex);
 	// Apply changes clicked
 	void on_applyChangesBtn_clicked();
 	// Revert changes clicked
@@ -212,6 +213,10 @@ private slots:
 	void on_actionNew_library_triggered(bool checked = false);
 	// file browser selection changed
 	void fileView_selectionChanged(const QItemSelection&, const QItemSelection&);
+	void dirView_selectionChanged(const QItemSelection&, const QItemSelection&);
+	// file and dir browser clicked
+	void on_fileView_clicked(const QModelIndex& index);
+	void on_dirView_clicked(const QModelIndex& index);
 	// auto-fill exposure numbers
 	void on_actionAuto_fill_exposure_triggered(bool checked = false);
 	// double-click on file

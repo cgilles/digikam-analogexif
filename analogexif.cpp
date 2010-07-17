@@ -35,6 +35,7 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include <QSysInfo>
+#include <QTimer>
 
 AnalogExif::AnalogExif(QWidget *parent, Qt::WFlags flags)
 	: QMainWindow(parent, flags), progressBox(QMessageBox::NoIcon, tr("New program version"), tr("Checking for the new version..."), QMessageBox::Cancel, this)
@@ -42,22 +43,29 @@ AnalogExif::AnalogExif(QWidget *parent, Qt::WFlags flags)
 	ui.setupUi(this);
 
 	/// setup tree view
-	fileViewModel = new QFileSystemModel(this);
+	dirViewModel = new QFileSystemModel(this);
+	dirViewModel->setFilter(QDir::AllDirs | QDir::Drives | QDir::NoDotAndDotDot);
+	dirViewModel->setReadOnly(false);
 	dirSorter = new DirSortFilterProxyModel(this);
+
+	ui.dirView->setModel(dirSorter);
+	// resize Name and Size column
+	ui.dirView->setColumnWidth(0, 150);
+	ui.dirView->setColumnWidth(1, 50);
+	// sort by filename 
+	ui.dirView->setSortingEnabled(true);
+	ui.dirView->sortByColumn(0, Qt::AscendingOrder);
+
+	fileViewModel = new QFileSystemModel(this);
+	fileViewModel->setFilter(QDir::Files);
 	// show supported files only
 	fileViewModel->setNameFilterDisables(false);
 	fileViewModel->setNameFilters(QStringList() << "*.jpg" << "*.jpeg" << "*.tif" << "*.tiff");
 	fileViewModel->setReadOnly(false);
-	// connect selection and expansion events
-	ui.fileView->setModel(dirSorter);
-	// hide Type column
-	ui.fileView->hideColumn(2);
-	// resize Name and Size column
-	ui.fileView->setColumnWidth(0, 150);
-	ui.fileView->setColumnWidth(1, 50);
-	// sort by filename 
-	ui.fileView->setSortingEnabled(true);
-	ui.fileView->sortByColumn(0, Qt::AscendingOrder);
+	fileSorter = new DirSortFilterProxyModel(this);
+	fileSorter->setSourceModel(fileViewModel);
+
+	ui.fileView->setModel(fileSorter);
 
 	// set file preview
 	// filePreviewPixmap = new QPixmap();
@@ -108,6 +116,7 @@ AnalogExif::AnalogExif(QWidget *parent, Qt::WFlags flags)
 
 	contextMenus << ui.actionAuto_fill_exposure << ui.action_Copy_metadata << separator << ui.actionOpen_external << ui.actionRename << separator << ui.actionRemove;
 	ui.fileView->addActions(contextMenus);
+	ui.dirView->addActions(contextMenus);
 
 	verChecker = new OnlineVersionChecker(this);
 	connect(verChecker, SIGNAL(newVersionAvailable(QString, QString, QDateTime, QString)), this, SLOT(newVersionAvailable(QString, QString, QDateTime, QString)));
@@ -141,6 +150,8 @@ AnalogExif::~AnalogExif()
 	if(developersList)
 		delete developersList;
 	delete dirSorter;
+	delete dirViewModel;
+	delete fileSorter;
 	delete fileViewModel;
 	delete verChecker;
 	// delete filePreviewPixmap;
@@ -247,20 +258,35 @@ bool AnalogExif::initialize()
 
 	// start scan
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-        fileViewModel->setRootPath(QDir::rootPath());
+	dirViewModel->setRootPath(QDir::rootPath());
 	QApplication::restoreOverrideCursor();
 
-	dirSorter->setSourceModel(fileViewModel);
+	dirSorter->setSourceModel(dirViewModel);
+	for(int i = 0; i < dirSorter->columnCount(); i++)
+		ui.dirView->hideColumn(i);
 
+	ui.dirView->showColumn(0);
+
+	connect(ui.dirView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(dirView_selectionChanged(const QItemSelection&, const QItemSelection&)));
 	connect(ui.fileView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(fileView_selectionChanged(const QItemSelection&, const QItemSelection&)));
 
-	QModelIndex lastFolder = dirSorter->mapFromSource(fileViewModel->index(settings.value("lastFolder", QDir::homePath()).toString()));
-	if(lastFolder != QModelIndex())
+	QString lastFolder = settings.value("lastFolder", QDir::homePath()).toString();
+	if(lastFolder == "")
+		lastFolder = QDir::homePath();
+	curDirIndex = dirSorter->mapFromSource(dirViewModel->index(lastFolder));
+	if(curDirIndex != QModelIndex())
 	{
-		ui.directoryLine->setText(QDir::toNativeSeparators(settings.value("lastFolder", QDir::homePath()).toString()));
-		ui.fileView->scrollTo(lastFolder, QAbstractItemView::PositionAtTop);
-		ui.fileView->setCurrentIndex(lastFolder);
-		ui.fileView->setExpanded(lastFolder, true);
+		ui.directoryLine->setText(QDir::toNativeSeparators(lastFolder));
+		ui.dirView->setCurrentIndex(curDirIndex);
+		ui.dirView->setExpanded(curDirIndex, true);
+		ui.dirView->scrollTo(curDirIndex, QAbstractItemView::PositionAtTop);
+
+		QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+		fileViewModel->setRootPath(lastFolder);
+		QApplication::restoreOverrideCursor();
+
+		fileSorter->setSourceModel(fileViewModel);
+		ui.fileView->setRootIndex(fileSorter->mapFromSource(fileViewModel->index(lastFolder)));
 	}
 
 	// check for the new version
@@ -271,6 +297,113 @@ bool AnalogExif::initialize()
 	}
 
 	return true;
+}
+
+void AnalogExif::dirView_selectionChanged(const QItemSelection& selected, const QItemSelection&)
+{
+	// map selection to original
+	QModelIndexList selIdx;
+
+	if(selected.count())
+	{
+		int prevRow = -1;
+		foreach(QModelIndex idx, selected.indexes())
+		{
+			if(idx.row() != prevRow)
+			{
+				selIdx.append(idx);
+				prevRow = idx.row();
+			}
+		}
+	}
+	
+	// selIdx = ui.dirView->selectionModel()->selectedRows();
+
+	if(selIdx.count() == 0)
+	{
+		curDirIndex = QModelIndex();
+		return;
+	}
+
+	if(dirty)
+	{
+		QMessageBox::StandardButton result = QMessageBox::question(this, tr("Unsaved data"),
+															tr("Save changes in the current image?"),
+															QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
+															QMessageBox::Cancel);
+
+		if(result == QMessageBox::Cancel)
+		{
+			// select previous file
+			ui.dirView->selectionModel()->select(curDirIndex, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
+			ui.dirView->selectionModel()->setCurrentIndex(curDirIndex, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
+
+			return;
+		}
+
+		if(result == QMessageBox::Save)
+			if(!save())
+				return;
+
+		setDirty(false);
+	}
+
+	setDirty(false);
+
+	if(selIdx.count() == 1)
+	{
+		// selected single folder - reflect this in the file view
+		curDirIndex = selIdx.at(0);
+
+		if(curDirIndex != QModelIndex())
+		{
+			QString selFolderName = dirViewModel->filePath(dirSorter->mapToSource(curDirIndex));
+			QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+			fileViewModel->setFilter(0);
+			ui.fileView->setRootIndex(fileSorter->mapFromSource(fileViewModel->setRootPath(selFolderName)));
+			fileViewModel->setFilter(QDir::Files);
+			QApplication::restoreOverrideCursor();
+
+			ui.directoryLine->setText(QDir::toNativeSeparators(selFolderName));
+		}
+
+		ui.dirView->setCurrentIndex(curDirIndex);
+		ui.dirView->setExpanded(curDirIndex, true);
+	}
+	else
+	{
+		// multiple selection, clear files view
+		fileViewModel->setFilter(0);
+	}
+
+	// enable copy metadata if anything selected
+	// BUG/TODO: should be disabled when no files found
+	ui.action_Copy_metadata->setEnabled(true);
+
+	// enable auto-fill exposure numbers for several files or directory(ies)
+	ui.actionAuto_fill_exposure->setEnabled(true);
+
+	ui.actionOpen_external->setEnabled(false);
+
+	// clear file preview
+	ui.filePreview->setPixmap(NULL);
+
+	// clear metatags
+	exifTreeModel->clear(true);
+
+	// enable editing
+	exifTreeModel->setReadonly(false);	
+
+	// expand and fix the metadata tree view
+	setupTreeView();
+
+	// clear filename from the window title
+	setWindowTitle(QCoreApplication::applicationName());
+	setWindowModified(false);
+
+	// clear current file name
+	curFileName = "";
+	previewIndex = QModelIndex();
 }
 
 // changed selection of the file browser
@@ -317,7 +450,7 @@ void AnalogExif::fileView_selectionChanged(const QItemSelection&, const QItemSel
 	{
 		ui.action_Copy_metadata->setEnabled(true);
 	}
-	else
+	else if(!ui.dirView->selectionModel()->hasSelection())
 	{
 		ui.action_Copy_metadata->setEnabled(false);
 	}
@@ -325,7 +458,7 @@ void AnalogExif::fileView_selectionChanged(const QItemSelection&, const QItemSel
 	// selected single item
 	if(selIdx.count() == 1)
 	{
-		QModelIndex index = dirSorter->mapToSource(selIdx.at(0));
+		QModelIndex index = fileSorter->mapToSource(selIdx.at(0));
 
 		// check whether it is file
 		if(!fileViewModel->isDir(index))
@@ -371,20 +504,17 @@ void AnalogExif::fileView_selectionChanged(const QItemSelection&, const QItemSel
 
 			return;
 		}
-		else
-		{
-			// selected directory - set proper directory string
-			ui.directoryLine->setText(QDir::toNativeSeparators(fileViewModel->filePath(index)));
-		}
-	}
-	else
-	{
-		// multiple selection - clear directory string
-		ui.directoryLine->setText("");
 	}
 
 	// enable auto-fill exposure numbers for several files or directory(ies)
-	ui.actionAuto_fill_exposure->setEnabled(true);
+	if((selIdx.count() == 0) && !ui.dirView->selectionModel()->hasSelection())
+	{
+		ui.actionAuto_fill_exposure->setEnabled(false);
+	}
+	else
+	{
+		ui.actionAuto_fill_exposure->setEnabled(true);
+	}
 
 	ui.actionOpen_external->setEnabled(false);
 
@@ -408,6 +538,22 @@ void AnalogExif::fileView_selectionChanged(const QItemSelection&, const QItemSel
 	curFileName = "";
 	previewIndex = QModelIndex();
 
+}
+
+void AnalogExif::on_fileView_clicked(const QModelIndex& index)
+{
+	ui.dirView->selectionModel()->clearSelection();
+}
+
+void AnalogExif::on_dirView_clicked(const QModelIndex& index)
+{
+	ui.fileView->selectionModel()->clearSelection();
+
+	if(index.isValid())
+	{
+		// update directory line
+		ui.directoryLine->setText(QDir::toNativeSeparators(dirViewModel->filePath(dirSorter->mapToSource(index))));
+	}
 }
 
 // open file for editing
@@ -436,6 +582,9 @@ void AnalogExif::openLocation(QString path)
 
 		// clear current file name
 		curFileName = "";
+
+		// current directory index
+		curDirIndex = dirSorter->mapFromSource(dirViewModel->index(fileInfo.filePath()));
 	}
 	else
 	{
@@ -454,14 +603,22 @@ void AnalogExif::openLocation(QString path)
 		// load preview in the background
 		ui.filePreview->setPixmap(NULL);
 #ifdef Q_WS_MAC
-                // Background loading doesn't work properly for Mac
-                QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-                loadPreview(curFileName);
-                QApplication::restoreOverrideCursor();
+		// Background loading doesn't work properly for Mac
+		QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+		loadPreview(curFileName);
+		QApplication::restoreOverrideCursor();
 #else
-                QFuture<void> future = QtConcurrent::run(this, &AnalogExif::loadPreview, curFileName);
+		QFuture<void> future = QtConcurrent::run(this, &AnalogExif::loadPreview, curFileName);
 #endif
-        }
+		// directory index
+		curDirIndex = dirSorter->mapFromSource(dirViewModel->index(fileInfo.path()));
+	}
+
+	// scroll to the directory
+	ui.dirView->scrollTo(curDirIndex, QAbstractItemView::PositionAtCenter);
+	ui.dirView->selectionModel()->select(curDirIndex, QItemSelectionModel::SelectCurrent);
+	ui.dirView->setCurrentIndex(curDirIndex);
+	ui.dirView->setExpanded(curDirIndex, true);
 
 	ui.gearView->expandAll();
 
@@ -471,9 +628,10 @@ void AnalogExif::openLocation(QString path)
 	setupTreeView();
 
 	// scroll and select
-	QModelIndex idx = dirSorter->mapFromSource(fileViewModel->index(path));
-	ui.fileView->scrollTo(idx, QAbstractItemView::PositionAtCenter);
-	ui.fileView->selectionModel()->select(idx, QItemSelectionModel::SelectCurrent);
+	previewIndex = fileSorter->mapFromSource(fileViewModel->index(path));
+	ui.fileView->selectionModel()->select(previewIndex, QItemSelectionModel::SelectCurrent);
+	ui.fileView->setCurrentIndex(previewIndex);
+	ui.fileView->scrollTo(previewIndex, QAbstractItemView::PositionAtCenter);
 }
 
 // background preview loader
@@ -511,14 +669,6 @@ void AnalogExif::loadPreview(QString filename)
 void AnalogExif::previewUpdate()
 {
 	ui.filePreview->setPixmap(filePreviewPixmap);
-}
-
-// called when user expands the file browser tree
-void AnalogExif::on_fileView_expanded (const QModelIndex& sortIndex)
-{
-	// have to map indices
-	QModelIndex index = dirSorter->mapToSource(sortIndex);
-	ui.directoryLine->setText(QDir::toNativeSeparators(fileViewModel->filePath(index)));
 }
 
 // on main window resize event
@@ -617,7 +767,17 @@ bool AnalogExif::createBackup(QString filename, bool singleFile, QMessageBox::St
 bool AnalogExif::save()
 {
 	// determine the number of selected files
-	QModelIndexList selIdx = ui.fileView->selectionModel()->selectedRows();
+	QModelIndexList selIdx;
+
+	if(ui.fileView->selectionModel()->hasSelection())
+	{
+		selIdx = ui.fileView->selectionModel()->selectedRows();
+	}
+	else
+	{
+		selIdx = ui.dirView->selectionModel()->selectedRows();
+	}
+
 	// save backup answer
 	QMessageBox::StandardButton saveBkp = QMessageBox::No;
 	// single selection
@@ -928,13 +1088,16 @@ void AnalogExif::on_directoryLine_returnPressed()
 		return;
 
 	// try to open specified path
-	QFileInfo fileInfo(ui.directoryLine->text());
+	QString filePath = ui.directoryLine->text();
+	QFileInfo fileInfo(filePath);
 
-	// TODO: show warning message box?
-	if(!fileInfo.exists())
+	if(!fileInfo.exists() && !fileInfo.isDir())
+	{
+		QMessageBox::warning(this, tr("Path does not exist"), tr("The specified path (%1) does not exist.\nPlease enter correct path.").arg(filePath));
 		return;
+	}
 
-	openLocation(QDir::fromNativeSeparators(ui.directoryLine->text()));
+	openLocation(QDir::fromNativeSeparators(filePath));
 }
 
 // open file
@@ -1203,10 +1366,14 @@ QStringList AnalogExif::scanSubfolders(QModelIndexList selIdx, bool includeDirs)
 {
 	QStringList fileNames;
 
-	// browse through all selected indexes
-	foreach(QModelIndex idx, selIdx)
+	if(selIdx.count())
 	{
-		addFileNames(fileNames, fileViewModel->filePath(dirSorter->mapToSource(idx)), includeDirs);
+		DirSortFilterProxyModel* sortModel = (DirSortFilterProxyModel*)selIdx.at(0).model();
+		// browse through all selected indexes
+		foreach(QModelIndex idx, selIdx)
+		{
+			addFileNames(fileNames, ((QFileSystemModel*)sortModel->sourceModel())->filePath(sortModel->mapToSource(idx)), includeDirs);
+		}
 	}
 
 	return fileNames;
@@ -1261,7 +1428,16 @@ QStringList AnalogExif::getFileList(QModelIndexList selIdx, bool includeDirs, bo
 void AnalogExif::on_actionAuto_fill_exposure_triggered(bool)
 {
 	// determine the number of selected files
-	QModelIndexList selIdx = ui.fileView->selectionModel()->selectedRows();
+	QModelIndexList selIdx;
+
+	if(ui.fileView->selectionModel()->hasSelection())
+	{
+		selIdx = ui.fileView->selectionModel()->selectedRows();
+	}
+	else
+	{
+		selIdx = ui.dirView->selectionModel()->selectedRows();
+	}
 
 	bool cancelled = false;
 
@@ -1368,7 +1544,7 @@ void AnalogExif::openExternal(const QModelIndex& index)
 	if(!index.isValid())
 		return;
 
-	QModelIndex idx = dirSorter->mapToSource(index);
+	QModelIndex idx = fileSorter->mapToSource(index);
 
 	if(!fileViewModel->isDir(idx))
 		QDesktopServices::openUrl(QUrl::fromLocalFile(fileViewModel->filePath(idx)));
@@ -1376,13 +1552,31 @@ void AnalogExif::openExternal(const QModelIndex& index)
 
 void AnalogExif::on_actionRename_triggered(bool)
 {
-	ui.fileView->edit(ui.fileView->selectionModel()->currentIndex());
+	if(ui.fileView->selectionModel()->hasSelection())
+	{
+		// triggered on file view
+		ui.fileView->edit(ui.fileView->selectionModel()->currentIndex());
+	}
+	else
+	{
+		// triggered on dir view
+		ui.dirView->edit(ui.dirView->selectionModel()->currentIndex());
+	}
 }
 
 void AnalogExif::on_actionRemove_triggered(bool)
 {
 	// determine the number of selected files
-	QModelIndexList selIdx = ui.fileView->selectionModel()->selectedRows();
+	QModelIndexList selIdx;
+
+	if(ui.fileView->selectionModel()->hasSelection())
+	{
+		selIdx = ui.fileView->selectionModel()->selectedRows();
+	}
+	else
+	{
+		selIdx = ui.dirView->selectionModel()->selectedRows();
+	}
 
 	bool cancelled = false;
 
@@ -1466,7 +1660,16 @@ void AnalogExif::on_actionRemove_triggered(bool)
 void AnalogExif::on_action_Copy_metadata_triggered(bool)
 {
 	// determine the number of selected files
-	QModelIndexList selIdx = ui.fileView->selectionModel()->selectedRows();
+	QModelIndexList selIdx;
+
+	if(ui.fileView->selectionModel()->hasSelection())
+	{
+		selIdx = ui.fileView->selectionModel()->selectedRows();
+	}
+	else
+	{
+		selIdx = ui.dirView->selectionModel()->selectedRows();
+	}
 
 	QStringList fileNames = getFileList(selIdx);
 
@@ -1547,7 +1750,7 @@ void AnalogExif::on_action_Copy_metadata_triggered(bool)
 		exifTreeModel->blockSignals(false);
 		exifTreeModel->clear(true);
 
-		if((selIdx.count() == 1) && (!fileViewModel->isDir(dirSorter->mapToSource(selIdx.at(0)))))
+		if((selIdx.count() == 1) && (selIdx.at(0).model() == fileSorter) && (!fileViewModel->isDir(fileSorter->mapToSource(selIdx.at(0)))))
 		{
 			// if only one file selected, reselect it and trigger metadata reload
 			ui.fileView->clearSelection();

@@ -54,14 +54,20 @@
       <widget class="QGroupBox" name="groupBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
+         <horstretch>30</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>250</width>
+         <height>0</height>
+        </size>
        </property>
        <property name="title">
         <string>Files</string>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout">
+       <layout class="QVBoxLayout" name="verticalLayout" stretch="0,30,0,25">
         <item>
          <widget class="QLineEdit" name="directoryLine">
           <property name="font">
@@ -77,7 +83,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QTreeView" name="fileView">
+         <widget class="QTreeView" name="dirView">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -124,11 +130,39 @@ QTreeView::item:selected:!active{
            <bool>false</bool>
           </property>
           <attribute name="headerVisible">
-           <bool>true</bool>
+           <bool>false</bool>
           </attribute>
           <attribute name="headerVisible">
-           <bool>true</bool>
+           <bool>false</bool>
           </attribute>
+         </widget>
+        </item>
+        <item>
+         <widget class="QListView" name="fileView">
+          <property name="contextMenuPolicy">
+           <enum>Qt::ActionsContextMenu</enum>
+          </property>
+          <property name="showDropIndicator" stdset="0">
+           <bool>false</bool>
+          </property>
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::ExtendedSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+          <property name="isWrapping" stdset="0">
+           <bool>false</bool>
+          </property>
+          <property name="viewMode">
+           <enum>QListView::ListMode</enum>
+          </property>
+          <property name="uniformItemSizes">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -182,7 +216,7 @@ QTreeView::item:selected:!active{
       <widget class="QGroupBox" name="groupBox_2">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-         <horstretch>100</horstretch>
+         <horstretch>75</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
@@ -863,7 +897,7 @@ QListView::item:selected:!active{
  </customwidgets>
  <tabstops>
   <tabstop>directoryLine</tabstop>
-  <tabstop>fileView</tabstop>
+  <tabstop>dirView</tabstop>
   <tabstop>applyChangesBtn</tabstop>
   <tabstop>revertBtn</tabstop>
   <tabstop>applyGearBtn</tabstop>
