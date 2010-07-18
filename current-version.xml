@@ -5,25 +5,21 @@
     <Version>0.0beta</Version>
     <ReleaseNumber>0</ReleaseNumber>
     <Date>28.06.2010</Date>
-    <Notes>
-      New from 0.0beta release:
-      * Change online version check behaviour
-      * Minor UI redesign
-      * New AnalogExif tags: Film grain and Develop process
-      * Online help
-    </Notes>
+    <Notes>New from 0.0beta release:
+* Change online version check behaviour
+* Minor UI redesign
+* New AnalogExif tags: Film grain and Develop process
+* Online help</Notes>
   </Release>
   <Release>
     <OS>Mac</OS>
     <Version>0.0beta</Version>
     <ReleaseNumber>0</ReleaseNumber>
     <Date>28.06.2010</Date>
-    <Notes>
-      New from 0.0beta release:
-      * Change online version check behaviour
-      * Minor UI redesign
-      * New AnalogExif tags: Film grain and Develop process
-      * Online help
-    </Notes>
+    <Notes>New from 0.0beta release:
+* Change online version check behaviour
+* Minor UI redesign
+* New AnalogExif tags: Film grain and Develop process
+* Online help</Notes>
   </Release>
 </Releases>
