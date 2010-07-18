@@ -77,7 +77,7 @@ QVariant GearTreeModel::data(const QModelIndex &item, int role) const
 	if(!item.isValid())
 		return QVariant();
 
-	if(((item == selected) || (item == selected.parent())) && (role == Qt::FontRole))
+	if((selected.isValid()) && ((item == selected) || (item == selected.parent())) && (role == Qt::FontRole))
 	{
 		QFont f;
 		f.setBold(true);

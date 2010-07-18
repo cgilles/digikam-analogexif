@@ -41,6 +41,9 @@ int GearListModel::rowCount(const QModelIndex &index) const
 
 QVariant GearListModel::data(const QModelIndex &item, int role) const
 {
+	if(!item.isValid())
+		return QVariant();
+
 	int nRows = QSqlQueryModel::rowCount(item.parent());
 
 	if(nRows == 0)
