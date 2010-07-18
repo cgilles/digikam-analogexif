@@ -55,6 +55,8 @@ TagNameEditDialog::TagNameEditDialog(QWidget *parent, const QString& tagNames, E
 			connect(cbx, SIGNAL(stateChanged(int)), this, SLOT(ascii_stateChanged(int)));
 		}
 	}
+
+	setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint);
 }
 
 void TagNameEditDialog::setFlags(ExifItem::TagFlags flags)
