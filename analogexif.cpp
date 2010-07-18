@@ -281,7 +281,9 @@ bool AnalogExif::initialize()
 		ui.directoryLine->setText(QDir::toNativeSeparators(lastFolder));
 		ui.dirView->setCurrentIndex(curDirIndex);
 		ui.dirView->setExpanded(curDirIndex, true);
+#ifndef Q_WS_MAC
 		QTimer::singleShot(200, this, SLOT(scrollToSelectedDir()));
+#endif
 
 		QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 		fileViewModel->setRootPath(lastFolder);
