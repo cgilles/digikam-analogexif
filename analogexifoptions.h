@@ -118,8 +118,6 @@ private slots:
 	void gearList_selectionChanged(const QItemSelection&, const QItemSelection&);
 	// user ns schema changed
 	void on_userNsPrefix_textEdited(const QString &);
-	// unsupported tag
-	void unsupportedTag(const QModelIndex& idx, const QString& tagName);
 	// check for new verison button
 	void on_updCheckBtn_clicked();
 	// new version available

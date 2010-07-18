@@ -19,8 +19,12 @@
 
 #include "tagnameeditdialog.h"
 #include "optgeartemplatemodel.h"
+#include "exiftreemodel.h"
 #include <QCheckBox>
 #include <QPushButton>
+#include <QMessageBox>
+#include <QRegExp>
+#include <QRegExpValidator>
 
 TagNameEditDialog::TagNameEditDialog(QWidget *parent, const QString& tagNames, ExifItem::TagFlags, const QString& altTags)
 	: QDialog(parent), altTagNames(NULL)
@@ -28,6 +32,7 @@ TagNameEditDialog::TagNameEditDialog(QWidget *parent, const QString& tagNames, E
 	ui.setupUi(this);
 
 	ui.tagNamesEdit->setText(tagNames);
+	ui.tagNamesEdit->setValidator(new QRegExpValidator(QRegExp("(((Exif|Iptc|Xmp)\\.([a-zA-Z0-9])+\\.([a-zA-Z0-9])+)\\s*(\\,?\\s*)?)+"), this));
 
 	for(int i = 1; i < ExifItem::Last; i *= 2)
 	{
@@ -42,6 +47,7 @@ TagNameEditDialog::TagNameEditDialog(QWidget *parent, const QString& tagNames, E
 			altTagNames = new QLineEdit(ui.optionsBox);
 			altTagNames->setEnabled(false);
 			altTagNames->setText(altTags);
+			altTagNames->setValidator(new QRegExpValidator(QRegExp("(((Exif|Iptc|Xmp)\\.([a-zA-Z0-9])+\\.([a-zA-Z0-9])+)\\s*(\\,?\\s*)?)+"), this));
 
 			altTagCbox = cbx;
 
@@ -58,6 +64,8 @@ TagNameEditDialog::TagNameEditDialog(QWidget *parent, const QString& tagNames, E
 	}
 
 	setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint);
+
+	ui.tagNamesEdit->setFocus(Qt::OtherFocusReason);
 }
 
 void TagNameEditDialog::setFlags(ExifItem::TagFlags flags)
@@ -88,6 +96,44 @@ ExifItem::TagFlags TagNameEditDialog::getFlags() const
 
 void TagNameEditDialog::on_buttonBox_accepted()
 {
+	// check for empty string
+	if(ui.tagNamesEdit->text().isEmpty())
+	{
+		QMessageBox::critical(this, tr("Empty tag list"), tr("Please specify correct tag in the tag list."));
+		return;
+	}
+
+	// browse through tags and verify them
+	QStringList tags = ui.tagNamesEdit->text().remove(QRegExp("(\\s?)")).split(",", QString::SkipEmptyParts);
+	foreach(QString tag, tags)
+	{
+		if(!ExifTreeModel::tagSupported(tag))
+		{
+			QMessageBox::critical(this, tr("Unsupported tag"), tr("Unsupported or unknown metadata tag %1.\nPlease correct the tag name.").arg(tag));
+			ui.tagNamesEdit->selectAll();
+			ui.tagNamesEdit->setFocus(Qt::OtherFocusReason);
+
+			return;
+		}
+	}
+
+	// if alternative tag set, verify them as well
+	if(altTagNames && altTagNames->isEnabled())
+	{
+		tags = altTagNames->text().remove(QRegExp("(\\s?)")).split(",", QString::SkipEmptyParts);
+		foreach(QString tag, tags)
+		{
+			if(!ExifTreeModel::tagSupported(tag))
+			{
+				QMessageBox::critical(this, tr("Unsupported tag"), tr("Unsupported or unknown metadata tag %1.\nPlease correct the tag name.").arg(tag));
+				altTagNames->selectAll();
+				altTagNames->setFocus(Qt::OtherFocusReason);
+
+				return;
+			}
+		}
+	}
+
 	setResult(QDialog::Accepted);
 	accept();
 }

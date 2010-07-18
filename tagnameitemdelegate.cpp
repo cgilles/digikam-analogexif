@@ -77,6 +77,10 @@ void TagNameItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mode
 		QVariantList data;
 		data << tagNameEditDialog->getTagNames() << (int)tagNameEditDialog->getFlags() << tagNameEditDialog->getAltTagNames();
 
-		model->setData(index, data);	
+		model->setData(index, data);
+	}
+	else
+	{
+		model->setData(index, QVariant());
 	}
 }

@@ -222,7 +222,15 @@ bool OptGearTemplateModel::setData(const QModelIndex &index, const QVariant &val
 	int id = query().value(6).toInt();
 
 	if(value == QVariant())
+	{
+		if((index.column() == 1) && query().value(1).toString().isEmpty())
+		{
+			// remove cancelled tag
+			removeTag(index);
+		}
+
 		return false;
+	}
 
 	// update the record
 	QString queryStr;
@@ -263,33 +271,11 @@ bool OptGearTemplateModel::setData(const QModelIndex &index, const QVariant &val
 					}
 				}
 
-				// browse through tags and verify them
-				QStringList tags = vallist.at(0).toString().remove(QRegExp("(\\s?)")).split(",", QString::SkipEmptyParts);
-				foreach(QString tag, tags)
-				{
-					if(!ExifTreeModel::tagSupported(tag))
-					{
-						emit unsupportedTag(index, tag);
-						return false;
-					}
-				}
-
-				queryStr += QString("TagName = '%1', Flags = %2").arg(vallist.at(0).toString().replace("'", "''")).arg(vallist.at(1).toInt());
+				queryStr += QString("TagName = '%1', Flags = %2").arg(vallist.at(0).toString().remove(QRegExp("(\\s?)")).replace("'", "''")).arg(vallist.at(1).toInt());
 
 				if(((ExifItem::TagFlags)vallist.at(1).toInt()).testFlag(ExifItem::AsciiAlt))
 				{
-					// browse through tags and verify them
-					QStringList tags = vallist.at(2).toString().remove(QRegExp("(\\s?)")).split(",", QString::SkipEmptyParts);
-					foreach(QString tag, tags)
-					{
-						if(!ExifTreeModel::tagSupported(tag))
-						{
-							emit unsupportedTag(index, tag);
-							return false;
-						}
-					}
-
-					queryStr += QString(", AltTag = '%1'").arg(vallist.at(2).toString().replace("'", "''"));
+					queryStr += QString(", AltTag = '%1'").arg(vallist.at(2).toString().remove(QRegExp("(\\s?)")).replace("'", "''"));
 				}
 				else
 				{

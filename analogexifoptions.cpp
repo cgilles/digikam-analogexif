@@ -53,7 +53,6 @@ AnalogExifOptions::AnalogExifOptions(QWidget *parent)
 	gearTempList = new OptGearTemplateModel(this);
 	ui.gearTemplateView->setModel(gearTempList);
 	connect(gearTempList, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(gearTempList_dataChanged(const QModelIndex&, const QModelIndex&)));
-	connect(gearTempList, SIGNAL(unsupportedTag(const QModelIndex&, const QString&)), this, SLOT(unsupportedTag(const QModelIndex&, const QString&)), Qt::QueuedConnection);
 
 	connect(ui.gearTemplateView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(gearList_selectionChanged(const QItemSelection&, const QItemSelection&)));
 
@@ -271,7 +270,7 @@ void AnalogExifOptions::on_actionDelete_triggered(bool)
 // add new tag
 void AnalogExifOptions::on_actionAdd_new_tag_triggered(bool)
 {
-        int newId = gearTempList->insertTag("", tr("New tag"), "%1", ExifItem::TagString);
+    int newId = gearTempList->insertTag("", tr("New tag"), "%1", ExifItem::TagString);
 
 	if(newId != -1)
 	{
@@ -604,16 +603,6 @@ bool AnalogExifOptions::checkOptions()
 	}
 
 	return true;
-}
-
-// unsupported tag
-void AnalogExifOptions::unsupportedTag(const QModelIndex& idx, const QString& tagName)
-{
-	// show message box
-	QMessageBox::critical(this, tr("Unsupported tag"), tr("Unsupported or unknown metadata tag %1.\nPlease correct the tag name.").arg(tagName));
-
-	// open editor
-	ui.gearTemplateView->edit(idx);
 }
 
 // UI interaction that dirty the form

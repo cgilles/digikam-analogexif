@@ -69,9 +69,6 @@ public:
 
 	// Protect built-in tags
 	static const bool ProtectBuiltInTags = true;
-signals:
-	// unsupported tag
-	void unsupportedTag(const QModelIndex& idx, const QString& tagName);
 
 private:
 	int gearId;
