@@ -37,7 +37,7 @@
 #include <exiv2/properties.hpp>
 #include <exiv2/datasets.hpp>
 
-#define CUSTOM_XMP_NAMESPACE_URI		("http://www.c41bytes.com/analogexif/ns")
+#define CUSTOM_XMP_NAMESPACE_URI		("http://analogexif.sourceforge.net/ns")
 #define ETAGS_START_MARKER_IN_COMMENTS	(QT_TR_NOOP("Photo information: \n"))
 #define ETAGS_DELIMETER_IN_COMMENTS		(" \n\n")
 
