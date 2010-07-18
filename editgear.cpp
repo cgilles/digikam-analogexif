@@ -788,8 +788,11 @@ void EditGear::on_addTagBtn_clicked()
 		if(metadataList->addNewTag(action->data().toInt(), metadataList->rowCount()))
 		{
 			setDirty();
-			// select last row (new)
-			ui.metadataView->selectRow(metadataList->rowCount() - 1);
+			// select last row (new) and edit it
+			QModelIndex idx = metadataList->index(metadataList->rowCount() - 1, 1);
+			ui.metadataView->setCurrentIndex(idx);
+			ui.metadataView->selectRow(idx.row());
+			ui.metadataView->edit(idx);
 		}
 	}
 }
@@ -856,8 +859,11 @@ void EditGear::on_metadataView_customContextMenuRequested(const QPoint& pos)
 		if(metadataList->addNewTag(action->data().toInt(), metadataList->rowCount()))
 		{
 			setDirty();
-			// select last row (new)
-			ui.metadataView->selectRow(metadataList->rowCount() - 1);
+			// select last row (new) and edit it
+			QModelIndex idx = metadataList->index(metadataList->rowCount() - 1, 1);
+			ui.metadataView->setCurrentIndex(idx);
+			ui.metadataView->selectRow(idx.row());
+			ui.metadataView->edit(idx);
 		}
 	}
 }
