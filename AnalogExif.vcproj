@@ -47,6 +47,7 @@
 				PreprocessorDefinitions="UNICODE,WIN32,QT_LARGEFILE_SUPPORT,QT_THREAD_SUPPORT,QT_NO_DEBUG,NDEBUG,QT_CORE_LIB,QT_GUI_LIB,QT_SQL_LIB;QT_NETWORK_LIB"
 				RuntimeLibrary="0"
 				TreatWChar_tAsBuiltInType="false"
+				WarningLevel="4"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="0"
 			/>
@@ -124,6 +125,7 @@
 				PreprocessorDefinitions="UNICODE,WIN32,QT_LARGEFILE_SUPPORT,QT_THREAD_SUPPORT,QT_CORE_LIB,QT_GUI_LIB,QT_SQL_LIB;QT_NETWORK_LIB"
 				RuntimeLibrary="1"
 				TreatWChar_tAsBuiltInType="false"
+				WarningLevel="2"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -3272,10 +3274,10 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					Description="Performing Custom Build Step"
-					CommandLine=""
+					Description="Updating version information"
+					CommandLine="parseVersions.vbs $(PlatformName)"
 					AdditionalDependencies=""
-					Outputs=""
+					Outputs="version.xml;AnalogExif.nsh"
 				/>
 			</FileConfiguration>
 			<FileConfiguration

@@ -2,24 +2,28 @@
 <Releases>
   <Release>
     <OS>Win32</OS>
-    <Version>0.0beta</Version>
-    <ReleaseNumber>0</ReleaseNumber>
-    <Date>28.06.2010</Date>
+    <Version>0.0.1</Version>
+    <ReleaseNumber>1</ReleaseNumber>
+    <Date>18.07.2010</Date>
     <Notes>New from 0.0beta release:
 * Change online version check behaviour
-* Minor UI redesign
+* UI redesign
 * New AnalogExif tags: Film grain and Develop process
-* Online help</Notes>
+* Online help
+* Bugfixes
+</Notes>
   </Release>
   <Release>
     <OS>Mac</OS>
-    <Version>0.0beta</Version>
-    <ReleaseNumber>0</ReleaseNumber>
-    <Date>28.06.2010</Date>
+    <Version>0.0.1</Version>
+    <ReleaseNumber>1</ReleaseNumber>
+    <Date>18.07.2010</Date>
     <Notes>New from 0.0beta release:
 * Change online version check behaviour
-* Minor UI redesign
+* UI redesign
 * New AnalogExif tags: Film grain and Develop process
-* Online help</Notes>
+* Online help
+* Bugfixes
+</Notes>
   </Release>
 </Releases>
