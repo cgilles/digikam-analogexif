@@ -76,7 +76,7 @@ QString ExifUtils::fancyPrintDouble(double val)
 	if(modf(val, &dec) == 0.0)
 		return QString::number(val, 'f', 1);
 
-	return QString::number(val, 'g', DoublePrecision);
+	return QString::number(val, 'f', DoublePrecision);
 }
 
 bool ExifUtils::containsNonAscii(const QString& str)
