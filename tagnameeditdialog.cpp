@@ -20,6 +20,7 @@
 #include "tagnameeditdialog.h"
 #include "optgeartemplatemodel.h"
 #include <QCheckBox>
+#include <QPushButton>
 
 TagNameEditDialog::TagNameEditDialog(QWidget *parent, const QString& tagNames, ExifItem::TagFlags, const QString& altTags)
 	: QDialog(parent), altTagNames(NULL)
@@ -127,4 +128,12 @@ void TagNameEditDialog::setFlagEnabled(ExifItem::TagFlag flag, bool isEnabled)
 			break;
 		}
 	}
+}
+
+void TagNameEditDialog::disableEdit()
+{
+	// disable all editing functions
+	ui.tagNamesEdit->setEnabled(false);
+	ui.optionsBox->setEnabled(false);
+	ui.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 }

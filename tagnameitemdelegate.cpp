@@ -63,6 +63,8 @@ void TagNameItemDelegate::setEditorData(QWidget *editor, const QModelIndex &inde
 	if(flags.testFlag(ExifItem::AsciiAlt))
 		tagNameEditDialog->setAltTagNames(index.data(OptGearTemplateModel::GetAltTagRole).toString());
 
+	if(OptGearTemplateModel::ProtectBuiltInTags && flags.testFlag(ExifItem::Protected))
+		tagNameEditDialog->disableEdit();
 }
 
 void TagNameItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,

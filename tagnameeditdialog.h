@@ -65,6 +65,8 @@ public:
 
 	void setFlagEnabled(ExifItem::TagFlag flag, bool isEnabled);
 
+	void disableEdit();
+
 private:
 	Ui::TagNameEditDialogClass ui;
 

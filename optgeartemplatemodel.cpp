@@ -38,12 +38,17 @@ Qt::ItemFlags OptGearTemplateModel::flags(const QModelIndex &index) const
 		return 0;
 
 	// protect minimum db setup
+
 	if(!query().seek(index.row()))
 		return 0;
 
 	if(ProtectBuiltInTags && ((ExifItem::TagFlags)query().value(5).toInt()).testFlag(ExifItem::Protected))
 	{
-		if((index.column() != 0) && (index.column() != 2) && (index.column() != 4))
+		if((index.column() != 1) && (index.column() != 2) && (index.column() != 4))
+			return Qt::ItemIsSelectable;
+
+		// protect selection values from edit as well
+		if(((ExifItem::TagFlags)query().value(5).toInt()).testFlag(ExifItem::Choice) && (index.column() == 4))
 			return Qt::ItemIsSelectable;
 	}
 
