@@ -98,7 +98,7 @@ bool EditGearTagsModel::setData(const QModelIndex &index, const QVariant &dataVa
 	QString updateValue;
 	QString updateAltValue;
 
-	QVariant oldValue = ExifItem::valueFromString(query().value(1).toString(), tagType, true, tagFlags);
+	QVariant oldValue = query().value(1);
 	QVariant value = dataValue;
 
 	QVariantList varList;
