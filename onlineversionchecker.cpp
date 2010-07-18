@@ -25,7 +25,7 @@
 #include <QSettings>
 
 const QUrl OnlineVersionChecker::versionCheckUrl("http://analogexif.svn.sourceforge.net/viewvc/analogexif/current-version.xml");
-const QUrl OnlineVersionChecker::downloadUrl("https://sourceforge.net/projects/analogexif/files/");
+const QUrl OnlineVersionChecker::downloadUrl("http://sourceforge.net/projects/analogexif/files/");
 
 OnlineVersionChecker::OnlineVersionChecker(QObject *parent) : QObject(parent), curRequest(NULL)
 {
