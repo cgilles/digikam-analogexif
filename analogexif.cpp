@@ -1075,20 +1075,27 @@ void AnalogExif::on_actionPreferences_triggered(bool)
 	if(!checkForDirty())
 		return;
 
-	QModelIndex prevIdx = ui.fileView->currentIndex();
+	QModelIndex prevIdx;
+	if(ui.fileView->selectionModel()->hasSelection())
+		prevIdx = ui.fileView->currentIndex();
 
 	AnalogExifOptions options(this);
 	options.setModal(true);
 
-	if(options.exec())
-	{
-		exifTreeModel->repopulate();
-		ui.metadataView->expandAll();
+	options.exec();
 
+	if(prevIdx.isValid())
+	{
 		ui.fileView->clearSelection();
-		ui.fileView->selectionModel()->select(prevIdx, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
-		ui.fileView->selectionModel()->setCurrentIndex(prevIdx, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
 	}
+
+	exifTreeModel->repopulate();
+	ui.metadataView->expandAll();
+
+	gearList->setSelectedIndex(QModelIndex());
+	filmsList->setSelectedIndex(QModelIndex());
+	developersList->setSelectedIndex(QModelIndex());
+	authorsList->setSelectedIndex(QModelIndex());
 }
 
 // directory line enter pressed
