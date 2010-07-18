@@ -1808,7 +1808,7 @@ void AnalogExif::newVersionCheckError(QNetworkReply::NetworkError error)
 	}
 }
 
-void AnalogExif::on_actionHelp_triggered(bool checked)
+void AnalogExif::on_actionHelp_triggered(bool)
 {
 	QDesktopServices::openUrl(helpUrl);
 }
