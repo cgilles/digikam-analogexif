@@ -37,6 +37,8 @@
 #include <QSysInfo>
 #include <QTimer>
 
+const QUrl AnalogExif::helpUrl("http://analogexif.sourceforge.net/help/");
+
 AnalogExif::AnalogExif(QWidget *parent, Qt::WFlags flags)
 	: QMainWindow(parent, flags), progressBox(QMessageBox::NoIcon, tr("New program version"), tr("Checking for the new version..."), QMessageBox::Cancel, this)
 {
@@ -1804,4 +1806,9 @@ void AnalogExif::newVersionCheckError(QNetworkReply::NetworkError error)
 	{
 		QMessageBox::critical(this, tr("New program version"), tr("Error checking for the new program version."));
 	}
+}
+
+void AnalogExif::on_actionHelp_triggered(bool checked)
+{
+	QDesktopServices::openUrl(helpUrl);
 }

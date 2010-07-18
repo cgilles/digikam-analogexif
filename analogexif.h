@@ -171,6 +171,8 @@ private:
 	OnlineVersionChecker* verChecker;
 	QMessageBox progressBox;
 
+	static const QUrl helpUrl;
+
 signals:
 	void updatePreview();
 
@@ -231,6 +233,8 @@ private slots:
 	void on_action_Copy_metadata_triggered(bool checked = false);
 	// about dialog
 	void on_action_About_triggered(bool checked = false);
+	// help
+	void on_actionHelp_triggered(bool checked = false);
 
 	// on update preview
 	void previewUpdate();
