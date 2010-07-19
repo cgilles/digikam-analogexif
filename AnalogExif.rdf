@@ -14,6 +14,13 @@
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
   </rdf:Property>
 
+  <rdf:Property rdf:about="http://analogexif.sourceforge.net/ns#LensSerialNumber">
+    <rdfs:label xml:lang="en-US">Lens serial number</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Lens serial number</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://analogexif.sourceforge.net/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
   <rdf:Property rdf:about="http://analogexif.sourceforge.net/ns#RollId">
     <rdfs:label xml:lang="en-US">Roll id</rdfs:label>
     <rdfs:comment xml:lang="en-US">Film roll identifier</rdfs:comment>
