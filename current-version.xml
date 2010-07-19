@@ -3,12 +3,12 @@
   <Release>
     <OS>Win32</OS>
     <Version>0.0.1</Version>
-    <ReleaseNumber>1</ReleaseNumber>
+    <ReleaseNumber>2</ReleaseNumber>
     <Date>18.07.2010</Date>
     <Notes>New from 0.0beta release:
 * Change online version check behaviour
 * UI redesign
-* New AnalogExif tags: Film grain and Develop process
+* New AnalogExif tags: Lens serial number, Film grain and Develop process
 * Online help
 * Bugfixes
 </Notes>
@@ -16,12 +16,12 @@
   <Release>
     <OS>Mac</OS>
     <Version>0.0.1</Version>
-    <ReleaseNumber>1</ReleaseNumber>
+    <ReleaseNumber>2</ReleaseNumber>
     <Date>18.07.2010</Date>
     <Notes>New from 0.0beta release:
 * Change online version check behaviour
 * UI redesign
-* New AnalogExif tags: Film grain and Develop process
+* New AnalogExif tags: Lens serial number, Film grain and Develop process
 * Online help
 * Bugfixes
 </Notes>
