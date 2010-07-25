@@ -2,10 +2,13 @@
 <Releases>
   <Release>
     <OS>Win32</OS>
-    <Version>0.0.1</Version>
-    <ReleaseNumber>2</ReleaseNumber>
-    <Date>18.07.2010</Date>
-    <Notes>New from 0.0beta release:
+    <Version>0.0.2</Version>
+    <ReleaseNumber>3</ReleaseNumber>
+    <Date>25.07.2010</Date>
+    <Notes>New from 0.0.1 release:
+* Fix default library access error on Vista/7
+
+New from 0.0beta release:
 * Change online version check behaviour
 * UI redesign
 * New AnalogExif tags: Lens serial number, Film grain and Develop process
