@@ -53,6 +53,8 @@ UninstPage custom un.ShowDeleteDb un.LeaveDeleteDb
 
 ; MUI end ------
 
+!define APP_DB_FOLDER "$DOCUMENTS"
+
 Name "${PRODUCT_NAME}"
 OutFile "${PRODUCT_NAME}Setup.${PRODUCT_VERSION}.exe"
 InstallDir "$PROGRAMFILES\AnalogExif"
@@ -66,16 +68,16 @@ Section "MainSection" SEC01
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
   File "Release\AnalogExif.exe"
-  SetOverwrite off
-  File "AnalogExif.ael"
   SetOverwrite ifnewer
   File "COPYING"
+  SetOverwrite off
+  SetOutPath "${APP_DB_FOLDER}"
+  File "AnalogExif.ael"
 
 ; Shortcuts
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\AnalogExif.lnk" "$INSTDIR\AnalogExif.exe"
-  CreateShortCut "$DESKTOP\AnalogExif.lnk" "$INSTDIR\AnalogExif.exe"
   !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
@@ -95,6 +97,7 @@ Section -Post
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
+  WriteRegStr HKLM "Software\${PRODUCT_PUBLISHER}\${PRODUCT_NAME}" "dbName" "${APP_DB_FOLDER}\AnalogExif.ael"
 SectionEnd
 
 
@@ -116,7 +119,6 @@ Section Uninstall
   Delete "$INSTDIR\AnalogExif.exe"
 
   Delete "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk"
-  Delete "$DESKTOP\AnalogExif.lnk"
   Delete "$SMPROGRAMS\$ICONS_GROUP\AnalogExif.lnk"
 
   RMDir "$SMPROGRAMS\$ICONS_GROUP"
@@ -189,6 +191,8 @@ Function un.LeaveDeleteDb
   ${NSD_GetState} $YesDeleteDb $0
   
   ${If} $0 == ${BST_CHECKED}
-    Delete "$INSTDIR\AnalogExif.ael"
+    Delete "${APP_DB_FOLDER}\AnalogExif.ael"
+    ReadRegStr $0 HKCU "Software\${PRODUCT_PUBLISHER}\${PRODUCT_NAME}" "dbName"
+    Delete $0
   ${EndIf}
 FunctionEnd
