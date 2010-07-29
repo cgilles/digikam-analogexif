@@ -26,6 +26,8 @@
 
 void GearListModel::reload()
 {
+	// invalidate selected index
+	selected = QModelIndex();
 	setQuery(QString("SELECT GearName, id FROM UserGearItems WHERE GearType=%1 ORDER BY OrderBy").arg(gearType));
 }
 
@@ -60,7 +62,7 @@ QVariant GearListModel::data(const QModelIndex &item, int role) const
 		}
 	}
 
-	if((item == selected) && (role == Qt::FontRole))
+	if(selected.isValid() && (item == selected) && (role == Qt::FontRole))
 	{
 		QFont f;
 		f.setBold(true);

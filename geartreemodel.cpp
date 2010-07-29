@@ -28,6 +28,9 @@ void GearTreeModel::reload()
 {
 	clear();
 
+	// invalidate selected index as of bug 3036087
+	selected = QModelIndex();
+
 	if(bodyCount() == 0)
 	{
 		QFont f;
