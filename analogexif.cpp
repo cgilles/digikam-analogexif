@@ -1158,6 +1158,12 @@ bool AnalogExif::checkForDirty()
 
 	setDirty(false);
 
+	// invalidate selected equipment
+	gearList->setSelectedIndex(QModelIndex());
+	filmsList->setSelectedIndex(QModelIndex());
+	developersList->setSelectedIndex(QModelIndex());
+	authorsList->setSelectedIndex(QModelIndex());
+
 	return true;
 }
 
@@ -1199,6 +1205,9 @@ void AnalogExif::metadataView_selectionChanged(const QItemSelection& selected, c
 // open new library
 void AnalogExif::on_actionOpen_library_triggered(bool)
 {
+	if(!checkForDirty())
+		return;
+
 	QString newName = QFileDialog::getOpenFileName(this, tr("Open equipment library"), QDir::fromNativeSeparators(ui.directoryLine->text()), tr("AnalogExif library files (*.ael);;All files (*.*)"));
 
 	if(!newName.isNull())
@@ -1234,6 +1243,9 @@ void AnalogExif::on_actionOpen_library_triggered(bool)
 // create new library
 void AnalogExif::on_actionNew_library_triggered(bool)
 {
+	if(!checkForDirty())
+		return;
+
 	QString newDb = createLibrary(this, QDir::fromNativeSeparators(ui.directoryLine->text()));
 
 	if(!newDb.isNull())
@@ -1444,6 +1456,9 @@ QStringList AnalogExif::getFileList(QModelIndexList selIdx, bool includeDirs, bo
 // auto-fill exposure
 void AnalogExif::on_actionAuto_fill_exposure_triggered(bool)
 {
+	if(!checkForDirty())
+		return;
+
 	// determine the number of selected files
 	QModelIndexList selIdx;
 
@@ -1676,6 +1691,9 @@ void AnalogExif::on_actionRemove_triggered(bool)
 // copy metadata from another file
 void AnalogExif::on_action_Copy_metadata_triggered(bool)
 {
+	if(!checkForDirty())
+		return;
+
 	// determine the number of selected files
 	QModelIndexList selIdx;
 
