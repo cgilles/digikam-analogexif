@@ -189,7 +189,12 @@ Qt::ItemFlags ExifTreeModel::flags(const QModelIndex &index) const
 
 	// caption or tag text - selectable, enabled, non-editable
 	if(index.column() == 0)
+	{
+		if(getItem(index)->isCaption())
+			return Qt::ItemIsEnabled;
+
 		return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+	}
 
 	if(editable)
 		return Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsSelectable;
