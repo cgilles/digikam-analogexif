@@ -862,6 +862,11 @@ bool AnalogExif::save()
 	authorsList->setSelectedIndex(QModelIndex());
 	developersList->setSelectedIndex(QModelIndex());
 
+	ui.gearView->selectionModel()->clearSelection();
+	ui.filmView->selectionModel()->clearSelection();
+	ui.developerView->selectionModel()->clearSelection();
+	ui.authorView->selectionModel()->clearSelection();
+
 	// focus on metadata view
 	ui.metadataView->setFocus(Qt::OtherFocusReason);
 
@@ -874,10 +879,17 @@ void AnalogExif::on_revertBtn_clicked()
 	exifTreeModel->reload();
 	setDirty(false);
 	setupTreeView();
+
+	// clear selection
 	filmsList->setSelectedIndex(QModelIndex());
 	gearList->setSelectedIndex(QModelIndex());
 	authorsList->setSelectedIndex(QModelIndex());
 	developersList->setSelectedIndex(QModelIndex());
+
+	ui.gearView->selectionModel()->clearSelection();
+	ui.filmView->selectionModel()->clearSelection();
+	ui.developerView->selectionModel()->clearSelection();
+	ui.authorView->selectionModel()->clearSelection();
 
 	ui.metadataView->setFocus(Qt::OtherFocusReason);
 }
@@ -1056,16 +1068,45 @@ void AnalogExif::on_actionEdit_gear_triggered(bool)
 	if(!checkForDirty())
 		return;
 
+	// get currently selected filename - indexes may not be valid after changes
+	QString curSelected;
+	if(ui.fileView->selectionModel()->hasSelection() && (ui.fileView->selectionModel()->selectedRows().count() == 1))
+	{
+		curSelected = fileViewModel->filePath(fileSorter->mapToSource(ui.fileView->currentIndex()));
+	}
+
 	EditGear edit(this);
 	edit.setModal(true);
 
 	if(edit.exec())
 	{
+		// reload equipment
 		gearList->reload();
 		ui.gearView->expandAll();
 		filmsList->reload();
 		authorsList->reload();
 		developersList->reload();
+	}
+
+	// repopulate metadata
+	if(!curSelected.isEmpty())
+	{
+		QModelIndex idx = fileSorter->mapFromSource(fileViewModel->index(curSelected));
+		ui.fileView->selectionModel()->clearSelection();
+		ui.fileView->setCurrentIndex(QModelIndex());
+
+		if(idx.isValid())
+		{
+			// reselect and reload
+			ui.fileView->selectionModel()->select(idx, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
+			ui.fileView->setCurrentIndex(idx);
+		}
+	}
+	else
+	{
+		// multiple or incorrect selection - clear the metadata view
+		exifTreeModel->reload();
+		ui.metadataView->expandAll();
 	}
 }
 
@@ -1075,27 +1116,42 @@ void AnalogExif::on_actionPreferences_triggered(bool)
 	if(!checkForDirty())
 		return;
 
-	QModelIndex prevIdx;
-	if(ui.fileView->selectionModel()->hasSelection())
-		prevIdx = ui.fileView->currentIndex();
+	// get currently selected filename - indexes may not be valid after changes
+	QString curSelected;
+	if(ui.fileView->selectionModel()->hasSelection() && (ui.fileView->selectionModel()->selectedRows().count() == 1))
+	{
+		curSelected = fileViewModel->filePath(fileSorter->mapToSource(ui.fileView->currentIndex()));
+	}
 
 	AnalogExifOptions options(this);
 	options.setModal(true);
 
-	options.exec();
-
-	if(prevIdx.isValid())
+	if(options.exec())
 	{
-		ui.fileView->clearSelection();
+		exifTreeModel->repopulate();
+		ui.metadataView->expandAll();
 	}
 
-	exifTreeModel->repopulate();
-	ui.metadataView->expandAll();
+	// repopulate metadata
+	if(!curSelected.isEmpty())
+	{
+		QModelIndex idx = fileSorter->mapFromSource(fileViewModel->index(curSelected));
+		ui.fileView->selectionModel()->clearSelection();
+		ui.fileView->setCurrentIndex(QModelIndex());
 
-	gearList->setSelectedIndex(QModelIndex());
-	filmsList->setSelectedIndex(QModelIndex());
-	developersList->setSelectedIndex(QModelIndex());
-	authorsList->setSelectedIndex(QModelIndex());
+		if(idx.isValid())
+		{
+			// reselect and reload
+			ui.fileView->selectionModel()->select(idx, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
+			ui.fileView->setCurrentIndex(idx);
+		}
+	}
+	else
+	{
+		// multiple or incorrect selection - clear the metadata view
+		exifTreeModel->reload();
+		ui.metadataView->expandAll();
+	}
 }
 
 // directory line enter pressed
@@ -1164,6 +1220,12 @@ bool AnalogExif::checkForDirty()
 	developersList->setSelectedIndex(QModelIndex());
 	authorsList->setSelectedIndex(QModelIndex());
 
+	// deselect equipment
+	ui.gearView->selectionModel()->clearSelection();
+	ui.filmView->selectionModel()->clearSelection();
+	ui.developerView->selectionModel()->clearSelection();
+	ui.authorView->selectionModel()->clearSelection();
+
 	return true;
 }
 
@@ -1177,7 +1239,10 @@ void AnalogExif::on_action_Clear_tag_value_triggered(bool)
 	// clear their values
 	foreach(QModelIndex idx, idxList)
 	{
-		exifTreeModel->setData(idx, QVariant());
+		if(exifTreeModel->index(idx.row(), 1, idx.parent()).data(Qt::DisplayRole) != QVariant())
+		{
+			exifTreeModel->setData(idx, QVariant());
+			}
 	}
 
 	ui.metadataView->expandAll();
@@ -1549,9 +1614,9 @@ void AnalogExif::on_actionAuto_fill_exposure_triggered(bool)
 		}
 
 		ui.metadataView->blockSignals(false);
-		exifTreeModel->clear(true);
-		setupTreeView();
 	}
+	exifTreeModel->clear(true);
+	setupTreeView();
 }
 
 // double-click - launch file
@@ -1696,10 +1761,18 @@ void AnalogExif::on_action_Copy_metadata_triggered(bool)
 
 	// determine the number of selected files
 	QModelIndexList selIdx;
+	QString selectedFname;
 
 	if(ui.fileView->selectionModel()->hasSelection())
 	{
 		selIdx = ui.fileView->selectionModel()->selectedRows();
+
+		// if only one file selected - store its filename to reload later
+		if(selIdx.count() == 1)
+		{
+			if(selIdx.at(0).isValid())
+				selectedFname = fileViewModel->filePath(fileSorter->mapToSource(selIdx.at(0)));
+		}
 	}
 	else
 	{
@@ -1769,7 +1842,7 @@ void AnalogExif::on_action_Copy_metadata_triggered(bool)
 
 			if(!future.result())
 			{
-				QMessageBox::critical(this, tr("File save error"), tr("Unable to set metadata for %1.").arg(fileName));
+				QMessageBox::critical(this, tr("File save error"), tr("Unable to set metadata for %1.").arg(fName));
 
 				exifTreeModel->blockSignals(false);
 				exifTreeModel->clear(true);
@@ -1784,18 +1857,26 @@ void AnalogExif::on_action_Copy_metadata_triggered(bool)
 
 		exifTreeModel->blockSignals(false);
 		exifTreeModel->clear(true);
+	}
 
-		if((selIdx.count() == 1) && (selIdx.at(0).model() == fileSorter) && (!fileViewModel->isDir(fileSorter->mapToSource(selIdx.at(0)))))
+	if(!selectedFname.isEmpty())
+	{
+		QModelIndex idx = fileSorter->mapFromSource(fileViewModel->index(selectedFname));
+		ui.fileView->selectionModel()->clearSelection();
+		ui.fileView->setCurrentIndex(QModelIndex());
+
+		if(idx.isValid())
 		{
-			// if only one file selected, reselect it and trigger metadata reload
-			ui.fileView->clearSelection();
-			ui.fileView->selectionModel()->select(selIdx.at(0), QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
+			// reselect and reload
+			ui.fileView->selectionModel()->select(idx, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
+			ui.fileView->setCurrentIndex(idx);
 		}
-		else
-		{
-			// restore view
-			setupTreeView();
-		}
+	}
+	else
+	{
+		// multiple or incorrect selection - clear the metadata view
+		exifTreeModel->reload();
+		ui.metadataView->expandAll();
 	}
 }
 
