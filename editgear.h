@@ -75,6 +75,9 @@ private:
 
 	void saveAndClose();
 
+public slots:
+	virtual void reject();
+
 private slots:
 	// close button
 	void on_buttonBox_rejected();

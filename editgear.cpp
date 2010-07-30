@@ -116,6 +116,11 @@ EditGear::~EditGear()
 
 void EditGear::on_buttonBox_rejected()
 {
+	reject();
+}
+
+void EditGear::reject()
+{
 	if(dirty)
 	{
 		QMessageBox::StandardButton result = QMessageBox::question(this, tr("Unsaved data"),
@@ -141,7 +146,7 @@ void EditGear::on_buttonBox_rejected()
 	//query.exec("ROLLBACK TRANSACTION");
 	query.exec("ROLLBACK TO EditGearStart");
 
-	reject();
+	QDialog::reject();
 }
 
 void EditGear::on_buttonBox_accepted()

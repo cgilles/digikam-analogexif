@@ -116,6 +116,11 @@ void AnalogExifOptions::on_gearTypesList_itemClicked(QListWidgetItem*)
 // close button
 void AnalogExifOptions::on_buttonBox_rejected()
 {
+	reject();
+}
+
+void AnalogExifOptions::reject()
+{
 	if(dirty)
 	{
 		QMessageBox::StandardButton result = QMessageBox::question(this, tr("Unsaved preferences"),
@@ -140,7 +145,7 @@ void AnalogExifOptions::on_buttonBox_rejected()
 	//query.exec("ROLLBACK TRANSACTION");
 	query.exec("ROLLBACK TO EditOptionsStart");
 
-	reject();
+	QDialog::reject();
 }
 
 // ok button
@@ -162,7 +167,7 @@ void AnalogExifOptions::saveAndExit()
 
 		if(result == QMessageBox::Yes)
 		{
-			reject();
+			QDialog::reject();
 		}
 
 		return;

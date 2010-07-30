@@ -72,3 +72,9 @@ void AsciiTextDialog::on_buttonBox_clicked(QAbstractButton* button)
 	setResult(buttonRole);
 	done(buttonRole);
 }
+
+void AsciiTextDialog::reject()
+{
+	setResult(QDialogButtonBox::RejectRole);
+	done(QDialogButtonBox::RejectRole);
+}

@@ -104,8 +104,13 @@ void MultiTagValuesDialog::list_selectionChanged(const QItemSelection&, const QI
 // ok/cancel handlers
 void MultiTagValuesDialog::on_buttonBox_rejected()
 {
-	setResult(QDialog::Rejected);
 	reject();
+}
+
+void MultiTagValuesDialog::reject()
+{
+	setResult(QDialog::Rejected);
+	QDialog::reject();
 }
 
 void MultiTagValuesDialog::on_buttonBox_accepted()

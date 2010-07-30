@@ -140,8 +140,13 @@ void TagNameEditDialog::on_buttonBox_accepted()
 
 void TagNameEditDialog::on_buttonBox_rejected()
 {
-	setResult(QDialog::Rejected);
 	reject();
+}
+
+void TagNameEditDialog::reject()
+{
+	setResult(QDialog::Rejected);
+	QDialog::reject();
 }
 
 void TagNameEditDialog::altTag_stateChanged(int state)

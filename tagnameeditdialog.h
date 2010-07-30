@@ -74,6 +74,9 @@ private:
 	QCheckBox* altTagCbox;
 	QCheckBox* asciiTagCbox;
 
+public slots:
+	virtual void reject();
+
 private slots:
 	// ok/cancel
 	void on_buttonBox_accepted();

@@ -61,6 +61,13 @@ public slots:
 		ui.progressBar->setValue(i / 1024);
 	}
 
+	virtual void reject()
+	{
+		// handle Escape key properly
+		cancelled = true;
+		QDialog::reject();
+	}
+
 private:
 	Ui::ProgressDialogClass ui;
 
@@ -68,9 +75,8 @@ private:
 
 private slots:
 	// on cancel button clicked
-	void on_cancelBtn_clicked(bool checked = false)
+	void on_cancelBtn_clicked(bool)
 	{
-                Q_UNUSED(checked);
 		cancelled = true;
 	}
 };

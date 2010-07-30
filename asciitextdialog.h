@@ -60,6 +60,9 @@ private:
 	QString unicodeValue;
 	Ui::AsciiTextDialogClass ui;
 
+public slots:
+	virtual void reject();
+
 private slots:
 	void on_copyBtn_clicked();
 	void on_buttonBox_clicked(QAbstractButton* button);

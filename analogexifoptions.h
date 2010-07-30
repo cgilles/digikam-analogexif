@@ -93,6 +93,9 @@ private:
 
 	void saveAndExit();
 
+public slots:
+	virtual void reject();
+
 private slots:
 	// on gear clicked
 	void on_gearTypesList_itemClicked(QListWidgetItem* item);
