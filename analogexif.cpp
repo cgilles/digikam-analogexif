@@ -1186,7 +1186,7 @@ void AnalogExif::on_actionOpen_triggered(bool)
 	if(!checkForDirty())
 		return;
 
-	QString filename = QFileDialog::getOpenFileName(this, tr("Select file to open..."), QDir::fromNativeSeparators(ui.directoryLine->text()), tr("JPEG images (*.jpg *.jpeg *jpe);;JPEG2000 images (*.jpf *.jpx *.jp2 *.j2c *.j2k *.jpc);;TIFF images (*.tif *.tiff);;DNG images (*.dng);;Photoshop PSD images (*.psd);;Camera raw images (*.cr2 *.nef *.pef *.rw2 *.arw *.sr2 *.orf *.raf);;All files (*.*)"));
+	QString filename = QFileDialog::getOpenFileName(this, tr("Select file to open..."), QDir::fromNativeSeparators(ui.directoryLine->text()), tr("JPEG images (*.jpg *.jpeg *jpe);;JPEG2000 images (*.jpf *.jpx *.jp2 *.j2c *.j2k *.jpc);;TIFF images (*.tif *.tiff);;DNG images (*.dng);;Photoshop PSD images (*.psd);;Camera raw images (*.cr2 *.nef *.pef *.rw2 *.arw *.sr2 *.orf *.raf *.mrw);;All files (*.*)"));
 
 	if(!filename.isNull())
 		openLocation(filename);
@@ -1792,7 +1792,7 @@ void AnalogExif::on_action_Copy_metadata_triggered(bool)
 		return;
 
 	// get source filename
-	QString fileName = QFileDialog::getOpenFileName(this, tr("Select source file for metadata..."), QDir::fromNativeSeparators(ui.directoryLine->text()), tr("JPEG images (*.jpg *.jpeg *jpe);;JPEG2000 images (*.jpf *.jpx *.jp2 *.j2c *.j2k *.jpc);;TIFF images (*.tif *.tiff);;DNG images (*.dng);;Photoshop PSD images (*.psd);;Camera raw images (*.cr2 *.nef *.pef *.rw2 *.arw *.sr2 *.orf *.raf);;All files (*.*)"));
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Select source file for metadata..."), QDir::fromNativeSeparators(ui.directoryLine->text()), tr("JPEG images (*.jpg *.jpeg *jpe);;JPEG2000 images (*.jpf *.jpx *.jp2 *.j2c *.j2k *.jpc);;TIFF images (*.tif *.tiff);;DNG images (*.dng);;Photoshop PSD images (*.psd);;Camera raw images (*.cr2 *.nef *.pef *.rw2 *.arw *.sr2 *.orf *.raf *.mrw);;All files (*.*)"));
 
 	if(fileName.isNull())
 		return;
