@@ -30,6 +30,7 @@
 
 #include <QFile>
 #include <QTextStream>
+#include <QImageReader>
 
 #include <cmath>
 
@@ -1779,8 +1780,16 @@ QByteArray* ExifTreeModel::getPreview() const
 	if(previews.empty())
 		return NULL;
 
-	// choose the largest required preview
-	return new QByteArray((const char*)preview.getPreviewImage(previews.back()).pData(), previews.back().size_);
+	// choose the smallest supported required preview
+	QList<QByteArray> supportedImgs = QImageReader::supportedImageFormats();
+
+	for(Exiv2::PreviewPropertiesList::iterator i = previews.begin(); i < previews.end(); i++)
+	{
+		if(supportedImgs.contains(QString::fromStdString(i->extension_).remove(".").toLatin1()))
+			return new QByteArray((const char*)preview.getPreviewImage(*i).pData(), i->size_);
+	}
+
+	return NULL;
 }
 
 // clears dirty flag from all tags

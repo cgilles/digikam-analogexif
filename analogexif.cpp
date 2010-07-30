@@ -36,6 +36,7 @@
 #include <QUrl>
 #include <QSysInfo>
 #include <QTimer>
+#include <QImageReader>
 
 const QUrl AnalogExif::helpUrl("http://analogexif.sourceforge.net/help/");
 
@@ -62,7 +63,7 @@ AnalogExif::AnalogExif(QWidget *parent, Qt::WFlags flags)
 	fileViewModel->setFilter(QDir::Files);
 	// show supported files only
 	fileViewModel->setNameFilterDisables(false);
-	fileViewModel->setNameFilters(QStringList() << "*.jpg" << "*.jpeg" << "*.tif" << "*.tiff");
+	fileViewModel->setNameFilters(QStringList() << "*.jpg" << "*.jpeg" << "*.jpe" << "*.tif" << "*.tiff" << "*.dng" << "*.jp2" << "*.jpf" << "*.jpx" << "*.j2k" << "*.j2c" << "*.jpc" << "*.psd");
 	fileViewModel->setReadOnly(false);
 	fileSorter = new DirSortFilterProxyModel(this);
 	fileSorter->setSourceModel(fileViewModel);
@@ -658,6 +659,12 @@ void AnalogExif::loadPreview(QString filename)
 	}
 	else
 	{
+		// check whether image is supported
+		QList<QByteArray> supportedImgs = QImageReader::supportedImageFormats();
+
+		if(!supportedImgs.contains(filename.section(".", -1).toLatin1()))
+			return;
+
 		// show the full image otherwise
 		if(!filePreviewPixmap.load(filename, 0, Qt::ThresholdDither))
 			return;
@@ -1179,7 +1186,7 @@ void AnalogExif::on_actionOpen_triggered(bool)
 	if(!checkForDirty())
 		return;
 
-	QString filename = QFileDialog::getOpenFileName(this, tr("Select file to open..."), QDir::fromNativeSeparators(ui.directoryLine->text()), tr("JPEG images (*.jpg *.jpeg);;TIFF images (*.tif *.tiff);;All files (*.*)"));
+	QString filename = QFileDialog::getOpenFileName(this, tr("Select file to open..."), QDir::fromNativeSeparators(ui.directoryLine->text()), tr("JPEG images (*.jpg *.jpeg *jpe);;JPEG2000 images (*.jpf *.jpx *.jp2 *.j2c *.j2k *.jpc);;TIFF images (*.tif *.tiff);;DNG images (*.dng);;Photoshop PSD images (*.psd);;Camera raw images (*.cr2 *.nef *.pef *.rw2 *.arw *.sr2 *.orf *.raf);;All files (*.*)"));
 
 	if(!filename.isNull())
 		openLocation(filename);
@@ -1785,7 +1792,7 @@ void AnalogExif::on_action_Copy_metadata_triggered(bool)
 		return;
 
 	// get source filename
-	QString fileName = QFileDialog::getOpenFileName(this, tr("Select source file for metadata..."), QDir::fromNativeSeparators(ui.directoryLine->text()), tr("JPEG images (*.jpg *.jpeg);;TIFF images (*.tif *.tiff);;All files (*.*)"));
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Select source file for metadata..."), QDir::fromNativeSeparators(ui.directoryLine->text()), tr("JPEG images (*.jpg *.jpeg *jpe);;JPEG2000 images (*.jpf *.jpx *.jp2 *.j2c *.j2k *.jpc);;TIFF images (*.tif *.tiff);;DNG images (*.dng);;Photoshop PSD images (*.psd);;Camera raw images (*.cr2 *.nef *.pef *.rw2 *.arw *.sr2 *.orf *.raf);;All files (*.*)"));
 
 	if(fileName.isNull())
 		return;
