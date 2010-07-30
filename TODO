@@ -1,7 +1,7 @@
 FUTURE FEATURES
 * database export/import (XML/CSV)
 * Linux support
-* Google Maps support
+* Full Google Maps support
 * help
 * APEX-adjustment as tag flag
 * mark dirty fields in bold when editing gear template
@@ -10,8 +10,7 @@ FUTURE FEATURES
 * support XMP structures and LangAlt
 * show progress during backup
 * when failed to open new database and consequently fail to open previous db - ask to create new and revert to default
-? Filter shown metadata
-? Other file format support
+* filter shown metadata
 ? set proper XMP toolkit tag
 * when disabling custom namespace warn regarding affected equipment
 * multiple custom namespaces
@@ -22,7 +21,7 @@ FUTURE FEATURES
 * duplicate Exif/IPTC/XMP intersections
 
 DEVELOPMENT
-
+* auto-patch "About..." dialog with current version
 
 TESTS
 * verify against metadata corruption
