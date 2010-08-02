@@ -21,6 +21,7 @@
 #include <cmath>
 #include <limits>
 
+#ifndef __GNUC__
 double ExifUtils::fractionPart(double value)
 {
 	return abs(abs(value) - (int)abs(value));
@@ -44,12 +45,19 @@ void ExifUtils::getFraction(double value, int* num, int* denom, int depth)
 	*denom = (int)inverse * denom1 + num1;
 	*num = denom1;
 }
+#endif
 
 void ExifUtils::doubleToFraction(double value, int* numerator, int* denom)
 {
+#ifdef __GNUC__
+	// don't use clever double to fraction algorithm under gcc (bug 3035568)
+	*numerator = value * DoubleDenominator;
+	*denom = DoubleDenominator;
+#else
 	getFraction(abs(value), numerator, denom, 10);
 	if(value < 0)
 		*numerator = -*numerator;
+#endif
 }
 
 void ExifUtils::doubleToDegrees(double val, int& deg, int& min, double& sec)
