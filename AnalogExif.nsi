@@ -70,6 +70,8 @@ Section "MainSection" SEC01
   File "Release\AnalogExif.exe"
   SetOverwrite ifnewer
   File "COPYING"
+  SetOverwrite ifnewer
+  File "CHANGES"
   SetOverwrite off
   SetOutPath "${APP_DB_FOLDER}"
   File "AnalogExif.ael"
@@ -116,6 +118,7 @@ Section Uninstall
   !insertmacro MUI_STARTMENU_GETFOLDER "Application" $ICONS_GROUP
   Delete "$INSTDIR\uninst.exe"
   Delete "$INSTDIR\COPYING"
+  Delete "$INSTDIR\CHANGES"
   Delete "$INSTDIR\AnalogExif.exe"
 
   Delete "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk"
@@ -147,7 +150,7 @@ Function ShowSetupDetails
     Abort
   ${EndIf}
 
-  ${NSD_CreateLabel} 0 0 100% 25u "This program will install ${PRODUCT_NAME} version ${PRODUCT_VERSION}.$\r$\n$\nRelease notes"
+  ${NSD_CreateLabel} 0 0 100% 25u "This program will install ${PRODUCT_NAME} version ${PRODUCT_VERSION}.$\r$\n$\nRelease notes (please refer to CHANGES file for details)"
 
   ${NSD_CreateTextMultiline} 0 25u 100% 80% "Version ${PRODUCT_VERSION}, ${PRODUCT_DATE}$\r$\n$\r$\n${PRODUCT_NOTES}"
   Pop $ReleaseNotes

@@ -1,0 +1,15 @@
+Changes from 0.0.1 (build 3)
+* Fix incorrect floating point conversion under gcc for APEX aperture metadata,
+  e.g. Maximum aperture (bug 3035568)
+* Fix incorrect behaviour when Escape key was pressed in dialogs (bug 3034869)
+* Add DNG, Photoshop PSD, JPEG2000 edit support and camera raw read support
+  (CR2, NEF, PEF, ARW, RW2, SR2, ORF, RAF, MRW)
+* Allow multi-selection in the metadata editor (to clear tags)
+* Reload metadata and deselect equipment after preferences, equipment library
+  or other modification dialogs were invoked.
+* Ask to save changes for all cases when equipment or metadata may be applied
+* Fix crash when selected equipment edited in the equipment (bug 3036087)
+
+Changes from 0.0.1 (build 2)
+* Install default equipment library to the user folder (fixes disabled
+  equipment edit on Vista and Windows7)
