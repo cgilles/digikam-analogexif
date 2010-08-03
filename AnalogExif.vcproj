@@ -3262,6 +3262,10 @@
 			</FileConfiguration>
 		</File>
 		<File
+			RelativePath=".\CHANGES"
+			>
+		</File>
+		<File
 			RelativePath=".\COPYING"
 			DeploymentContent="true"
 			>
@@ -3275,7 +3279,7 @@
 				<Tool
 					Name="VCCustomBuildTool"
 					Description="Updating version information"
-					CommandLine="parseVersions.vbs $(PlatformName)"
+					CommandLine="parseVersions.vbs $(PlatformName)&#x0D;&#x0A;"
 					AdditionalDependencies=""
 					Outputs="version.xml;AnalogExif.nsh"
 				/>
