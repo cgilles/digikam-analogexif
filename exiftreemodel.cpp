@@ -339,7 +339,10 @@ QVariant ExifTreeModel::getItemValue(const QVariant& itemValue, const QString& i
 		}
 	case ExifItem::TagDateTime:
 		{
-			return QDateTime::fromString(itemValue.toString(), "yyyy:MM:dd HH:mm:ss");
+			if(role == Qt::DisplayRole)
+			{
+				return itemValue.toDateTime().toString(Qt::DefaultLocaleShortDate);
+			}
 		}
 		break;
 	default:
