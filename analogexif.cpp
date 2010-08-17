@@ -38,6 +38,10 @@
 #include <QTimer>
 #include <QImageReader>
 
+#ifdef Q_WS_WIN
+#include <windows.h>
+#endif
+
 const QUrl AnalogExif::helpUrl("http://analogexif.sourceforge.net/help/");
 
 AnalogExif::AnalogExif(QWidget *parent, Qt::WFlags flags)
@@ -1334,6 +1338,18 @@ void AnalogExif::on_actionNew_library_triggered(bool)
 				QCoreApplication::exit(-1);
 			}
 		}
+
+		gearList->reload();
+		filmsList->reload();
+		developersList->reload();
+		authorsList->reload();
+
+		exifTreeModel->repopulate();
+
+		// setup tree
+		setupTreeView();
+
+		ui.gearView->expandAll();
 	}
 }
 
@@ -1430,6 +1446,25 @@ QString AnalogExif::createLibrary(QWidget* parent, QString dir)
 			QMessageBox::critical(this, tr("Library create error"), tr("Unable to create new library ")+QDir::toNativeSeparators(newDb));
 			return QString();
 		}
+
+		// fix file access
+#ifdef Q_WS_WIN
+		// use file attributes under Win32
+		if(!SetFileAttributes((LPCTSTR)newDb.toStdWString().c_str(), FILE_ATTRIBUTE_NORMAL))
+		{
+			QMessageBox::critical(this, tr("Library create error"), tr("Unable to create new library ")+QDir::toNativeSeparators(newDb));
+			return QString();
+		}
+#else
+		// fix access permissions anywhere else
+		Permissions filePermissions = QFile::permissions(newDb);
+
+		if(!QFile::setPermissions(newDb, filePermissions | QFile::WriteOther))
+		{
+			QMessageBox::critical(this, tr("Library create error"), tr("Unable to create new library ")+QDir::toNativeSeparators(newDb));
+			return QString();
+		}
+#endif
 	}
 
 	return newDb;
