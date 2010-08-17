@@ -240,6 +240,9 @@ int EditGearTreeModel::createNewGear(int copyId, int parentId, int gearType, QSt
 {
 	QSqlQuery query, subquery;
 
+	// start inner transaction
+	query.exec("SAVEPOINT InsertGear");
+
 	if(copyId == -1)
 	{
 		// insert new row
@@ -256,7 +259,16 @@ int EditGearTreeModel::createNewGear(int copyId, int parentId, int gearType, QSt
 
 	// check validity
 	if(!query.lastInsertId().isValid())
+	{
+		query.exec("ROLLBACK TO InsertGear");
 		return -1;
+	}
+
+	if(query.lastError().isValid())
+	{
+		query.exec("ROLLBACK TO InsertGear");
+		return -1;
+	}
 
 	int newId = query.lastInsertId().toInt();
 
@@ -265,11 +277,23 @@ int EditGearTreeModel::createNewGear(int copyId, int parentId, int gearType, QSt
 	{
 		// insert properties from template
 		query.exec(QString("INSERT INTO UserGearProperties(GearId, TagId, OrderBy) SELECT %1, TagId, OrderBy FROM GearTemplate WHERE GearType = %2").arg(newId).arg(gearType));
+
+		if(query.lastError().isValid())
+		{
+			query.exec("ROLLBACK TO InsertGear");
+			return -1;
+		}
 	}
 	else
 	{
 		// copy properties
 		query.exec(QString("INSERT INTO UserGearProperties(GearId, TagId, TagValue, OrderBy) SELECT %1, TagId, TagValue, OrderBy FROM UserGearProperties WHERE GearId = %2").arg(newId).arg(copyId));
+
+		if(query.lastError().isValid())
+		{
+			query.exec("ROLLBACK TO InsertGear");
+			return -1;
+		}
 
 		// copy children
 		if(gearType == 0)
@@ -277,17 +301,27 @@ int EditGearTreeModel::createNewGear(int copyId, int parentId, int gearType, QSt
 			subquery.exec(QString("SELECT id, GearType FROM UserGearItems WHERE ParentId = %1 ORDER BY OrderBy").arg(copyId));
 			while(subquery.next())
 			{
-				createNewGear(subquery.value(0).toInt(), newId, subquery.value(1).toInt(), "", -1);
+				if(createNewGear(subquery.value(0).toInt(), newId, subquery.value(1).toInt(), "", -1) == -1)
+				{
+					query.exec("ROLLBACK TO InsertGear");
+					return -1;
+				}
 			}
 		}
 	}
 
+	// "commit" inner transaction
+	query.exec("RELEASE InsertGear");
+
 	return newId;
 }
 
-void EditGearTreeModel::deleteGear(int gearId, int gearType)
+bool EditGearTreeModel::deleteGear(int gearId, int gearType)
 {
 	QSqlQuery query;
+
+	// start inner transaction
+	query.exec("SAVEPOINT DeleteGear");
 
 	// delete children
 	if(gearType == 0)
@@ -303,8 +337,25 @@ void EditGearTreeModel::deleteGear(int gearId, int gearType)
 	// delete properties
 	query.exec(QString("DELETE FROM UserGearProperties WHERE GearId = %1").arg(gearId));
 
+	if(query.lastError().isValid())
+	{
+		query.exec("ROLLBACK TO DeleteGear");
+		return false;
+	}
+
 	// delete gear
 	query.exec(QString("DELETE FROM UserGearItems WHERE id = %1").arg(gearId));
+
+	if(query.lastError().isValid())
+	{
+		query.exec("ROLLBACK TO DeleteGear");
+		return false;
+	}
+
+	// "commit" transaction
+	query.exec("RELEASE DeleteGear");
+
+	return true;
 }
 
 bool EditGearTreeModel::setData(const QModelIndex& index, const QVariant& value, int role)

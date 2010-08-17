@@ -285,6 +285,13 @@ void EditGear::on_actionAdd_new_camera_body_triggered(bool)
 	// add new camera body
 	int newId = gearList->createNewGear(-1, -1, 0, tr("New camera body"), gearList->invisibleRootItem()->rowCount());
 
+	if(newId == -1)
+	{
+		// error
+		QMessageBox::critical(this, tr("Error creating new camera body"), tr("Unable to create a new camera body.\nPlease check that equipment library file is writeable and retry the operation."));
+		return;
+	}
+
 	QModelIndex newIdx = gearList->reload(newId);
 	ui.gearView->expandAll();
 	metadataList->reload(newId);
@@ -307,6 +314,13 @@ void EditGear::on_actionAdd_new_camera_lens_triggered(bool)
 
 	int newId = gearList->createNewGear(-1, parentId, 1, tr("New camera lens"), orderBy);
 
+	if(newId == -1)
+	{
+		// error
+		QMessageBox::critical(this, tr("Error creating new lens"), tr("Unable to create new lens.\nPlease check that equipment library file is writeable and retry the operation."));
+		return;
+	}
+
 	QModelIndex newIdx = gearList->reload(newId);
 	ui.gearView->expandAll();
 	metadataList->reload(newId);
@@ -321,6 +335,13 @@ void EditGear::on_actionAdd_new_film_triggered(bool)
 	// add new film
 	int newId = filmList->createNewGear(-1, -1, 2, tr("New film"), filmList->invisibleRootItem()->rowCount());
 
+	if(newId == -1)
+	{
+		// error
+		QMessageBox::critical(this, tr("Error creating new film"), tr("Unable to create a new film.\nPlease check that equipment library file is writeable and retry the operation."));
+		return;
+	}
+
 	QModelIndex newIdx = filmList->reload(newId);
 	metadataList->reload(newId);
 	setDirty();
@@ -334,6 +355,13 @@ void EditGear::on_actionAdd_new_developer_triggered(bool)
 	// add new film
 	int newId = filmList->createNewGear(-1, -1, 3, tr("New developer"), developerList->invisibleRootItem()->rowCount());
 
+	if(newId == -1)
+	{
+		// error
+		QMessageBox::critical(this, tr("Error creating new developer"), tr("Unable to create a new developer.\nPlease check that equipment library file is writeable and retry the operation."));
+		return;
+	}
+
 	QModelIndex newIdx = developerList->reload(newId);
 	metadataList->reload(newId);
 	setDirty();
@@ -346,6 +374,13 @@ void EditGear::on_actionAdd_new_author_triggered(bool)
 {
 	// add new film
 	int newId = authorList->createNewGear(-1, -1, 4, tr("New author"), authorList->invisibleRootItem()->rowCount());
+
+	if(newId == -1)
+	{
+		// error
+		QMessageBox::critical(this, tr("Error creating new author"), tr("Unable to create a new author.\nPlease check that equipment library file is writeable and retry the operation."));
+		return;
+	}
 
 	QModelIndex newIdx = authorList->reload(newId);
 	metadataList->reload(newId);
@@ -392,6 +427,8 @@ void EditGear::on_actionDuplicate_triggered(bool)
 		return;
 
 
+	int newId = -1;
+
     foreach(QModelIndex index, selectedItems)
 	{
 		switch(gearType)
@@ -406,19 +443,26 @@ void EditGear::on_actionDuplicate_triggered(bool)
 					orderBy = gearList->itemFromIndex(index.parent())->rowCount();
 					parentId =index.parent().data(EditGearTreeModel::GetGearIdRole).toInt();
 				}
-				gearList->createNewGear(index.data(EditGearTreeModel::GetGearIdRole).toInt(), parentId, index.data(EditGearTreeModel::GetGearTypeRole).toInt(), tr("Copy of "), orderBy);
+				newId = gearList->createNewGear(index.data(EditGearTreeModel::GetGearIdRole).toInt(), parentId, index.data(EditGearTreeModel::GetGearTypeRole).toInt(), tr("Copy of "), orderBy);
 			}
 			break;
 		case 2:
-			filmList->createNewGear(index.data(EditGearTreeModel::GetGearIdRole).toInt(), -1, index.data(EditGearTreeModel::GetGearTypeRole).toInt(), tr("Copy of "), filmList->invisibleRootItem()->rowCount());
+			newId = filmList->createNewGear(index.data(EditGearTreeModel::GetGearIdRole).toInt(), -1, index.data(EditGearTreeModel::GetGearTypeRole).toInt(), tr("Copy of "), filmList->invisibleRootItem()->rowCount());
 			break;
 		case 3:
-			filmList->createNewGear(index.data(EditGearTreeModel::GetGearIdRole).toInt(), -1, index.data(EditGearTreeModel::GetGearTypeRole).toInt(), tr("Copy of "), developerList->invisibleRootItem()->rowCount());
+			newId = filmList->createNewGear(index.data(EditGearTreeModel::GetGearIdRole).toInt(), -1, index.data(EditGearTreeModel::GetGearTypeRole).toInt(), tr("Copy of "), developerList->invisibleRootItem()->rowCount());
 			break;
 		case 4:
-			filmList->createNewGear(index.data(EditGearTreeModel::GetGearIdRole).toInt(), -1, index.data(EditGearTreeModel::GetGearTypeRole).toInt(), tr("Copy of "), authorList->invisibleRootItem()->rowCount());
+			newId = filmList->createNewGear(index.data(EditGearTreeModel::GetGearIdRole).toInt(), -1, index.data(EditGearTreeModel::GetGearTypeRole).toInt(), tr("Copy of "), authorList->invisibleRootItem()->rowCount());
 			break;
 		}
+	}
+
+	if(newId == -1)
+	{
+		// error
+		QMessageBox::critical(this, tr("Error duplicating equipment"), tr("Unable to duplicate equipment.\nPlease check that equipment library file is writeable and retry the operation."));
+		return;
 	}
 
 	treemodel->reload();
@@ -488,8 +532,24 @@ void EditGear::on_actionDelete_triggered(bool)
 
 	if(result == QMessageBox::Yes)
 	{
+		bool deleted;
 	    foreach(QModelIndex index, selectedItems) {
-			treemodel->deleteGear(index.data(EditGearTreeModel::GetGearIdRole).toInt(), index.data(EditGearTreeModel::GetGearTypeRole).toInt());
+			if(!treemodel->deleteGear(index.data(EditGearTreeModel::GetGearIdRole).toInt(), index.data(EditGearTreeModel::GetGearTypeRole).toInt()))
+			{
+				// error
+				QMessageBox::critical(this, tr("Error deleting equipment"), tr("Unable to delete equipment.\nPlease check that equipment library file is writeable and retry the operation."));
+				if(deleted)
+				{
+					// something was deleted - need to update view
+					break;
+				}
+				else
+				{
+					return;
+				}
+			}
+			// at least one operation was successful
+			deleted = true;
 		}
 
 		treemodel->reload();

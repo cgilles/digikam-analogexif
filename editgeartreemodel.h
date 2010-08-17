@@ -56,7 +56,7 @@ public:
 	int createNewGear(int copyId, int parentId, int gearType, QString prefix = "", int orderBy = 0);
 
 	// delete specified gear
-	void deleteGear(int gearId, int gearType);
+	bool deleteGear(int gearId, int gearType);
 
 private:
 	int gearType;
