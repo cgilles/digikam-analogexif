@@ -1,3 +1,12 @@
+Changes from 0.0.3 (build 4)
+* Moved to Exiv2 0.20 (see http://www.exiv2.org/changelog.html for list
+  of the related updates)
+* Fix TIFF file truncation (bug 3040425)
+* Fix incorrect display of date and time metadata (bug 3042261)
+* Show messages on database errors
+* Fix new equipment library read-only state (bug 3042259)
+* Arrow keys in multiple values dialog are no longer move current item
+
 Changes from 0.0.1 (build 3)
 * Fix incorrect floating point conversion under gcc for APEX aperture metadata,
   e.g. Maximum aperture (bug 3035568)
