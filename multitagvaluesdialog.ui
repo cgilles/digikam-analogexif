@@ -192,16 +192,10 @@
    <property name="text">
     <string>Move up</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+Up</string>
-   </property>
   </action>
   <action name="actionMove_down">
    <property name="text">
     <string>Move down</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Down</string>
    </property>
   </action>
  </widget>
