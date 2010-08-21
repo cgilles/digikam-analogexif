@@ -1457,9 +1457,9 @@ QString AnalogExif::createLibrary(QWidget* parent, QString dir)
 		}
 #else
 		// fix access permissions anywhere else
-		Permissions filePermissions = QFile::permissions(newDb);
+		QFile::Permissions filePermissions = QFile::permissions(newDb);
 
-		if(!QFile::setPermissions(newDb, filePermissions | QFile::WriteOther))
+		if(!QFile::setPermissions(newDb, filePermissions | QFile::WriteOwner))
 		{
 			QMessageBox::critical(this, tr("Library create error"), tr("Unable to create new library ")+QDir::toNativeSeparators(newDb));
 			return QString();
