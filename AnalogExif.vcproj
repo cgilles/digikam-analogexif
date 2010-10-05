@@ -43,7 +43,7 @@
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="1"
 				WholeProgramOptimization="true"
-				AdditionalIncludeDirectories=".;&quot;$(QTDIR)\include&quot;;&quot;.\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\qtmain&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtGui&quot;;&quot;$(QTDIR)\include\QtSql&quot;;&quot;.\exiv2-0.19\msvc\include&quot;;&quot;$(QTDIR)\include\QtNetwork&quot;;&quot;.\expat-2.0.1\lib&quot;"
+				AdditionalIncludeDirectories=".;&quot;$(QTDIR)\include&quot;;&quot;.\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\qtmain&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtGui&quot;;&quot;$(QTDIR)\include\QtSql&quot;;&quot;.\exiv2-0.20\msvc\include&quot;;&quot;$(QTDIR)\include\QtNetwork&quot;;&quot;.\expat-2.0.1\lib&quot;"
 				PreprocessorDefinitions="UNICODE,WIN32,QT_LARGEFILE_SUPPORT,QT_THREAD_SUPPORT,QT_NO_DEBUG,NDEBUG,QT_CORE_LIB,QT_GUI_LIB,QT_SQL_LIB;QT_NETWORK_LIB"
 				RuntimeLibrary="0"
 				TreatWChar_tAsBuiltInType="false"
@@ -67,7 +67,7 @@
 				ShowProgress="0"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="0"
-				AdditionalLibraryDirectories="&quot;$(QTDIR)\plugins\sqldrivers&quot;;&quot;$(QTDIR)\plugins\imageformats&quot;;&quot;$(QTDIR)\lib&quot;;&quot;.\exiv2-0.19\msvc\bin\$(ConfigurationName)&quot;;&quot;.\exiv2-0.19\msvc\xmpsdk\$(ConfigurationName)&quot;;&quot;.\expat-2.0.1\win32\bin\$(ConfigurationName)&quot;;&quot;.\zlib-1.2.3\projects\visualc6\Win32_LIB_$(ConfigurationName)&quot;"
+				AdditionalLibraryDirectories="&quot;$(QTDIR)\plugins\sqldrivers&quot;;&quot;$(QTDIR)\plugins\imageformats&quot;;&quot;$(QTDIR)\lib&quot;;&quot;.\exiv2-0.20\msvc\bin\$(ConfigurationName)&quot;;&quot;.\exiv2-0.20\msvc\xmpsdk\$(ConfigurationName)&quot;;&quot;.\expat-2.0.1\win32\bin\$(ConfigurationName)&quot;;&quot;.\zlib-1.2.3\projects\visualc6\Win32_LIB_$(ConfigurationName)&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="false"
 				SubSystem="2"
@@ -320,7 +320,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\aboutdialog.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\aboutdialog.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -346,7 +346,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\analogexif.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\analogexif.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -372,7 +372,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\analogexifoptions.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\analogexifoptions.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -398,7 +398,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\asciistringdialog.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\asciistringdialog.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -424,7 +424,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\asciitextdialog.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\asciitextdialog.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -450,7 +450,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\autofillexpnum.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\autofillexpnum.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -476,7 +476,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\checkedgeartreeview.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\checkedgeartreeview.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -502,7 +502,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\copymetadatadialog.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\copymetadatadialog.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -528,7 +528,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\dirsortfilterproxymodel.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\dirsortfilterproxymodel.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -554,7 +554,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\editgear.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\editgear.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -580,7 +580,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\editgeartagsmodel.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\editgeartagsmodel.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -606,7 +606,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\editgeartreemodel.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\editgeartreemodel.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -632,7 +632,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\edittagselectvalues.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\edittagselectvalues.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -658,7 +658,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\emptyspinbox.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\emptyspinbox.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -710,7 +710,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\exifitemdelegate.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\exifitemdelegate.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -736,7 +736,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\exiftreemodel.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\exiftreemodel.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -788,7 +788,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\gearlistmodel.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\gearlistmodel.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -814,7 +814,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\gearlistview.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\gearlistview.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -840,7 +840,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\geartableview.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\geartableview.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -866,7 +866,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\geartreemodel.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\geartreemodel.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -892,7 +892,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\geartreeview.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\geartreeview.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -919,7 +919,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\metadatatagcompleter.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\metadatatagcompleter.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -946,7 +946,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\multitagvaluesdialog.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\multitagvaluesdialog.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -972,7 +972,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\onlineversionchecker.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\onlineversionchecker.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -998,7 +998,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\optgeartemplatemodel.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\optgeartemplatemodel.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -1024,7 +1024,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\optgeartemplateview.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\optgeartemplateview.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -1050,7 +1050,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\progressdialog.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\progressdialog.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -1128,7 +1128,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\tagnameeditdialog.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\tagnameeditdialog.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -1154,7 +1154,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\tagnameitemdelegate.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\tagnameitemdelegate.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -1180,7 +1180,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\tagselectvalsitemdelegate.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\tagselectvalsitemdelegate.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -1206,7 +1206,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.19\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\tagtypeitemdelegate.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB  -I&quot;.&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;.\$(ConfigurationName)&quot; -I&quot;$(QTDIR)\include\qtmain&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\include\QtGui&quot; -I&quot;$(QTDIR)\include\QtSql&quot; -I&quot;.\exiv2-0.20\msvc\include&quot; -I&quot;$(QTDIR)\include\QtNetwork&quot; -I&quot;.\expat-2.0.1\lib&quot; &quot;.\tagtypeitemdelegate.h&quot; -o &quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
