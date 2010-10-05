@@ -1,3 +1,7 @@
+Changes from 0.0.4 (build 5 Windows)
+* Windows version was properly moved to Exiv2 0.20, which should fix
+  previous 0.0.3 issues.
+
 Changes from 0.0.3 (build 4)
 * Moved to Exiv2 0.20 (see http://www.exiv2.org/changelog.html for list
   of the related updates)

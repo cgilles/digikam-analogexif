@@ -83,12 +83,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "C-41 Bytes"
             VALUE "FileDescription", "AnalogExif"
-            VALUE "FileVersion", "0.0.4"
+            VALUE "FileVersion", "0.0.4.1"
             VALUE "InternalName", "AnalogExif"
             VALUE "LegalCopyright", "Copyright © 2010 C-41 bytes"
             VALUE "OriginalFilename", "AnalogExif"
             VALUE "ProductName", "AnalogExif"
-            VALUE "ProductVersion", "0.0.4"
+            VALUE "ProductVersion", "0.0.4.1"
         END
     END
     BLOCK "VarFileInfo"
