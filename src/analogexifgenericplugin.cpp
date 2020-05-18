@@ -52,7 +52,7 @@ AnalogExifPlugin::~AnalogExifPlugin()
 
 QString AnalogExifPlugin::name() const
 {
-    return QString::fromUtf8("Hello World");
+    return QString::fromUtf8("Analog Exif");
 }
 
 QString AnalogExifPlugin::iid() const
@@ -67,17 +67,25 @@ QIcon AnalogExifPlugin::icon() const
 
 QString AnalogExifPlugin::description() const
 {
-    return QString::fromUtf8("A demo Hello World plugin");
+    return QString::fromUtf8("A plugin to edit metadata for the scanned films and DSC-captured digital images.");
 }
 
 QString AnalogExifPlugin::details() const
 {
-    return QString::fromUtf8("<p>This Generic plugin is a simple demo.</p>");
+    return QString::fromUtf8("<p>This plugin can perform modification of the most EXIF, IPTC and XMP metadata tags for JPEG and TIFF files, "
+                             "can store metadata properties of the film cameras and other analog equipment, "
+                             "can manage custom XMP schema for film camera properties (e.g. film name, exposure number etc.) "
+                             "and user-defined XMP schema for extra flexibility, "
+                             "perform batch operations (copy metadata from another file, auto-fill exposure number), "
+                             "and permit customizable set of the supported metadata tags.</p>");
 }
 
 QList<DPluginAuthor> AnalogExifPlugin::authors() const
 {
     return QList<DPluginAuthor>()
+            << DPluginAuthor(QString::fromUtf8("C-41 Bytes"),
+                             QString::fromUtf8("contact at c41bytes dot com"),
+                             QString::fromUtf8("(C) 2010"))
             << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
                              QString::fromUtf8("caulier dot gilles at gmail dot com"),
                              QString::fromUtf8("(C) 2020"))
