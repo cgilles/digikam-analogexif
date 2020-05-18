@@ -23,6 +23,7 @@
 #include <QSqlQuery>
 #include <QStringList>
 #include <QVariantList>
+#include <QVariant>
 #include <QDateTime>
 #include <QFont>
 #include <QBrush>
@@ -968,14 +969,14 @@ QVariant ExifTreeModel::readTagValue(QString tagNames, int& srcTagType, ExifItem
 				{
 					std::string str = tagValue.toString();
 					// do not convert real numbers to Exif fraction format
-					return ExifItem::valueFromString(QString::fromUtf8(str.data(), str.length()), type, false, false);
+					return ExifItem::valueFromString(QString::fromUtf8(str.data(), str.length()), type, false, ExifItem::None);
 				}
 				break;
 			case Exiv2::langAlt:	// LangAlt gets the first value only
 				{
 					std::string str = tagValue.toString();
 					// do not convert real numbers to Exif fraction format
-					return ExifItem::valueFromString(QString::fromUtf8(str.data(), str.length()).remove(QRegExp("^lang=\".*\" ")), type, false, false);
+					return ExifItem::valueFromString(QString::fromUtf8(str.data(), str.length()).remove(QRegExp("^lang=\".*\" ")), type, false, ExifItem::None);
 				}
 				break;
 			case Exiv2::xmpAlt:
@@ -1135,7 +1136,8 @@ void ExifTreeModel::setValues(QVariantList& values)
 void ExifTreeModel::repopulate()
 {
 	rootItem->removeChildren();
-	reset();
+    beginResetModel();
+    endResetModel();
 	populateModel();
 	// reload information if file was open
 	/*if(editable)
@@ -1319,7 +1321,7 @@ void ExifTreeModel::writeTagValue(QString tagNames, const QVariant& tagValue, Ex
 				Exiv2::Value::AutoPtr v;
 
 				// set tag data according to its Exiv2 type
-				Exiv2::TypeId typId = Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId());
+				Exiv2::TypeId typId = Exiv2::Exifdatum(exifKey).typeId();
 
 				// special care for multivalue tag
 				if(tagFlags.testFlag(ExifItem::Multi))
@@ -1613,7 +1615,7 @@ QString ExifTreeModel::ExifUtfToQString(const Exiv2::Value& exifData, bool check
 		if(strcmp((char*)data, "UNICODE") == 0)
 			qstr = QString::fromUtf16((const ushort*)(data + 8), (strSize - 8) / 2);
 		else 
-			qstr = QString::fromAscii((char*)(data + 8), strSize - 8);
+			qstr = QString::fromLatin1((char*)(data + 8), strSize - 8);
 	}
 	else
 	{
@@ -2072,7 +2074,7 @@ bool ExifTreeModel::mergeMetadata(QString filename, QVariantList metadata)
 
 		foreach(QVariant value, metadata)
 		{
-			ExifItem* item = static_cast<ExifItem*>(qVariantValue<void*>(value));
+			ExifItem* item = static_cast<ExifItem*>(value.value<void*>());
 
 			if(!item)
 				return false;
@@ -2105,9 +2107,9 @@ bool ExifTreeModel::mergeMetadata(QString filename, QVariantList metadata)
 
 		delete image.release();
 	}
-	catch (Exiv2::Error& err)
+    catch(Exiv2::AnyError& exc)
 	{
-		qDebug("AnalogExif: ExifTreeModel::setExposureNumber(%s) Exiv2 exception (%d) = %s", filename.toStdString().c_str(), err.code(), err.what());
+		qDebug("AnalogExif: ExifTreeModel::setExposureNumber(%s) Exiv2 exception (%d) = %s", filename.toStdString().c_str(), exc.code(), exc.what());
 		return false;
 	}
 
