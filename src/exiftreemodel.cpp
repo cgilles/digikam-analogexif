@@ -73,8 +73,10 @@ ExifTreeModel::~ExifTreeModel()
 // clear data
 void ExifTreeModel::clear(bool deleteObj)
 {
-	modelReset();
-	rootItem->reset();
+    beginResetModel();
+    endResetModel();
+
+    rootItem->reset();
 
 	curExifData.clear();
 	curIptcData.clear();

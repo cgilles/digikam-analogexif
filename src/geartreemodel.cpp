@@ -66,7 +66,8 @@ void GearTreeModel::reload()
 void GearTreeModel::setApplicable(bool applicable)
 {
     isApplicable = applicable;
-    modelReset();
+    beginResetModel();
+    endResetModel();
 }
 
 // get number of camera bodies (gearType = 0)

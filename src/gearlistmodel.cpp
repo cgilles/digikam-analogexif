@@ -34,7 +34,8 @@ void GearListModel::reload()
 void GearListModel::setApplicable(bool applicable)
 {
     isApplicable = applicable;
-    modelReset();
+    beginResetModel();
+    endResetModel();
 }
 
 int GearListModel::rowCount(const QModelIndex &index) const

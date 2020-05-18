@@ -67,9 +67,9 @@ set(analogexif_generic_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/analogexifgenericplugin.
                             ${CMAKE_CURRENT_SOURCE_DIR}/asciitextdialog.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/asciistringdialog.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/tagnameeditdialog.cpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/exiftreemodel.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/gearlistmodel.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/geartreemodel.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/exiftreemodel.cpp
 )
 
 qt5_wrap_ui(analogexif_generic_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/analogexifoptions.ui
