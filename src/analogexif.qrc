@@ -19,9 +19,9 @@
         <file>icons/arrow_undo.png</file>
     </qresource>
     <qresource prefix="/database">
-        <file>NewDb.ael</file>
+        <file>res/NewDb.ael</file>
     </qresource>
     <qresource prefix="/">
-        <file>not-supported.txt</file>
+        <file>res/not-supported.txt</file>
     </qresource>
 </RCC>
