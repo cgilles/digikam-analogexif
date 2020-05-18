@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Releases>
+  <Release>
+    <OS>Win32</OS>
+    <Version>0.0.4.1</Version>
+    <ReleaseNumber>6</ReleaseNumber>
+    <Date>29.09.2010</Date>
+    <Notes>New from 0.0.4 release:
+* Due to incorrect release, Exiv2 0.20 was not properly
+  linked to 0.0.4 Windows version. This release fixes all
+  previous Exiv2 0.19 bugs mentioned in 0.0.4 (TIFF file
+  corruption etc.)
+
+New from 0.0.3 release:
+* Move to Exiv2 0.20
+   - fixed several critical issues (TIFF file truncation)
+   - updated makernotes and TIFF tags
+   - support for new XMP schemas
+   - see http://www.exiv2.org/changelog.html for more details
+* Bugfixes
+   - new library is now working properly
+   - time and date metadata tags are now displayed properly
+   - UI fixes
+
+New from 0.0.2 release:
+* Support for DNG, Photoshop PSD, JPEG2000 and camera raw formats
+* Fixed several crashes
+* Bugfixes
+
+New from 0.0.1 release:
+* Fix default library access error on Vista/7
+
+New from 0.0beta release:
+* Change online version check behaviour
+* UI redesign
+* New AnalogExif tags: Lens serial number, Film grain and Develop process
+* Online help
+* Bugfixes
+</Notes>
+  </Release>
+  <Release>
+    <OS>Mac</OS>
+    <Version>0.0.4</Version>
+    <ReleaseNumber>5</ReleaseNumber>
+    <Date>21.08.2010</Date>
+    <Notes>New from 0.0.3 release (see CHANGES for complete list):
+* Move to Exiv2 0.20
+   - fixed several critical issues (TIFF file truncation)
+   - updated makernotes and TIFF tags
+   - support for new XMP schemas
+   - see http://www.exiv2.org/changelog.html for more details
+* Bugfixes
+   - new library is now working properly
+   - time and date metadata tags are now displayed properly
+   - UI fixes
+      
+New from 0.0.1 release:
+* Support for DNG, Photoshop PSD, JPEG2000 and camera raw formats
+* Handle APEX aperture tags properly (e.g. Maximum aperture)
+* Fixed several crashes
+* Bugfixes
+
+New from 0.0beta release:
+* Change online version check behaviour
+* UI redesign
+* New AnalogExif tags: Lens serial number, Film grain and Develop process
+* Online help
+* Bugfixes
+</Notes>
+  </Release>
+</Releases>

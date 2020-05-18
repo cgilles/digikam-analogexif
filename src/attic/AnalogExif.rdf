@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE rdf:RDF [
+  <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#">
+]>
+<rdf:RDF
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xml:base="http://analogexif.sourceforge.net/ns#">
+
+  <rdf:Property rdf:about="http://analogexif.sourceforge.net/ns#ExposureNumber">
+    <rdfs:label xml:lang="en-US">Exposure number</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Exposure number of the photo</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://analogexif.sourceforge.net/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://analogexif.sourceforge.net/ns#LensSerialNumber">
+    <rdfs:label xml:lang="en-US">Lens serial number</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Lens serial number</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://analogexif.sourceforge.net/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://analogexif.sourceforge.net/ns#RollId">
+    <rdfs:label xml:lang="en-US">Roll id</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Film roll identifier</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://analogexif.sourceforge.net/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://analogexif.sourceforge.net/ns#FilmMaker">
+    <rdfs:label xml:lang="en-US">Film maker</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Film manufacturer</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://analogexif.sourceforge.net/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://analogexif.sourceforge.net/ns#FilmAlias">
+    <rdfs:label xml:lang="en-US">Film alias</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Film name alias</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://analogexif.sourceforge.net/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://analogexif.sourceforge.net/ns#FilmGrain">
+    <rdfs:label xml:lang="en-US">Film grain</rdfs:label>
+    <rdfs:comment xml:lang="en-US">RMS value of the film</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://analogexif.sourceforge.net/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://analogexif.sourceforge.net/ns#Film">
+    <rdfs:label xml:lang="en-US">Film</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Film name (including manufacturer company)</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://analogexif.sourceforge.net/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://analogexif.sourceforge.net/ns#FilmType">
+    <rdfs:label xml:lang="en-US">Film type</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Film type (e.g 120, 135 etc.)</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://analogexif.sourceforge.net/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://analogexif.sourceforge.net/ns#DevelopProcess">
+    <rdfs:label xml:lang="en-US">Development process</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Used development process</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://analogexif.sourceforge.net/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://analogexif.sourceforge.net/ns#Developer">
+    <rdfs:label xml:lang="en-US">Developer</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Used photographic developer</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://analogexif.sourceforge.net/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://analogexif.sourceforge.net/ns#DeveloperMaker">
+    <rdfs:label xml:lang="en-US">Developer manufacturer</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Photographic developer manufacturer</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://analogexif.sourceforge.net/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://analogexif.sourceforge.net/ns#DeveloperDilution">
+    <rdfs:label xml:lang="en-US">Developer dilution</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Used dilution of the photographic developer</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://analogexif.sourceforge.net/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://analogexif.sourceforge.net/ns#DevelopTime">
+    <rdfs:label xml:lang="en-US">Developing time</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Developing time</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://analogexif.sourceforge.net/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://analogexif.sourceforge.net/ns#Lab">
+    <rdfs:label xml:lang="en-US">Lab</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Used photographic laboratory</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://analogexif.sourceforge.net/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://analogexif.sourceforge.net/ns#LabAddress">
+    <rdfs:label xml:lang="en-US">Lab address</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Photographic laboratory address</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://analogexif.sourceforge.net/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://analogexif.sourceforge.net/ns#Filter">
+    <rdfs:label xml:lang="en-US">Filter</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Used filter(s)</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://analogexif.sourceforge.net/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://analogexif.sourceforge.net/ns#ScannerMaker">
+    <rdfs:label xml:lang="en-US">Scanner manufacturer</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Manufacturer of the scanner used to digitize the film</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://analogexif.sourceforge.net/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://analogexif.sourceforge.net/ns#Scanner">
+    <rdfs:label xml:lang="en-US">Scanner</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Scanner used to digitize the film</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://analogexif.sourceforge.net/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://analogexif.sourceforge.net/ns#ScannerSoftware">
+    <rdfs:label xml:lang="en-US">Scanner software</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Scanner software used to digitize the film</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://analogexif.sourceforge.net/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+</rdf:RDF>

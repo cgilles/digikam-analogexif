@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE rdf:RDF [
+  <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#">
+]>
+<rdf:RDF
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xml:base="http://sites.google.com/site/c41bytes/analogexif/ns">
+
+  <rdf:Property rdf:about="http://sites.google.com/site/c41bytes/analogexif/ns#ExposureNumber">
+    <rdfs:label xml:lang="en-US">Exposure number</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Exposure number of the photo</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://sites.google.com/site/c41bytes/analogexif/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://sites.google.com/site/c41bytes/analogexif/ns#RollId">
+    <rdfs:label xml:lang="en-US">Roll id</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Film roll identifier</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://sites.google.com/site/c41bytes/analogexif/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://sites.google.com/site/c41bytes/analogexif/ns#FilmMaker">
+    <rdfs:label xml:lang="en-US">FilmMaker</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Film maker company</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://sites.google.com/site/c41bytes/analogexif/ns#"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://sites.google.com/site/c41bytes/analogexif/ns#Film">
+    <rdfs:label xml:lang="en-US">Film</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Film name (including maker company)</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://sites.google.com/site/c41bytes/analogexif/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://sites.google.com/site/c41bytes/analogexif/ns#Developer">
+    <rdfs:label xml:lang="en-US">Developer</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Used photographic developer</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://sites.google.com/site/c41bytes/analogexif/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://sites.google.com/site/c41bytes/analogexif/ns#DeveloperMaker">
+    <rdfs:label xml:lang="en-US">Developer maker</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Photographic developer company</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://sites.google.com/site/c41bytes/analogexif/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://sites.google.com/site/c41bytes/analogexif/ns#DeveloperDilution">
+    <rdfs:label xml:lang="en-US">Developer dilution</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Used dilution of the photographic developer</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://sites.google.com/site/c41bytes/analogexif/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://sites.google.com/site/c41bytes/analogexif/ns#DevelopTime">
+    <rdfs:label xml:lang="en-US">Developing time</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Developing time</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://sites.google.com/site/c41bytes/analogexif/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://sites.google.com/site/c41bytes/analogexif/ns#DevelopDate">
+    <rdfs:label xml:lang="en-US">DevelopDate</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Date of the photo development</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://sites.google.com/site/c41bytes/analogexif/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://sites.google.com/site/c41bytes/analogexif/ns#Lab">
+    <rdfs:label xml:lang="en-US">Lab</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Used photographic laboratory</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://sites.google.com/site/c41bytes/analogexif/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://sites.google.com/site/c41bytes/analogexif/ns#LabAddress">
+    <rdfs:label xml:lang="en-US">Lab address</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Photographic laboratory address</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://sites.google.com/site/c41bytes/analogexif/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://sites.google.com/site/c41bytes/analogexif/ns#Filter">
+    <rdfs:label xml:lang="en-US">Filter</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Used filter</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://sites.google.com/site/c41bytes/analogexif/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://sites.google.com/site/c41bytes/analogexif/ns#ScannerMaker">
+    <rdfs:label xml:lang="en-US">Scanner maker</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Maker of the scanner used to digitize the film</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://sites.google.com/site/c41bytes/analogexif/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://sites.google.com/site/c41bytes/analogexif/ns#Scanner">
+    <rdfs:label xml:lang="en-US">Scanner</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Scanner used to digitize the film</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://sites.google.com/site/c41bytes/analogexif/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://sites.google.com/site/c41bytes/analogexif/ns#ScannerSoftware">
+    <rdfs:label xml:lang="en-US">Scanner software</rdfs:label>
+    <rdfs:comment xml:lang="en-US">Scanner software used to digitize the film</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="http://sites.google.com/site/c41bytes/analogexif/ns"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+
+</rdf:RDF>

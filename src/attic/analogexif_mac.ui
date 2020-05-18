@@ -72,8 +72,6 @@
          <widget class="QLineEdit" name="directoryLine">
           <property name="font">
            <font>
-            <family>Segoe UI</family>
-            <pointsize>9</pointsize>
             <kerning>true</kerning>
            </font>
           </property>
@@ -130,17 +128,25 @@ QTreeView::item:selected:!active{
            <bool>false</bool>
           </property>
           <attribute name="headerVisible">
-           <bool>false</bool>
+           <bool>true</bool>
           </attribute>
           <attribute name="headerVisible">
-           <bool>false</bool>
+           <bool>true</bool>
           </attribute>
          </widget>
         </item>
         <item>
          <widget class="QListView" name="fileView">
+          <property name="font">
+           <font>
+            <pointsize>13</pointsize>
+           </font>
+          </property>
           <property name="contextMenuPolicy">
            <enum>Qt::ActionsContextMenu</enum>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
           </property>
           <property name="showDropIndicator" stdset="0">
            <bool>false</bool>
@@ -216,7 +222,7 @@ QTreeView::item:selected:!active{
       <widget class="QGroupBox" name="groupBox_2">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-         <horstretch>75</horstretch>
+         <horstretch>100</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
@@ -428,6 +434,7 @@ QTreeView::item:selected:!active{
            <widget class="GearListView" name="filmView">
             <property name="font">
              <font>
+              <pointsize>13</pointsize>
               <kerning>true</kerning>
              </font>
             </property>
@@ -472,6 +479,7 @@ QListView::item:selected:!active{
            <widget class="GearListView" name="developerView">
             <property name="font">
              <font>
+              <pointsize>13</pointsize>
               <kerning>true</kerning>
              </font>
             </property>
@@ -504,6 +512,7 @@ QListView::item:selected:!active{
            <widget class="GearListView" name="authorView">
             <property name="font">
              <font>
+              <pointsize>13</pointsize>
               <kerning>true</kerning>
              </font>
             </property>
@@ -572,7 +581,7 @@ QListView::item:selected:!active{
      <x>0</x>
      <y>0</y>
      <width>909</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -892,7 +901,7 @@ QListView::item:selected:!active{
  </customwidgets>
  <tabstops>
   <tabstop>directoryLine</tabstop>
-  <tabstop>dirView</tabstop>
+  <tabstop>fileView</tabstop>
   <tabstop>applyChangesBtn</tabstop>
   <tabstop>revertBtn</tabstop>
   <tabstop>applyGearBtn</tabstop>

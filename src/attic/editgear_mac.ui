@@ -126,6 +126,7 @@ QTreeView::item:selected:!active{
           </property>
           <property name="font">
            <font>
+            <pointsize>13</pointsize>
             <kerning>true</kerning>
            </font>
           </property>
@@ -167,6 +168,7 @@ QListView::item:selected:!active{
          <widget class="GearListView" name="developerView">
           <property name="font">
            <font>
+            <pointsize>13</pointsize>
             <kerning>true</kerning>
            </font>
           </property>
@@ -196,6 +198,7 @@ QListView::item:selected:!active{
          <widget class="GearListView" name="authorView">
           <property name="font">
            <font>
+            <pointsize>13</pointsize>
             <kerning>true</kerning>
            </font>
           </property>

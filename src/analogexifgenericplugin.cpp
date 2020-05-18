@@ -62,7 +62,7 @@ QString AnalogExifPlugin::iid() const
 
 QIcon AnalogExifPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("digikam"));
+    return QIcon(QLatin1String(":/icons/analogexif.png"));
 }
 
 QString AnalogExifPlugin::description() const

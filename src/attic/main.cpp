@@ -17,27 +17,32 @@
     along with AnalogExif.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef TAGNAMEITEMDELEGATE_H
-#define TAGNAMEITEMDELEGATE_H
+#include "analogexif.h"
+#include <QtGui/QApplication>
 
-#include <QStyledItemDelegate>
+#ifdef Q_WS_WIN32
+#include <QtPlugin>
 
-class TagNameItemDelegate : public QStyledItemDelegate
+Q_IMPORT_PLUGIN(qjpeg)
+Q_IMPORT_PLUGIN(qsqlite)
+#endif
+
+int main(int argc, char *argv[])
 {
-	Q_OBJECT
+	QCoreApplication::setOrganizationName("C-41 Bytes");
+	QCoreApplication::setOrganizationDomain("c41bytes.com");
+	QCoreApplication::setApplicationName("AnalogExif");
 
-public:
-	TagNameItemDelegate(QObject *parent) : QStyledItemDelegate(parent) { }
+	QApplication a(argc, argv);
+	AnalogExif w;
 
-	virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
-		const QModelIndex &index) const;
+	// initialize and run main window
+	if(w.initialize())
+	{
+		w.show();
+		return a.exec();
+	}
 
-	virtual void setEditorData(QWidget *editor, const QModelIndex &index) const;
-	virtual void setModelData(QWidget *editor, QAbstractItemModel *model,
-		const QModelIndex &index) const;
-
-	virtual void updateEditorGeometry(QWidget *,
-		const QStyleOptionViewItem &, const QModelIndex &) const { }
-};
-
-#endif // TAGNAMEITEMDELEGATE_H
+	// error otherwise
+	return -1;
+}

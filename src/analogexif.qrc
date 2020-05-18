@@ -17,6 +17,7 @@
         <file>icons/film_go.png</file>
         <file>icons/film.png</file>
         <file>icons/arrow_undo.png</file>
+        <file>icons/analogexif.png</file>
     </qresource>
     <qresource prefix="/database">
         <file>res/NewDb.ael</file>
