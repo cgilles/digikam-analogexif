@@ -1,7 +1,7 @@
 /*
-	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+    Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
 
-	This file is part of AnalogExif.
+    This file is part of AnalogExif.
 
     AnalogExif is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,33 +22,33 @@
 
 bool DirSortFilterProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
-	QFileSystemModel* srcModel = dynamic_cast<QFileSystemModel*>(sourceModel());
+    QFileSystemModel* srcModel = dynamic_cast<QFileSystemModel*>(sourceModel());
 
-	if(!left.isValid() || !right.isValid())
-		return false;
+    if(!left.isValid() || !right.isValid())
+        return false;
 
-	// if compared to directory file is always less than
-	if(srcModel->isDir(left) && !srcModel->isDir(right))
-		return true;
+    // if compared to directory file is always less than
+    if(srcModel->isDir(left) && !srcModel->isDir(right))
+        return true;
 
-	if(!srcModel->isDir(left) && srcModel->isDir(right))
-		return false;
+    if(!srcModel->isDir(left) && srcModel->isDir(right))
+        return false;
 
-	// else compare by name
-	return QString::compare(srcModel->fileName(left), srcModel->fileName(right), Qt::CaseInsensitive) < 0;
+    // else compare by name
+    return QString::compare(srcModel->fileName(left), srcModel->fileName(right), Qt::CaseInsensitive) < 0;
 }
 
 QVariant DirSortFilterProxyModel::data(const QModelIndex& index, int role) const
 {
-	QFileSystemModel* srcModel = dynamic_cast<QFileSystemModel*>(sourceModel());
+    QFileSystemModel* srcModel = dynamic_cast<QFileSystemModel*>(sourceModel());
 
-	if(!index.isValid())
-		return QVariant();
+    if(!index.isValid())
+        return QVariant();
 
-	if(role == Qt::ToolTipRole)
-	{
-		return srcModel->fileName(index);
-	}
+    if(role == Qt::ToolTipRole)
+    {
+        return srcModel->fileName(index);
+    }
 
-	return QSortFilterProxyModel::data(index, role);
+    return QSortFilterProxyModel::data(index, role);
 }

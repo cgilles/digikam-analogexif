@@ -1,7 +1,7 @@
 /*
-	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+    Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
 
-	This file is part of AnalogExif.
+    This file is part of AnalogExif.
 
     AnalogExif is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,34 +21,34 @@
 
 QString MetadataTagCompleter::separator() const
 {
-	return sep;
+    return sep;
 }
 
 void MetadataTagCompleter::setSeparator(const QString &separator)
 {
-	sep = separator;
+    sep = separator;
 }
 
 QStringList MetadataTagCompleter::splitPath(const QString &path) const
 {
-	if (sep.isNull()) {
-		return QCompleter::splitPath(path);
-	}
+    if (sep.isNull()) {
+        return QCompleter::splitPath(path);
+    }
 
-	return path.split(sep);
+    return path.split(sep);
 }
 
 QString MetadataTagCompleter::pathFromIndex(const QModelIndex &index) const
 {
-	if (sep.isNull()) {
-		return QCompleter::pathFromIndex(index);
-	}
+    if (sep.isNull()) {
+        return QCompleter::pathFromIndex(index);
+    }
 
-	// navigate up and accumulate data
-	QStringList dataList;
-	for (QModelIndex i = index; i.isValid(); i = i.parent()) {
-		dataList.prepend(model()->data(i, completionRole()).toString());
-	}
+    // navigate up and accumulate data
+    QStringList dataList;
+    for (QModelIndex i = index; i.isValid(); i = i.parent()) {
+        dataList.prepend(model()->data(i, completionRole()).toString());
+    }
 
-	return dataList.join(sep);
+    return dataList.join(sep);
 }

@@ -1,7 +1,7 @@
 /*
-	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+    Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
 
-	This file is part of AnalogExif.
+    This file is part of AnalogExif.
 
     AnalogExif is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,40 +26,40 @@
 QWidget* TagTypeItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &,
         const QModelIndex &) const
 {
-	QComboBox* combo = new QComboBox(parent);
+    QComboBox* combo = new QComboBox(parent);
 
-	QStringList items;
+    QStringList items;
 
-	for(int i = ExifItem::TagString; i < ExifItem::TagTypeLast; i++)
-		items << ExifItem::typeName((ExifItem::TagType)i);
+    for(int i = ExifItem::TagString; i < ExifItem::TagTypeLast; i++)
+        items << ExifItem::typeName((ExifItem::TagType)i);
 
-	combo->addItems(items);
-	// combo->setFrame(false);
+    combo->addItems(items);
+    // combo->setFrame(false);
 
-	QFont f;
-	f.setBold(true);
-	combo->setFont(f);
+    QFont f;
+    f.setBold(true);
+    combo->setFont(f);
 
-	return combo;
+    return combo;
 }
 
 void TagTypeItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
-	QComboBox* combo = static_cast<QComboBox*>(editor);
+    QComboBox* combo = static_cast<QComboBox*>(editor);
 
-	combo->setCurrentIndex(index.data(Qt::EditRole).toInt());
+    combo->setCurrentIndex(index.data(Qt::EditRole).toInt());
 }
 
 void TagTypeItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
-	const QModelIndex &index) const
+    const QModelIndex &index) const
 {
-	QComboBox* combo = static_cast<QComboBox*>(editor);
+    QComboBox* combo = static_cast<QComboBox*>(editor);
 
-	model->setData(index, combo->currentIndex());
+    model->setData(index, combo->currentIndex());
 }
 
 void TagTypeItemDelegate::updateEditorGeometry(QWidget *editor,
         const QStyleOptionViewItem &option, const QModelIndex &) const
 {
-	editor->setGeometry(option.rect.adjusted(0, -2, 0, 2));
+    editor->setGeometry(option.rect.adjusted(0, -2, 0, 2));
 }

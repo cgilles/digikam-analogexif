@@ -1,7 +1,7 @@
 /*
-	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+    Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
 
-	This file is part of AnalogExif.
+    This file is part of AnalogExif.
 
     AnalogExif is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,18 +20,18 @@
 #include "progressdialog.h"
 
 ProgressDialog::ProgressDialog(QString windowTitle, QString labelText, QString buttonText, QWidget *parent, int min, int max)
-	: QDialog(parent), cancelled(false)
+    : QDialog(parent), cancelled(false)
 {
-	ui.setupUi(this);
+    ui.setupUi(this);
 
-	setWindowTitle(windowTitle);
-	ui.label->setText(labelText);
-	if(buttonText == "")
-		ui.cancelBtn->hide();
-	else
-		ui.cancelBtn->setText(buttonText);
+    setWindowTitle(windowTitle);
+    ui.label->setText(labelText);
+    if(buttonText == "")
+        ui.cancelBtn->hide();
+    else
+        ui.cancelBtn->setText(buttonText);
 
-	ui.progressBar->setRange(min, max);
+    ui.progressBar->setRange(min, max);
 
-	setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint);
+    setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint);
 }

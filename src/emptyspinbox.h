@@ -1,7 +1,7 @@
 /*
-	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+    Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
 
-	This file is part of AnalogExif.
+    This file is part of AnalogExif.
 
     AnalogExif is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,43 +26,43 @@
 
 class EmptyQSpinBox : public QSpinBox 
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
 
-	EmptyQSpinBox(QWidget* parent) : QSpinBox(parent) { }
+    EmptyQSpinBox(QWidget* parent) : QSpinBox(parent) { }
 
-	void fixup(QString & input) const
-	{
-		if(input != "")
-			QSpinBox::fixup(input);
-	}
+    void fixup(QString & input) const
+    {
+        if(input != "")
+            QSpinBox::fixup(input);
+    }
 
-	bool isEmpty() const
-	{
-		return (text() == "");
-	}
+    bool isEmpty() const
+    {
+        return (text() == "");
+    }
 
 };
 
 class EmptyQDoubleSpinBox : public QDoubleSpinBox 
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
 
-	EmptyQDoubleSpinBox(QWidget* parent) : QDoubleSpinBox(parent) { }
+    EmptyQDoubleSpinBox(QWidget* parent) : QDoubleSpinBox(parent) { }
 
-	void fixup(QString & input) const
-	{
-		if(input != "")
-			QDoubleSpinBox::fixup(input);
-	}
+    void fixup(QString & input) const
+    {
+        if(input != "")
+            QDoubleSpinBox::fixup(input);
+    }
 
-	bool isEmpty() const
-	{
-		return (text() == "");
-	}
+    bool isEmpty() const
+    {
+        return (text() == "");
+    }
 
 };
 

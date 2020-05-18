@@ -1,7 +1,7 @@
 /*
-	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+    Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
 
-	This file is part of AnalogExif.
+    This file is part of AnalogExif.
 
     AnalogExif is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,20 +29,20 @@ Q_IMPORT_PLUGIN(qsqlite)
 
 int main(int argc, char *argv[])
 {
-	QCoreApplication::setOrganizationName("C-41 Bytes");
-	QCoreApplication::setOrganizationDomain("c41bytes.com");
-	QCoreApplication::setApplicationName("AnalogExif");
+    QCoreApplication::setOrganizationName("C-41 Bytes");
+    QCoreApplication::setOrganizationDomain("c41bytes.com");
+    QCoreApplication::setApplicationName("AnalogExif");
 
-	QApplication a(argc, argv);
-	AnalogExif w;
+    QApplication a(argc, argv);
+    AnalogExif w;
 
-	// initialize and run main window
-	if(w.initialize())
-	{
-		w.show();
-		return a.exec();
-	}
+    // initialize and run main window
+    if(w.initialize())
+    {
+        w.show();
+        return a.exec();
+    }
 
-	// error otherwise
-	return -1;
+    // error otherwise
+    return -1;
 }

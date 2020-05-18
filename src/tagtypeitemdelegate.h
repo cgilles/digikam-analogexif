@@ -1,7 +1,7 @@
 /*
-	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+    Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
 
-	This file is part of AnalogExif.
+    This file is part of AnalogExif.
 
     AnalogExif is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,20 +24,20 @@
 
 class TagTypeItemDelegate : public QStyledItemDelegate
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	TagTypeItemDelegate(QObject *parent) : QStyledItemDelegate(parent) { }
+    TagTypeItemDelegate(QObject *parent) : QStyledItemDelegate(parent) { }
 
-	virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
-		const QModelIndex &index) const;
+    virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
+        const QModelIndex &index) const;
 
-	virtual void setEditorData(QWidget *editor, const QModelIndex &index) const;
-	virtual void setModelData(QWidget *editor, QAbstractItemModel *model,
-		const QModelIndex &index) const;
+    virtual void setEditorData(QWidget *editor, const QModelIndex &index) const;
+    virtual void setModelData(QWidget *editor, QAbstractItemModel *model,
+        const QModelIndex &index) const;
 
-	virtual void updateEditorGeometry(QWidget *editor,
-		const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    virtual void updateEditorGeometry(QWidget *editor,
+        const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
 
 #endif // TAGTYPEITEMDELEGATE_H

@@ -1,7 +1,7 @@
 /*
-	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+    Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
 
-	This file is part of AnalogExif.
+    This file is part of AnalogExif.
 
     AnalogExif is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,42 +30,42 @@
 
 class AsciiStringDialog : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	AsciiStringDialog(const QString& uValue, const QString& aValue, QWidget *parent = 0);
+    AsciiStringDialog(const QString& uValue, const QString& aValue, QWidget *parent = 0);
 
-	void setUnicodeValue(const QString& uValue)
-	{
-		unicodeValue = uValue;
-		ui.unicodeEdit->setText(unicodeValue);
-	}
+    void setUnicodeValue(const QString& uValue)
+    {
+        unicodeValue = uValue;
+        ui.unicodeEdit->setText(unicodeValue);
+    }
 
-	QString getUnicodeValue() const
-	{
-		return ui.unicodeEdit->text();
-	}
+    QString getUnicodeValue() const
+    {
+        return ui.unicodeEdit->text();
+    }
 
-	void setAsciiValue(const QString& aValue)
-	{
-		ui.asciiEdit->setText(aValue);
-	}
+    void setAsciiValue(const QString& aValue)
+    {
+        ui.asciiEdit->setText(aValue);
+    }
 
-	QString getAsciiValue() const
-	{
-		return ui.asciiEdit->text();
-	}
+    QString getAsciiValue() const
+    {
+        return ui.asciiEdit->text();
+    }
 
 private:
-	QString unicodeValue;
-	Ui::AsciiStringDialogClass ui;
+    QString unicodeValue;
+    Ui::AsciiStringDialogClass ui;
 
 public slots:
-	virtual void reject();
+    virtual void reject();
 
 private slots:
-	void on_copyBtn_clicked();
-	void on_buttonBox_clicked(QAbstractButton* button);
+    void on_copyBtn_clicked();
+    void on_buttonBox_clicked(QAbstractButton* button);
 };
 
 #endif // ASCIISTRINGDIALOG_H

@@ -1,7 +1,7 @@
 /*
-	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+    Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
 
-	This file is part of AnalogExif.
+    This file is part of AnalogExif.
 
     AnalogExif is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,58 +25,58 @@
 
 class OptGearTemplateView : public QTableView
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	OptGearTemplateView(QWidget *parent): QTableView(parent) { }
+    OptGearTemplateView(QWidget *parent): QTableView(parent) { }
 
 public slots:
-	virtual void edit(const QModelIndex& index)
-	{
-		if(index.isValid() && (index.column() == 1))
-		{
-			curEditIndex = index;
-		}
+    virtual void edit(const QModelIndex& index)
+    {
+        if(index.isValid() && (index.column() == 1))
+        {
+            curEditIndex = index;
+        }
 
-		QTableView::edit(index);
-	}
+        QTableView::edit(index);
+    }
 
-	void onCloseEditor(QWidget*, QAbstractItemDelegate::EndEditHint)
-	{
-		curEditIndex = QModelIndex();
-	}
+    void onCloseEditor(QWidget*, QAbstractItemDelegate::EndEditHint)
+    {
+        curEditIndex = QModelIndex();
+    }
 
 protected:
-	QModelIndex curEditIndex;
+    QModelIndex curEditIndex;
 
-	virtual bool edit(const QModelIndex& index, EditTrigger trigger, QEvent* event)
-	{
-		if(index.isValid() && (index.column() == 1))
-		{
-			curEditIndex = index;
-		}
+    virtual bool edit(const QModelIndex& index, EditTrigger trigger, QEvent* event)
+    {
+        if(index.isValid() && (index.column() == 1))
+        {
+            curEditIndex = index;
+        }
 
-		return QTableView::edit(index, trigger, event);
-	}
+        return QTableView::edit(index, trigger, event);
+    }
 
-	virtual void mousePressEvent(QMouseEvent * event)
-	{
-		QModelIndex clickIndex = indexAt(event->pos());
+    virtual void mousePressEvent(QMouseEvent * event)
+    {
+        QModelIndex clickIndex = indexAt(event->pos());
 
-		QTableView::mousePressEvent(event);		
+        QTableView::mousePressEvent(event);     
 
-		if((curEditIndex != QModelIndex()) && (clickIndex != curEditIndex))
-		{
-			QWidget* widgeditor = indexWidget(curEditIndex);
-			if(widgeditor)
-			{
-				commitData(widgeditor);
-				closeEditor(widgeditor, QAbstractItemDelegate::NoHint);
-			}
-			curEditIndex = QModelIndex();
-		}
-	}
-	
+        if((curEditIndex != QModelIndex()) && (clickIndex != curEditIndex))
+        {
+            QWidget* widgeditor = indexWidget(curEditIndex);
+            if(widgeditor)
+            {
+                commitData(widgeditor);
+                closeEditor(widgeditor, QAbstractItemDelegate::NoHint);
+            }
+            curEditIndex = QModelIndex();
+        }
+    }
+    
 };
 
 #endif // OPTGEARTEMPLATEVIEW_H

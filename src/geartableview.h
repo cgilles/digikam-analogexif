@@ -1,7 +1,7 @@
 /*
-	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+    Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
 
-	This file is part of AnalogExif.
+    This file is part of AnalogExif.
 
     AnalogExif is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,31 +26,31 @@
 
 class GearTableView : public QTableView
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	GearTableView(QWidget *parent) : QTableView(parent) { }
+    GearTableView(QWidget *parent) : QTableView(parent) { }
 
 signals:
-	void focused();
+    void focused();
 
 protected:
-	virtual void mousePressEvent(QMouseEvent * event)
-	{
-		QModelIndex clickIndex = indexAt(event->pos());
+    virtual void mousePressEvent(QMouseEvent * event)
+    {
+        QModelIndex clickIndex = indexAt(event->pos());
 
-		QTableView::mousePressEvent(event);		
+        QTableView::mousePressEvent(event);     
 
-		if(!clickIndex.isValid() && (event->button() != Qt::RightButton))
-			clearSelection();
-	}
+        if(!clickIndex.isValid() && (event->button() != Qt::RightButton))
+            clearSelection();
+    }
 
-	virtual void focusInEvent(QFocusEvent * event)
-	{
-		QTableView::focusInEvent(event);
+    virtual void focusInEvent(QFocusEvent * event)
+    {
+        QTableView::focusInEvent(event);
 
-		emit focused();
-	}
+        emit focused();
+    }
 };
 
 #endif // GEARTABLEVIEW_H

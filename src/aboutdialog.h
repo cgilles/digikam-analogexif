@@ -1,7 +1,7 @@
 /*
-	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+    Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
 
-	This file is part of AnalogExif.
+    This file is part of AnalogExif.
 
     AnalogExif is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,13 +30,13 @@
 
 class AboutDialog : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	AboutDialog(QWidget *parent = 0);
+    AboutDialog(QWidget *parent = 0);
 
 private:
-	Ui::AboutDialogClass ui;
+    Ui::AboutDialogClass ui;
 };
 
 #endif // ABOUTDIALOG_H

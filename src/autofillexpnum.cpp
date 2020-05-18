@@ -1,7 +1,7 @@
 /*
-	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+    Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
 
-	This file is part of AnalogExif.
+    This file is part of AnalogExif.
 
     AnalogExif is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,83 +20,83 @@
 #include "autofillexpnum.h"
 
 AutoFillExpNum::AutoFillExpNum(QStringList& fileList, QWidget *parent)
-	: QDialog(parent)
+    : QDialog(parent)
 {
-	ui.setupUi(this);
+    ui.setupUi(this);
 
-	files = new QStandardItemModel(this);
+    files = new QStandardItemModel(this);
 
-	QStringList header;
-	header << tr("Filename") << tr("Exposure");
-	files->setHorizontalHeaderLabels(header);
+    QStringList header;
+    header << tr("Filename") << tr("Exposure");
+    files->setHorizontalHeaderLabels(header);
 
-	//ui.fileExposures->setColumnWidth(1, 50);
+    //ui.fileExposures->setColumnWidth(1, 50);
 
-	int nExposures = 1;
+    int nExposures = 1;
 
-	foreach(QString fileName, fileList)
-	{
-		QList<QStandardItem*> row;
+    foreach(QString fileName, fileList)
+    {
+        QList<QStandardItem*> row;
 
-		QStandardItem* fileNameItem = new QStandardItem(fileName);
-		fileNameItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        QStandardItem* fileNameItem = new QStandardItem(fileName);
+        fileNameItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
-		QStandardItem* fileNumItem = new QStandardItem(QString::number(nExposures));
-		fileNumItem->setData(nExposures, Qt::EditRole);
+        QStandardItem* fileNumItem = new QStandardItem(QString::number(nExposures));
+        fileNumItem->setData(nExposures, Qt::EditRole);
 
-		row << fileNameItem << fileNumItem;
+        row << fileNameItem << fileNumItem;
 
-		files->appendRow(row);
+        files->appendRow(row);
 
-		nExposures++;
-	}
+        nExposures++;
+    }
 
-	ui.fileExposures->setModel(files);
-	ui.fileExposures->setColumnWidth(0, 175);
+    ui.fileExposures->setModel(files);
+    ui.fileExposures->setColumnWidth(0, 175);
 
-	connect(files, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(files_dataChanged(const QModelIndex&, const QModelIndex&)));
+    connect(files, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(files_dataChanged(const QModelIndex&, const QModelIndex&)));
 
-	setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint);
+    setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint);
 }
 
 AutoFillExpNum::~AutoFillExpNum()
 {
-	delete files;
+    delete files;
 }
 
 QVariantList AutoFillExpNum::resultFileNames()
 {
-	QVariantList values;
+    QVariantList values;
 
-	for(int i = 0; i < files->rowCount(); i++)
-	{
-		values << files->item(i, 0)->text() << files->item(i, 1)->data(Qt::EditRole).toInt();
-	}
+    for(int i = 0; i < files->rowCount(); i++)
+    {
+        values << files->item(i, 0)->text() << files->item(i, 1)->data(Qt::EditRole).toInt();
+    }
 
-	return values;
+    return values;
 }
 
 // model data changed - resort the list
 void AutoFillExpNum::files_dataChanged(const QModelIndex&, const QModelIndex&)
 {
-	files->sort(1);
+    files->sort(1);
 }
 
 // increased first exposure number - correct other values
 void AutoFillExpNum::on_firstExpNum_valueChanged(int i)
 {
-	QList<QStandardItem*> children;
-	
-	for(int j = 0; j < files->rowCount(); j++)
-	{
-		children << files->item(j, 1);
-	}
+    QList<QStandardItem*> children;
+    
+    for(int j = 0; j < files->rowCount(); j++)
+    {
+        children << files->item(j, 1);
+    }
 
-	int numExp = i;
+    int numExp = i;
 
-	foreach(QStandardItem* item, children)
-	{
-		item->setData(numExp, Qt::EditRole);
-		numExp++;
-	}
+    foreach(QStandardItem* item, children)
+    {
+        item->setData(numExp, Qt::EditRole);
+        numExp++;
+    }
 }

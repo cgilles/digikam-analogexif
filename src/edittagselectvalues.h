@@ -1,7 +1,7 @@
 /*
-	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+    Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
 
-	This file is part of AnalogExif.
+    This file is part of AnalogExif.
 
     AnalogExif is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,64 +29,64 @@
 
 class TagSelectValsItemModel : public QStandardItemModel
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	TagSelectValsItemModel(QObject *parent, ExifItem::TagType type, ExifItem::TagFlags flags) :
-		QStandardItemModel(parent), dataType(type), tagFlags(flags & ~ExifItem::Choice) { }
+    TagSelectValsItemModel(QObject *parent, ExifItem::TagType type, ExifItem::TagFlags flags) :
+        QStandardItemModel(parent), dataType(type), tagFlags(flags & ~ExifItem::Choice) { }
 
-	// get/set values
-	void setValues(const QString& data);
-	QString getValues() const;
+    // get/set values
+    void setValues(const QString& data);
+    QString getValues() const;
 
-	// add row
-	void addRow(const QModelIndex &item);
+    // add row
+    void addRow(const QModelIndex &item);
 
-	QVariant data(const QModelIndex &item, int role) const;
-	bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+    QVariant data(const QModelIndex &item, int role) const;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
 private:
-	// data type
-	ExifItem::TagType dataType;
-	// tag flags
-	ExifItem::TagFlags tagFlags;
+    // data type
+    ExifItem::TagType dataType;
+    // tag flags
+    ExifItem::TagFlags tagFlags;
 };
 
 class EditTagSelectValues : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	EditTagSelectValues(ExifItem::TagType dataType, ExifItem::TagFlags flags, QWidget *parent = 0);
-	~EditTagSelectValues();
+    EditTagSelectValues(ExifItem::TagType dataType, ExifItem::TagFlags flags, QWidget *parent = 0);
+    ~EditTagSelectValues();
 
-	// set/get data
-	void setValues(QString valueList);
-	QString getValues() const;
+    // set/get data
+    void setValues(QString valueList);
+    QString getValues() const;
 
 private:
-	Ui::EditTagSelectValuesClass ui;
+    Ui::EditTagSelectValuesClass ui;
 
-	// item selection values model
-	TagSelectValsItemModel* selValsModel;
-	// Exif item edit delegate
-	ExifItemDelegate* exifItemDelegate;
+    // item selection values model
+    TagSelectValsItemModel* selValsModel;
+    // Exif item edit delegate
+    ExifItemDelegate* exifItemDelegate;
 
 private slots:
-	// ok button
-	void on_buttonBox_accepted();
-	// cancel button
-	void on_buttonBox_rejected();
-	// add button
-	void on_actionAdd_new_row_triggered();
-	// delete button
-	void on_actionDelete_current_row_triggered();
-	// up button
-	void on_actionMove_row_up_triggered();
-	// down button
-	void on_actionMove_row_down_triggered();
-	// selection changed
-	void list_selectionChanged(const QItemSelection&, const QItemSelection&);
+    // ok button
+    void on_buttonBox_accepted();
+    // cancel button
+    void on_buttonBox_rejected();
+    // add button
+    void on_actionAdd_new_row_triggered();
+    // delete button
+    void on_actionDelete_current_row_triggered();
+    // up button
+    void on_actionMove_row_up_triggered();
+    // down button
+    void on_actionMove_row_down_triggered();
+    // selection changed
+    void list_selectionChanged(const QItemSelection&, const QItemSelection&);
 };
 
 #endif // EDITTAGSELECTVALUES_H

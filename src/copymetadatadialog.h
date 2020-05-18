@@ -1,7 +1,7 @@
 /*
-	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+    Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
 
-	This file is part of AnalogExif.
+    This file is part of AnalogExif.
 
     AnalogExif is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,45 +28,45 @@
 
 class CheckedExifTreeModel : public ExifTreeModel
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	CheckedExifTreeModel(QObject *parent) : ExifTreeModel(parent) { }
+    CheckedExifTreeModel(QObject *parent) : ExifTreeModel(parent) { }
 
-	// modify item flags to include checkboxes
-	virtual Qt::ItemFlags flags(const QModelIndex &index) const;
-	virtual QVariant data(const QModelIndex &index, int role) const;
-	virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+    // modify item flags to include checkboxes
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+    virtual QVariant data(const QModelIndex &index, int role) const;
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
-	// change the checked state of all items
-	void setChecked(int checked);
+    // change the checked state of all items
+    void setChecked(int checked);
 
-	// get checked tag values
-	QVariantList getCheckedTags();
+    // get checked tag values
+    QVariantList getCheckedTags();
 };
 
 class CopyMetadataDialog : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	CopyMetadataDialog(const QString& fname, QWidget *parent = 0);
-	~CopyMetadataDialog();
+    CopyMetadataDialog(const QString& fname, QWidget *parent = 0);
+    ~CopyMetadataDialog();
 
-	QVariantList getMetadata();
+    QVariantList getMetadata();
 
 private:
-	Ui::CopyMetadataDialogClass ui;
+    Ui::CopyMetadataDialogClass ui;
 
-	CheckedExifTreeModel* exifTreeModel;
-	ExifItemDelegate* exifItemDelegate;
+    CheckedExifTreeModel* exifTreeModel;
+    ExifItemDelegate* exifItemDelegate;
 
 private slots:
-	// on edit double click
-	void on_metadataView_doubleClicked(const QModelIndex &);
-	// check/uncheck/check not null checkbox state change
-	void on_checkUncheckCBox_stateChanged(int state);
-	void exifTreeModel_dataChanged(const QModelIndex&, const QModelIndex&);
+    // on edit double click
+    void on_metadataView_doubleClicked(const QModelIndex &);
+    // check/uncheck/check not null checkbox state change
+    void on_checkUncheckCBox_stateChanged(int state);
+    void exifTreeModel_dataChanged(const QModelIndex&, const QModelIndex&);
 };
 
 #endif // COPYMETADATADIALOG_H

@@ -1,7 +1,7 @@
 /*
-	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+    Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
 
-	This file is part of AnalogExif.
+    This file is part of AnalogExif.
 
     AnalogExif is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,25 +24,25 @@
 
 class CheckedGearTreeView : public QTreeView
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	CheckedGearTreeView(QWidget *parent) : QTreeView(parent) { }
+    CheckedGearTreeView(QWidget *parent) : QTreeView(parent) { }
 
 public slots:
-	void edit(const QModelIndex& index)
-	{
-		QTreeView::edit(index);
-	}
+    void edit(const QModelIndex& index)
+    {
+        QTreeView::edit(index);
+    }
 
 protected:
-	virtual bool edit(const QModelIndex &index, EditTrigger trigger, QEvent *event)
-	{
-		if(index.isValid() && (index.column() == 1) && (trigger == QAbstractItemView::EditKeyPressed))
-			emit doubleClicked(index);
+    virtual bool edit(const QModelIndex &index, EditTrigger trigger, QEvent *event)
+    {
+        if(index.isValid() && (index.column() == 1) && (trigger == QAbstractItemView::EditKeyPressed))
+            emit doubleClicked(index);
 
-		return QTreeView::edit(index, trigger, event);
-	}
+        return QTreeView::edit(index, trigger, event);
+    }
 };
 
 #endif // CHECKEDGEARTREEVIEW_H

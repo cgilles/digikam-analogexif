@@ -1,7 +1,7 @@
 /*
-	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+    Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
 
-	This file is part of AnalogExif.
+    This file is part of AnalogExif.
 
     AnalogExif is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,64 +28,64 @@
 
 class TagNameEditDialog : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	TagNameEditDialog(QWidget *parent = 0, const QString& tagNames = "", ExifItem::TagFlags flags = ExifItem::None, const QString& altTags = "");
-	
-	ExifItem::TagFlags getFlags() const;
-	QString getTagNames() const
-	{
-		return ui.tagNamesEdit->text();
-	}
+    TagNameEditDialog(QWidget *parent = 0, const QString& tagNames = "", ExifItem::TagFlags flags = ExifItem::None, const QString& altTags = "");
+    
+    ExifItem::TagFlags getFlags() const;
+    QString getTagNames() const
+    {
+        return ui.tagNamesEdit->text();
+    }
 
-	QString getAltTagNames() const
-	{
-		if(altTagNames && altTagNames->isEnabled())
-		{
-			return altTagNames->text();
-		}
+    QString getAltTagNames() const
+    {
+        if(altTagNames && altTagNames->isEnabled())
+        {
+            return altTagNames->text();
+        }
 
-		return QString();
-	}
+        return QString();
+    }
 
-	void setFlags(ExifItem::TagFlags flags);
-	void setTagNames(const QString& tagNames)
-	{
-		ui.tagNamesEdit->setText(tagNames);
-	}
+    void setFlags(ExifItem::TagFlags flags);
+    void setTagNames(const QString& tagNames)
+    {
+        ui.tagNamesEdit->setText(tagNames);
+    }
 
-	void setAltTagNames(const QString& altTags)
-	{
-		if(altTagNames)
-		{
-			altTagNames->setText(altTags);
-		}
-	}
+    void setAltTagNames(const QString& altTags)
+    {
+        if(altTagNames)
+        {
+            altTagNames->setText(altTags);
+        }
+    }
 
-	void setFlagEnabled(ExifItem::TagFlag flag, bool isEnabled);
+    void setFlagEnabled(ExifItem::TagFlag flag, bool isEnabled);
 
-	void disableEdit();
+    void disableEdit();
 
 private:
-	Ui::TagNameEditDialogClass ui;
+    Ui::TagNameEditDialogClass ui;
 
-	QLineEdit* altTagNames;
-	QCheckBox* altTagCbox;
-	QCheckBox* asciiTagCbox;
+    QLineEdit* altTagNames;
+    QCheckBox* altTagCbox;
+    QCheckBox* asciiTagCbox;
 
 public slots:
-	virtual void reject();
+    virtual void reject();
 
 private slots:
-	// ok/cancel
-	void on_buttonBox_accepted();
-	void on_buttonBox_rejected();
+    // ok/cancel
+    void on_buttonBox_accepted();
+    void on_buttonBox_rejected();
 
-	// alt tag enabled/disabled
-	void altTag_stateChanged(int);
-	// ascii enabled/disabled
-	void ascii_stateChanged(int);
+    // alt tag enabled/disabled
+    void altTag_stateChanged(int);
+    // ascii enabled/disabled
+    void ascii_stateChanged(int);
 };
 
 #endif // TAGNAMEEDITDIALOG_H

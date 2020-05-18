@@ -1,7 +1,7 @@
 /*
-	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+    Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
 
-	This file is part of AnalogExif.
+    This file is part of AnalogExif.
 
     AnalogExif is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,9 +26,9 @@
 
 void GearListModel::reload()
 {
-	// invalidate selected index
-	selected = QModelIndex();
-	setQuery(QString("SELECT GearName, id FROM UserGearItems WHERE GearType=%1 ORDER BY OrderBy").arg(gearType));
+    // invalidate selected index
+    selected = QModelIndex();
+    setQuery(QString("SELECT GearName, id FROM UserGearItems WHERE GearType=%1 ORDER BY OrderBy").arg(gearType));
 }
 
 void GearListModel::setApplicable(bool applicable)
@@ -40,86 +40,86 @@ void GearListModel::setApplicable(bool applicable)
 
 int GearListModel::rowCount(const QModelIndex &index) const
 {
-	int i = QSqlQueryModel::rowCount(index.parent());
+    int i = QSqlQueryModel::rowCount(index.parent());
 
-	if(i == 0)
-		return 1;
-	else
-		return i;
+    if(i == 0)
+        return 1;
+    else
+        return i;
 }
 
 QVariant GearListModel::data(const QModelIndex &item, int role) const
 {
-	if(!item.isValid())
-		return QVariant();
+    if(!item.isValid())
+        return QVariant();
 
-	int nRows = QSqlQueryModel::rowCount(item.parent());
+    int nRows = QSqlQueryModel::rowCount(item.parent());
 
-	if(nRows == 0)
-	{
-		// return string for the empty list
-		if(role == Qt::DisplayRole)
-			return emptyMessage;
-		if(role == Qt::FontRole)
-		{
-			QFont f;
-			f.setStyle(QFont::StyleItalic);
+    if(nRows == 0)
+    {
+        // return string for the empty list
+        if(role == Qt::DisplayRole)
+            return emptyMessage;
+        if(role == Qt::FontRole)
+        {
+            QFont f;
+            f.setStyle(QFont::StyleItalic);
 
-			return f;
-		}
-	}
+            return f;
+        }
+    }
 
-	if(selected.isValid() && (item == selected) && (role == Qt::FontRole))
-	{
-		QFont f;
-		f.setBold(true);
+    if(selected.isValid() && (item == selected) && (role == Qt::FontRole))
+    {
+        QFont f;
+        f.setBold(true);
 
-		return f;
-	}
+        return f;
+    }
 
-	if(role == GetExifData)
-	{
-		if(!item.isValid() || !isApplicable)
-			return QVariant();
+    if(role == GetExifData)
+    {
+        if(!item.isValid() || !isApplicable)
+            return QVariant();
 
-		QSqlRecord curRecord = record(item.row());
-		if(!curRecord.isEmpty())
-		{
-			QSqlQuery query(QString("SELECT b.TagName, a.TagValue, b.Flags, a.AltValue FROM UserGearProperties a, MetaTags b WHERE a.GearId = %1 AND b.id = a.TagId").arg(curRecord.value(1).toInt()));
-			QVariantList properties;
+        QSqlRecord curRecord = record(item.row());
+        if(!curRecord.isEmpty())
+        {
+            QSqlQuery query(QString("SELECT b.TagName, a.TagValue, b.Flags, a.AltValue FROM UserGearProperties a, MetaTags b WHERE a.GearId = %1 AND b.id = a.TagId").arg(curRecord.value(1).toInt()));
+            QVariantList properties;
 
-		    while (query.next()) {
-				QVariant value = query.value(1);
+            while (query.next()) {
+                QVariant value = query.value(1);
 
-				if(((ExifItem::TagFlags)query.value(2).toInt()).testFlag(ExifItem::AsciiAlt))
-				{
-					QVariantList varList;
-					varList << value << query.value(3);
+                if(((ExifItem::TagFlags)query.value(2).toInt()).testFlag(ExifItem::AsciiAlt))
+                {
+                    QVariantList varList;
+                    varList << value << query.value(3);
 
-					value = varList;
-				}
+                    value = varList;
+                }
 
-				properties << query.value(0) << value;
-			}
+                properties << query.value(0) << value;
+            }
 
-			if(properties.count())
-				return properties;
-		}
+            if(properties.count())
+                return properties;
+        }
 
-		return QVariant();
-	}
+        return QVariant();
+    }
 
-	return QSqlQueryModel::data(item, role);
+    return QSqlQueryModel::data(item, role);
 }
 
 Qt::ItemFlags GearListModel::flags(const QModelIndex &index) const
 {
-	int nRows = QSqlQueryModel::rowCount(index.parent());
+    int nRows = QSqlQueryModel::rowCount(index.parent());
 
-	if((nRows == 0) || !isApplicable)
-	{
-		return 0;
-	}
+    if((nRows == 0) || !isApplicable)
+    {
+        return 0;
+    }
 
-	return QSqlQueryModel::flags(index);
+    return QSqlQueryModel::flags(index);
 }

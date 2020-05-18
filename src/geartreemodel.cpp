@@ -1,7 +1,7 @@
 /*
-	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+    Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
 
-	This file is part of AnalogExif.
+    This file is part of AnalogExif.
 
     AnalogExif is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,41 +26,41 @@
 
 void GearTreeModel::reload()
 {
-	clear();
+    clear();
 
-	// invalidate selected index as of bug 3036087
-	selected = QModelIndex();
+    // invalidate selected index as of bug 3036087
+    selected = QModelIndex();
 
-	if(bodyCount() == 0)
-	{
-		QFont f;
-		f.setStyle(QFont::StyleItalic);
+    if(bodyCount() == 0)
+    {
+        QFont f;
+        f.setStyle(QFont::StyleItalic);
 
-		QStandardItem* item = new QStandardItem(tr("No equipment defined"));
-		item->setFont(f);
+        QStandardItem* item = new QStandardItem(tr("No equipment defined"));
+        item->setFont(f);
 
-		insertRow(0, item);
-	}
-	else
-	{
-		QSqlQuery query("SELECT GearName, id FROM UserGearItems WHERE GearType = 0 ORDER BY OrderBy");
-		while(query.next())
-		{
-			QStandardItem* parent = new QStandardItem(query.value(0).toString());
-			parent->setData(query.value(1).toInt());
-			invisibleRootItem()->appendRow(parent);
+        insertRow(0, item);
+    }
+    else
+    {
+        QSqlQuery query("SELECT GearName, id FROM UserGearItems WHERE GearType = 0 ORDER BY OrderBy");
+        while(query.next())
+        {
+            QStandardItem* parent = new QStandardItem(query.value(0).toString());
+            parent->setData(query.value(1).toInt());
+            invisibleRootItem()->appendRow(parent);
 
-			QSqlQuery subQuery(QString("SELECT GearName, id FROM UserGearItems WHERE GearType = 1 AND ParentId = %1 ORDER BY OrderBy").arg(query.value(1).toInt()));
+            QSqlQuery subQuery(QString("SELECT GearName, id FROM UserGearItems WHERE GearType = 1 AND ParentId = %1 ORDER BY OrderBy").arg(query.value(1).toInt()));
 
-			while(subQuery.next())
-			{
-				QStandardItem* child = new QStandardItem(subQuery.value(0).toString());
-				child->setData(subQuery.value(1).toInt());
+            while(subQuery.next())
+            {
+                QStandardItem* child = new QStandardItem(subQuery.value(0).toString());
+                child->setData(subQuery.value(1).toInt());
 
-				parent->appendRow(child);
-			}
-		}
-	}
+                parent->appendRow(child);
+            }
+        }
+    }
 }
 
 void GearTreeModel::setApplicable(bool applicable)
@@ -73,94 +73,94 @@ void GearTreeModel::setApplicable(bool applicable)
 // get number of camera bodies (gearType = 0)
 int GearTreeModel::bodyCount() const
 {
-	QSqlQuery query("SELECT COUNT(*) FROM UserGearItems WHERE GearType=0");
-	query.first();
+    QSqlQuery query("SELECT COUNT(*) FROM UserGearItems WHERE GearType=0");
+    query.first();
 
-	if(query.isValid())
-		return query.value(0).toInt();
-	else
-		return 0;
+    if(query.isValid())
+        return query.value(0).toInt();
+    else
+        return 0;
 }
 
 QVariant GearTreeModel::data(const QModelIndex &item, int role) const
 {
-	if(!item.isValid())
-		return QVariant();
+    if(!item.isValid())
+        return QVariant();
 
-	if((selected.isValid()) && ((item == selected) || (item == selected.parent())) && (role == Qt::FontRole))
-	{
-		QFont f;
-		f.setBold(true);
+    if((selected.isValid()) && ((item == selected) || (item == selected.parent())) && (role == Qt::FontRole))
+    {
+        QFont f;
+        f.setBold(true);
 
-		return f;
-	}
+        return f;
+    }
 
-	if(role == GetExifData)
-	{
-		if(!item.isValid() || !isApplicable)
-			return QVariant();
+    if(role == GetExifData)
+    {
+        if(!item.isValid() || !isApplicable)
+            return QVariant();
 
-		QVariantList properties;
+        QVariantList properties;
 
-		QStandardItem* selItem = itemFromIndex(item.parent());
+        QStandardItem* selItem = itemFromIndex(item.parent());
 
-		// get item parent properties
-		if(selItem)
-		{
-			QSqlQuery query(QString("SELECT b.TagName, a.TagValue, b.Flags, a.AltValue FROM UserGearProperties a, MetaTags b WHERE a.GearId = %1 AND b.id = a.TagId").arg(selItem->data().toInt()));
+        // get item parent properties
+        if(selItem)
+        {
+            QSqlQuery query(QString("SELECT b.TagName, a.TagValue, b.Flags, a.AltValue FROM UserGearProperties a, MetaTags b WHERE a.GearId = %1 AND b.id = a.TagId").arg(selItem->data().toInt()));
 
-		    while (query.next()) {
-				QVariant value = query.value(1);
+            while (query.next()) {
+                QVariant value = query.value(1);
 
-				if(((ExifItem::TagFlags)query.value(2).toInt()).testFlag(ExifItem::AsciiAlt))
-				{
-					QVariantList varList;
-					varList << value << query.value(3);
+                if(((ExifItem::TagFlags)query.value(2).toInt()).testFlag(ExifItem::AsciiAlt))
+                {
+                    QVariantList varList;
+                    varList << value << query.value(3);
 
-					value = varList;
-				}
+                    value = varList;
+                }
 
-				properties << query.value(0) << value;
-			}
-		}
+                properties << query.value(0) << value;
+            }
+        }
 
-		selItem = itemFromIndex(item);
+        selItem = itemFromIndex(item);
 
-		// get item properties
-		if(selItem)
-		{
-			QSqlQuery query(QString("SELECT b.TagName, a.TagValue, b.Flags, a.AltValue FROM UserGearProperties a, MetaTags b WHERE a.GearId = %1 AND b.id = a.TagId").arg(selItem->data().toInt()));
+        // get item properties
+        if(selItem)
+        {
+            QSqlQuery query(QString("SELECT b.TagName, a.TagValue, b.Flags, a.AltValue FROM UserGearProperties a, MetaTags b WHERE a.GearId = %1 AND b.id = a.TagId").arg(selItem->data().toInt()));
 
-		    while (query.next()) {
-				QVariant value = query.value(1);
+            while (query.next()) {
+                QVariant value = query.value(1);
 
-				if(((ExifItem::TagFlags)query.value(2).toInt()).testFlag(ExifItem::AsciiAlt))
-				{
-					QVariantList varList;
-					varList << value << query.value(3);
+                if(((ExifItem::TagFlags)query.value(2).toInt()).testFlag(ExifItem::AsciiAlt))
+                {
+                    QVariantList varList;
+                    varList << value << query.value(3);
 
-					value = varList;
-				}
+                    value = varList;
+                }
 
-				properties << query.value(0) << value;
-			}
-		}
+                properties << query.value(0) << value;
+            }
+        }
 
-		if(properties.count())
-			return properties;
+        if(properties.count())
+            return properties;
 
-		return QVariant();
-	}
+        return QVariant();
+    }
 
-	return QStandardItemModel::data(item, role);
+    return QStandardItemModel::data(item, role);
 }
 
 Qt::ItemFlags GearTreeModel::flags(const QModelIndex &index) const
 {
-	if((bodyCount() == 0) || !isApplicable)
-	{
-		return 0;
-	}
+    if((bodyCount() == 0) || !isApplicable)
+    {
+        return 0;
+    }
 
-	return QStandardItemModel::flags(index);
+    return QStandardItemModel::flags(index);
 }

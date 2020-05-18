@@ -1,7 +1,7 @@
 /*
-	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+    Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
 
-	This file is part of AnalogExif.
+    This file is part of AnalogExif.
 
     AnalogExif is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,20 +25,20 @@
 class ExifUtils
 {
 public:
-	static void doubleToFraction(double value, int* numerator, int* denom);
-	static void doubleToDegrees(double val, int& deg, int& min, double& sec);
-	static QString fancyPrintDouble(double val);
-	static bool containsNonAscii(const QString& str);
+    static void doubleToFraction(double value, int* numerator, int* denom);
+    static void doubleToDegrees(double val, int& deg, int& min, double& sec);
+    static QString fancyPrintDouble(double val);
+    static bool containsNonAscii(const QString& str);
 
-	static const int DoublePrecision = 2;
+    static const int DoublePrecision = 2;
 
 private:
 #ifdef __GNUC__
-	// don't use clever double to fraction algorithm under gcc (bug 3035568)
-	static constexpr double DoubleDenominator = 10000.0;
+    // don't use clever double to fraction algorithm under gcc (bug 3035568)
+    static constexpr double DoubleDenominator = 10000.0;
 #else
-	static double fractionPart(double value);
-	static void getFraction(double value, int* num, int* denom, int depth);
+    static double fractionPart(double value);
+    static void getFraction(double value, int* num, int* denom, int depth);
 #endif // __GNUC__
 };
 

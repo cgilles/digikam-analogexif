@@ -1,7 +1,7 @@
 /*
-	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+    Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
 
-	This file is part of AnalogExif.
+    This file is part of AnalogExif.
 
     AnalogExif is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,23 +27,23 @@
 
 class AutoFillExpNum : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	AutoFillExpNum(QStringList& fileList, QWidget *parent = 0);
-	~AutoFillExpNum();
+    AutoFillExpNum(QStringList& fileList, QWidget *parent = 0);
+    ~AutoFillExpNum();
 
-	QVariantList resultFileNames();
+    QVariantList resultFileNames();
 
 private:
-	Ui::AutoFillExpNumClass ui;
-	QStandardItemModel* files;
+    Ui::AutoFillExpNumClass ui;
+    QStandardItemModel* files;
 
 private slots:
-	// changed data in the model
-	void files_dataChanged(const QModelIndex&, const QModelIndex&);
-	// changed first exposure number
-	void on_firstExpNum_valueChanged(int i);
+    // changed data in the model
+    void files_dataChanged(const QModelIndex&, const QModelIndex&);
+    // changed first exposure number
+    void on_firstExpNum_valueChanged(int i);
 };
 
 #endif // AUTOFILLEXPNUM_H

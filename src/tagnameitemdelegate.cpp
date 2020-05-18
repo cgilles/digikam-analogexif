@@ -1,7 +1,7 @@
 /*
-	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+    Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
 
-	This file is part of AnalogExif.
+    This file is part of AnalogExif.
 
     AnalogExif is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,55 +32,55 @@ QWidget* TagNameItemDelegate::createEditor(QWidget *parent, const QStyleOptionVi
         const QModelIndex &) const
 {
 
-	TagNameEditDialog* tagNameEditDialog = new TagNameEditDialog(parent);
+    TagNameEditDialog* tagNameEditDialog = new TagNameEditDialog(parent);
 
-	return tagNameEditDialog;
+    return tagNameEditDialog;
 }
 
 void TagNameItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
-	TagNameEditDialog* tagNameEditDialog = static_cast<TagNameEditDialog*>(editor);
+    TagNameEditDialog* tagNameEditDialog = static_cast<TagNameEditDialog*>(editor);
 
-	tagNameEditDialog->setTagNames(index.data(Qt::EditRole).toString());
+    tagNameEditDialog->setTagNames(index.data(Qt::EditRole).toString());
 
-	ExifItem::TagFlags flags = (ExifItem::TagFlags)index.data(OptGearTemplateModel::GetTagFlagsRole).toInt();
+    ExifItem::TagFlags flags = (ExifItem::TagFlags)index.data(OptGearTemplateModel::GetTagFlagsRole).toInt();
 
-	ExifItem::TagType tagType = (ExifItem::TagType)index.data(OptGearTemplateModel::GetTagTypeRole).toInt();
-	if((tagType != ExifItem::TagString) && (tagType != ExifItem::TagText))
-	{
-		if(flags.testFlag(ExifItem::AsciiAlt))
-			flags &= ~ExifItem::AsciiAlt;
+    ExifItem::TagType tagType = (ExifItem::TagType)index.data(OptGearTemplateModel::GetTagTypeRole).toInt();
+    if((tagType != ExifItem::TagString) && (tagType != ExifItem::TagText))
+    {
+        if(flags.testFlag(ExifItem::AsciiAlt))
+            flags &= ~ExifItem::AsciiAlt;
 
-		if(flags.testFlag(ExifItem::Ascii))
-			flags &= ~ExifItem::Ascii;
+        if(flags.testFlag(ExifItem::Ascii))
+            flags &= ~ExifItem::Ascii;
 
-		tagNameEditDialog->setFlagEnabled(ExifItem::AsciiAlt, false);
-		tagNameEditDialog->setFlagEnabled(ExifItem::Ascii, false);
-	}
+        tagNameEditDialog->setFlagEnabled(ExifItem::AsciiAlt, false);
+        tagNameEditDialog->setFlagEnabled(ExifItem::Ascii, false);
+    }
 
-	tagNameEditDialog->setFlags(flags);
+    tagNameEditDialog->setFlags(flags);
 
-	if(flags.testFlag(ExifItem::AsciiAlt))
-		tagNameEditDialog->setAltTagNames(index.data(OptGearTemplateModel::GetAltTagRole).toString());
+    if(flags.testFlag(ExifItem::AsciiAlt))
+        tagNameEditDialog->setAltTagNames(index.data(OptGearTemplateModel::GetAltTagRole).toString());
 
-	if(OptGearTemplateModel::ProtectBuiltInTags && flags.testFlag(ExifItem::Protected))
-		tagNameEditDialog->disableEdit();
+    if(OptGearTemplateModel::ProtectBuiltInTags && flags.testFlag(ExifItem::Protected))
+        tagNameEditDialog->disableEdit();
 }
 
 void TagNameItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
-	const QModelIndex &index) const
+    const QModelIndex &index) const
 {
-	TagNameEditDialog* tagNameEditDialog = static_cast<TagNameEditDialog*>(editor);
+    TagNameEditDialog* tagNameEditDialog = static_cast<TagNameEditDialog*>(editor);
 
-	if(tagNameEditDialog->result() == QDialog::Accepted)
-	{
-		QVariantList data;
-		data << tagNameEditDialog->getTagNames() << (int)tagNameEditDialog->getFlags() << tagNameEditDialog->getAltTagNames();
+    if(tagNameEditDialog->result() == QDialog::Accepted)
+    {
+        QVariantList data;
+        data << tagNameEditDialog->getTagNames() << (int)tagNameEditDialog->getFlags() << tagNameEditDialog->getAltTagNames();
 
-		model->setData(index, data);
-	}
-	else
-	{
-		model->setData(index, QVariant());
-	}
+        model->setData(index, data);
+    }
+    else
+    {
+        model->setData(index, QVariant());
+    }
 }

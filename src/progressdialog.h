@@ -1,7 +1,7 @@
 /*
-	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+    Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
 
-	This file is part of AnalogExif.
+    This file is part of AnalogExif.
 
     AnalogExif is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,60 +25,60 @@
 
 class ProgressDialog : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	ProgressDialog(QString windowTitle, QString labelText, QString buttonText = tr("Cancel"), QWidget *parent = 0, int min = 0, int max = 100);
+    ProgressDialog(QString windowTitle, QString labelText, QString buttonText = tr("Cancel"), QWidget *parent = 0, int min = 0, int max = 100);
 
-	void setLabelText(const QString& text)
-	{
-		ui.label->setText(text);
-	}
+    void setLabelText(const QString& text)
+    {
+        ui.label->setText(text);
+    }
 
-	bool wasCanceled() const
-	{
-		return cancelled;
-	}
+    bool wasCanceled() const
+    {
+        return cancelled;
+    }
 
-	void resetCanceled()
-	{
-		cancelled = false;
-	}
+    void resetCanceled()
+    {
+        cancelled = false;
+    }
 
-	void setRange(int min, int max)
-	{
-		ui.progressBar->setRange(min, max);
-	}
+    void setRange(int min, int max)
+    {
+        ui.progressBar->setRange(min, max);
+    }
 
 public slots:
-	void setValue(int i)
-	{
-		ui.progressBar->setValue(i);
-	}
+    void setValue(int i)
+    {
+        ui.progressBar->setValue(i);
+    }
 
-	void setValue(qint64 i)
-	{
-		ui.progressBar->setValue(i / 1024);
-	}
+    void setValue(qint64 i)
+    {
+        ui.progressBar->setValue(i / 1024);
+    }
 
-	virtual void reject()
-	{
-		// handle Escape key properly
-		cancelled = true;
-		QDialog::reject();
-	}
+    virtual void reject()
+    {
+        // handle Escape key properly
+        cancelled = true;
+        QDialog::reject();
+    }
 
 private:
-	Ui::ProgressDialogClass ui;
+    Ui::ProgressDialogClass ui;
 
-	bool cancelled;
+    bool cancelled;
 
 private slots:
-	// on cancel button clicked
-	void on_cancelBtn_clicked(bool)
-	{
-		cancelled = true;
-	}
+    // on cancel button clicked
+    void on_cancelBtn_clicked(bool)
+    {
+        cancelled = true;
+    }
 };
 
 #endif // PROGRESSDIALOG_H

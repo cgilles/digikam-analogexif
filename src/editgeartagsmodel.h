@@ -1,7 +1,7 @@
 /*
-	Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
+    Copyright (C) 2010 C-41 Bytes <contact@c41bytes.com>
 
-	This file is part of AnalogExif.
+    This file is part of AnalogExif.
 
     AnalogExif is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,46 +24,46 @@
 
 class EditGearTagsModel : public QSqlQueryModel
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	EditGearTagsModel(QObject *parent) : QSqlQueryModel(parent), gearId(-1) { }
+    EditGearTagsModel(QObject *parent) : QSqlQueryModel(parent), gearId(-1) { }
 
-	QVariant data(const QModelIndex &index, int role) const;
-	Qt::ItemFlags flags(const QModelIndex &index) const;
-	bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+    QVariant data(const QModelIndex &index, int role) const;
+    Qt::ItemFlags flags(const QModelIndex &index) const;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
-	static const int GetTagIdRole = Qt::UserRole + 4;
+    static const int GetTagIdRole = Qt::UserRole + 4;
 
-	int columnCount(const QModelIndex &parent = QModelIndex()) const
-	{
+    int columnCount(const QModelIndex &parent = QModelIndex()) const
+    {
                 Q_UNUSED(parent);
 
-		// tag and its value
-		return 2;
-	}
+        // tag and its value
+        return 2;
+    }
 
-	void reload()
-	{
-		reload(gearId);
-	}
+    void reload()
+    {
+        reload(gearId);
+    }
 
-	void reload(int id);
+    void reload(int id);
 
-	virtual void clear()
-	{
-		QSqlQueryModel::clear();
-		emit cleared();
-	}
+    virtual void clear()
+    {
+        QSqlQueryModel::clear();
+        emit cleared();
+    }
 
-	bool addNewTag(int tagId, int orderBy = 0);
-	bool deleteTag(int tagId);
+    bool addNewTag(int tagId, int orderBy = 0);
+    bool deleteTag(int tagId);
 
 signals:
-	void cleared();
+    void cleared();
 
 private:
-	int gearId;
+    int gearId;
 };
 
 #endif // EDITGEARTAGSMODEL_H
