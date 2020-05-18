@@ -70,6 +70,13 @@ set(analogexif_generic_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/analogexifgenericplugin.
                             ${CMAKE_CURRENT_SOURCE_DIR}/gearlistmodel.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/geartreemodel.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/exiftreemodel.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/emptyspinbox.h
+                            ${CMAKE_CURRENT_SOURCE_DIR}/aboutdialog.h
+                            ${CMAKE_CURRENT_SOURCE_DIR}/checkedgeartreeview.h
+                            ${CMAKE_CURRENT_SOURCE_DIR}/gearlistview.h
+                            ${CMAKE_CURRENT_SOURCE_DIR}/geartableview.h
+                            ${CMAKE_CURRENT_SOURCE_DIR}/geartreeview.h
+                            ${CMAKE_CURRENT_SOURCE_DIR}/optgeartemplateview.h
 )
 
 qt5_wrap_ui(analogexif_generic_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/analogexifoptions.ui
