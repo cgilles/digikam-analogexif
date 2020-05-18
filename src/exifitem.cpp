@@ -337,7 +337,7 @@ QString ExifItem::valueToString(const QVariant& value, TagType type, const QVari
 			QVariantList rational = value.toList();
 
 			if(rational == QVariantList())
-				return false;
+				return QString();
 
 			valStr = QString("%1/%2").arg(rational.at(0).toInt()).arg(rational.at(1).toInt());
 			break;

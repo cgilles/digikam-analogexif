@@ -35,7 +35,7 @@ public:
 private:
 #ifdef __GNUC__
 	// don't use clever double to fraction algorithm under gcc (bug 3035568)
-	static const double DoubleDenominator = 10000.0;
+	static constexpr double DoubleDenominator = 10000.0;
 #else
 	static double fractionPart(double value);
 	static void getFraction(double value, int* num, int* denom, int depth);

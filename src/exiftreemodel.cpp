@@ -37,6 +37,7 @@
 #include <exiv2/tags.hpp>
 #include <exiv2/properties.hpp>
 #include <exiv2/datasets.hpp>
+#include <exiv2/error.hpp>
 
 #define CUSTOM_XMP_NAMESPACE_URI		("http://analogexif.sourceforge.net/ns")
 #define ETAGS_START_MARKER_IN_COMMENTS	(QT_TR_NOOP("Photo information: \n"))
@@ -52,7 +53,7 @@ ExifTreeModel::ExifTreeModel(QObject *parent) : QAbstractItemModel(parent)
 	{
 		Exiv2::XmpProperties::registerNs(CUSTOM_XMP_NAMESPACE_URI, "AnalogExif");
 	}
-	catch(Exiv2::Error& exc)
+    catch(Exiv2::AnyError& exc)
 	{
 		QMessageBox::critical(NULL, tr("Error registering AnalogExif XMP schema"), tr("Unable to register AnalogExif XMP schema.\n\n%1.").arg(exc.what()), QMessageBox::Ok);
 	}
@@ -72,7 +73,7 @@ ExifTreeModel::~ExifTreeModel()
 // clear data
 void ExifTreeModel::clear(bool deleteObj)
 {
-	reset();
+	modelReset();
 	rootItem->reset();
 
 	curExifData.clear();
@@ -94,7 +95,7 @@ bool ExifTreeModel::registerUserNs(QString userNs, QString userNsPrefix)
 	{
 		Exiv2::XmpProperties::registerNs(userNs.toStdString(), userNsPrefix.toStdString());
 	}
-	catch(Exiv2::Error& exc)
+    catch(Exiv2::AnyError& exc)
 	{
 		customUserNs = customUserNsPrefix = "";
 
@@ -118,7 +119,7 @@ bool ExifTreeModel::unregisterUserNs()
 
 		customUserNs = customUserNsPrefix = "";
 	}
-	catch(Exiv2::Error& exc)
+    catch(Exiv2::AnyError& exc)
 	{
 		return false;
 	}
@@ -147,9 +148,9 @@ bool ExifTreeModel::openFile(QString filename)
 		// read metadata
 		exifHandle->readMetadata();
 	}
-	catch(Exiv2::AnyError& err)
+    catch(Exiv2::AnyError& exc)
 	{
-		qDebug("AnalogExif: ExifTreeModel::openFile(%s) Exiv2 exception (%d) = %s", filename.toStdString().c_str(), err.code(), err.what());
+		qDebug("AnalogExif: ExifTreeModel::openFile(%s) Exiv2 exception (%d) = %s", filename.toStdString().c_str(), exc.code(), exc.what());
 		return false;
 	}
 

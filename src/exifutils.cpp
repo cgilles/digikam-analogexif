@@ -93,7 +93,7 @@ bool ExifUtils::containsNonAscii(const QString& str)
 
 	foreach(QChar c, str)
 	{
-		unsigned char chr = (unsigned char)c.toAscii();
+		unsigned char chr = (unsigned char)c.toLatin1();
 
 		if((chr > 0x80) || (chr == 0x00))
 		{

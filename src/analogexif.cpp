@@ -401,7 +401,7 @@ void AnalogExif::dirView_selectionChanged(const QItemSelection& selected, const 
 	ui.actionOpen_external->setEnabled(false);
 
 	// clear file preview
-	ui.filePreview->setPixmap(NULL);
+	ui.filePreview->setPixmap(QPixmap());
 
 	// clear metatags
 	exifTreeModel->clear(true);
@@ -504,7 +504,7 @@ void AnalogExif::fileView_selectionChanged(const QItemSelection&, const QItemSel
 			ui.directoryLine->setText(QDir::toNativeSeparators(fileViewModel->fileInfo(index).absolutePath()));
 
 			// load preview in the background
-			ui.filePreview->setPixmap(NULL);
+			ui.filePreview->setPixmap(QPixmap());
 #ifdef Q_WS_MAC
             // Background loading doesn't work properly for Mac
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
@@ -534,7 +534,7 @@ void AnalogExif::fileView_selectionChanged(const QItemSelection&, const QItemSel
 	ui.actionOpen_external->setEnabled(false);
 
 	// clear file preview
-	ui.filePreview->setPixmap(NULL);
+	ui.filePreview->setPixmap(QPixmap());
 
 	// clear metatags
 	exifTreeModel->clear(true);
@@ -587,7 +587,7 @@ void AnalogExif::openLocation(QString path)
 		ui.directoryLine->setText(QDir::toNativeSeparators(path));
 
 		// clear file preview
-		ui.filePreview->setPixmap(NULL);
+		ui.filePreview->setPixmap(QPixmap());
 
 		// clear metatags
 		exifTreeModel->clear(true);
@@ -616,7 +616,7 @@ void AnalogExif::openLocation(QString path)
 		ui.directoryLine->setText(QDir::toNativeSeparators(fileInfo.absolutePath()));
 
 		// load preview in the background
-		ui.filePreview->setPixmap(NULL);
+		ui.filePreview->setPixmap(QPixmap());
 #ifdef Q_WS_MAC
 		// Background loading doesn't work properly for Mac
 		QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));

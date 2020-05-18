@@ -43,6 +43,7 @@ include_directories($<TARGET_PROPERTY:Digikam::digikamcore,INTERFACE_INCLUDE_DIR
 include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 
 set(analogexif_generic_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/analogexifgenericplugin.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/analogexif.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/aboutdialog.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/analogexifoptions.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/autofillexpnum.cpp
@@ -54,10 +55,7 @@ set(analogexif_generic_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/analogexifgenericplugin.
                             ${CMAKE_CURRENT_SOURCE_DIR}/edittagselectvalues.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/exifitem.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/exifitemdelegate.cpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/exiftreemodel.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/exifutils.cpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/gearlistmodel.cpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/geartreemodel.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/metadatatagcompleter.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/multitagvaluesdialog.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/onlineversionchecker.cpp
@@ -69,7 +67,9 @@ set(analogexif_generic_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/analogexifgenericplugin.
                             ${CMAKE_CURRENT_SOURCE_DIR}/asciitextdialog.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/asciistringdialog.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/tagnameeditdialog.cpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/analogexif.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/exiftreemodel.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/gearlistmodel.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/geartreemodel.cpp
 )
 
 qt5_wrap_ui(analogexif_generic_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/analogexifoptions.ui
