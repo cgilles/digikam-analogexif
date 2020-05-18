@@ -5,4 +5,4 @@ Port AnalogExif tool <https://sourceforge.net/projects/analogexif/> to:
 - Exiv2 0.27.x API.
 - digiKam 7.x plugin interface. <https://www.digikam.org>
 
-[digiKam AnalogExif tool in action](https://i.imgur.com/i8uXBCC.png)
+![](https://i.imgur.com/i8uXBCC.png)
