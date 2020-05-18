@@ -86,8 +86,12 @@ qt5_wrap_ui(analogexif_generic_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/analogexifoption
                                     ${CMAKE_CURRENT_SOURCE_DIR}/asciitextdialog.ui
 )
 
+qt5_add_resources(analogexif_generic_QRC_SRCS analogexif.qrc)
+
 add_library(Generic_AnalogExif_Plugin
-            MODULE ${analogexif_generic_SRCS})
+            MODULE ${analogexif_generic_SRCS}
+                   ${analogexif_generic_QRC_SRCS}
+)
 
 set_target_properties(Generic_AnalogExif_Plugin PROPERTIES PREFIX "")
 

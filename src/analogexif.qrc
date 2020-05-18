@@ -22,7 +22,6 @@
         <file>NewDb.ael</file>
     </qresource>
     <qresource prefix="/">
-        <file>version.xml</file>
         <file>not-supported.txt</file>
     </qresource>
 </RCC>
