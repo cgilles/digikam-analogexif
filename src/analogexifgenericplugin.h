@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace DigikamGenericanalogExifPlugin
+namespace DigikamGenericAnalogExifPlugin
 {
 
 class AnalogExifPlugin : public DPluginGeneric
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotAnalogExif();
 };
 
-} // namespace DigikamGenericanalogExifPlugin
+} // namespace DigikamGenericAnalogExifPlugin
 
 #endif // DIGIKAM_ANALOG_EXIF_GENERIC_PLUGIN_H

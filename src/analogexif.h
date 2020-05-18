@@ -48,7 +48,7 @@ class AnalogExif : public QMainWindow
 	Q_OBJECT
 
 public:
-	AnalogExif(QWidget *parent = 0, Qt::WFlags flags = 0);
+	AnalogExif(QWidget *parent = 0);
 	~AnalogExif();
 
 	bool initialize();

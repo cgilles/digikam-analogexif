@@ -34,7 +34,11 @@
 #include <dinfointerface.h>
 #include <dmessagebox.h>
 
-namespace DigikamGenericanalogExifPlugin
+// Local includes
+
+#include "analogexif.h"
+
+namespace DigikamGenericAnalogExifPlugin
 {
 
 AnalogExifPlugin::AnalogExifPlugin(QObject* const parent)
@@ -104,7 +108,6 @@ void AnalogExifPlugin::slotAnalogExif()
     {
         images  = iface->currentAlbumItems();
         caption = QString::fromUtf8("List of all items (%1):").arg(images.count());
-
     }
 
     if (!images.isEmpty())
@@ -116,12 +119,10 @@ void AnalogExifPlugin::slotAnalogExif()
             items << url.url();
         }
 
-        DMessageBox::showInformationList(QMessageBox::Information,
-                                         qApp->activeWindow(),
-                                         QString::fromUtf8("AnalogExif"),
-                                         caption,
-                                         items);
+        AnalogExif* const dlg = new AnalogExif;
+        dlg->initialize();
+        dlg->show();
     }
 }
 
-} // namespace DigikamGenericanalogExifPlugin
+} // namespace DigikamGenericAnalogExifPlugin

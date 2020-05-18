@@ -31,11 +31,7 @@ public:
 		QSqlQueryModel(parent), isApplicable(false), gearType(gType),  emptyMessage(emptyMsg) { }
 
 	// can user get data from the gear
-	void setApplicable(bool applicable)
-	{
-		isApplicable = applicable;
-		reset();
-	}
+	void setApplicable(bool applicable);
 
 	// selects the gear
 	void setSelectedIndex(const QModelIndex &index)

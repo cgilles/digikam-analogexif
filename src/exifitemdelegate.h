@@ -63,7 +63,7 @@ protected:
 			QToolTip::hideText();
 			for(int i = 0; i < keys.length(); i++)
 			{
-				unsigned char curChar = (unsigned)keys.at(i).toAscii();
+				unsigned char curChar = (unsigned)keys.at(i).toLatin1();
 				if((curChar >= 0x80) || (curChar ==0))
 				{
 					// not supported character

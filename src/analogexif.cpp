@@ -44,8 +44,8 @@
 
 const QUrl AnalogExif::helpUrl("http://analogexif.sourceforge.net/help/");
 
-AnalogExif::AnalogExif(QWidget *parent, Qt::WFlags flags)
-	: QMainWindow(parent, flags), progressBox(QMessageBox::NoIcon, tr("New program version"), tr("Checking for the new version..."), QMessageBox::Cancel, this)
+AnalogExif::AnalogExif(QWidget *parent)
+	: QMainWindow(parent), progressBox(QMessageBox::NoIcon, tr("New program version"), tr("Checking for the new version..."), QMessageBox::Cancel, this)
 {
 	ui.setupUi(this);
 

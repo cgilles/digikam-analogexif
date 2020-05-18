@@ -33,11 +33,7 @@ public:
 	}
 
 	// can user get data from the gear
-	void setApplicable(bool applicable)
-	{
-		isApplicable = applicable;
-		reset();
-	}
+	void setApplicable(bool applicable);
 
 	// selects the gear
 	void setSelectedIndex(const QModelIndex &index)
