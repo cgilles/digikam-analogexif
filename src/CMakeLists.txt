@@ -79,18 +79,32 @@ set(analogexif_generic_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/analogexifgenericplugin.
                             ${CMAKE_CURRENT_SOURCE_DIR}/optgeartemplateview.h
 )
 
-qt5_wrap_ui(analogexif_generic_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/analogexifoptions.ui
-                                    ${CMAKE_CURRENT_SOURCE_DIR}/autofillexpnum.ui
-                                    ${CMAKE_CURRENT_SOURCE_DIR}/copymetadatadialog.ui
-                                    ${CMAKE_CURRENT_SOURCE_DIR}/edittagselectvalues.ui
-                                    ${CMAKE_CURRENT_SOURCE_DIR}/multitagvaluesdialog.ui
-                                    ${CMAKE_CURRENT_SOURCE_DIR}/progressdialog.ui
-                                    ${CMAKE_CURRENT_SOURCE_DIR}/tagnameeditdialog.ui
-                                    ${CMAKE_CURRENT_SOURCE_DIR}/analogexif.ui
-                                    ${CMAKE_CURRENT_SOURCE_DIR}/editgear.ui
-                                    ${CMAKE_CURRENT_SOURCE_DIR}/asciistringdialog.ui
-                                    ${CMAKE_CURRENT_SOURCE_DIR}/asciitextdialog.ui
+qt5_wrap_ui(analogexif_generic_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/ui/analogexifoptions.ui
+                                    ${CMAKE_CURRENT_SOURCE_DIR}/ui/autofillexpnum.ui
+                                    ${CMAKE_CURRENT_SOURCE_DIR}/ui/copymetadatadialog.ui
+                                    ${CMAKE_CURRENT_SOURCE_DIR}/ui/edittagselectvalues.ui
+                                    ${CMAKE_CURRENT_SOURCE_DIR}/ui/multitagvaluesdialog.ui
+                                    ${CMAKE_CURRENT_SOURCE_DIR}/ui/progressdialog.ui
+                                    ${CMAKE_CURRENT_SOURCE_DIR}/ui/tagnameeditdialog.ui
 )
+
+if (APPLE)
+
+    qt5_wrap_ui(analogexif_generic_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/ui/analogexif_mac.ui
+                                        ${CMAKE_CURRENT_SOURCE_DIR}/ui/editgear_mac.ui
+                                        ${CMAKE_CURRENT_SOURCE_DIR}/ui/asciistringdialog_mac.ui
+                                        ${CMAKE_CURRENT_SOURCE_DIR}/ui/asciitextdialog_mac.ui
+    )
+
+else()
+
+    qt5_wrap_ui(analogexif_generic_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/ui/analogexif.ui
+                                        ${CMAKE_CURRENT_SOURCE_DIR}/ui/editgear.ui
+                                        ${CMAKE_CURRENT_SOURCE_DIR}/ui/asciistringdialog.ui
+                                        ${CMAKE_CURRENT_SOURCE_DIR}/ui/asciitextdialog.ui
+    )
+
+endif()
 
 qt5_add_resources(analogexif_generic_QRC_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/analogexif.qrc)
 
