@@ -194,7 +194,6 @@ bool AnalogExif::initialize()
 
         if(msgBox.clickedButton() == cancelBtn)
         {
-            QCoreApplication::exit(-1);
             return false;
         }
         else if(msgBox.clickedButton() == openBtn)
