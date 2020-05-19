@@ -30,6 +30,10 @@
 #include <QMessageBox>
 #include <QNetworkReply>
 
+// digiKam includes
+
+#include "dplugin.h"
+
 #ifdef Q_WS_MAC
 #include "ui_analogexif_mac.h"
 #else
@@ -43,17 +47,23 @@
 #include "geartreemodel.h"
 #include "onlineversionchecker.h"
 
+using namespace Digikam;
+
 class AnalogExif : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    AnalogExif(QWidget *parent = 0);
+
+    explicit AnalogExif(DPlugin* const tool);
     ~AnalogExif();
 
     bool initialize();
 
 private:
+
+    DPlugin* m_tool;
+
     Ui::AnalogExifClass ui;
     QSettings settings;
 
@@ -174,9 +184,11 @@ private:
     static const QUrl helpUrl;
 
 signals:
+
     void updatePreview();
 
 private slots:
+
     // Apply changes clicked
     void on_applyChangesBtn_clicked();
     // Revert changes clicked

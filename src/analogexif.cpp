@@ -18,12 +18,8 @@
 */
 
 #include "analogexif.h"
-#include "editgear.h"
-#include "analogexifoptions.h"
-#include "autofillexpnum.h"
-#include "progressdialog.h"
-#include "copymetadatadialog.h"
-#include "aboutdialog.h"
+
+// Qt includes
 
 #include <QStringList>
 #include <QMessageBox>
@@ -38,14 +34,28 @@
 #include <QTimer>
 #include <QImageReader>
 
+// digiKam includes
+
+#include "dpluginaboutdlg.h"
+
+// Local includes
+
+#include "editgear.h"
+#include "analogexifoptions.h"
+#include "autofillexpnum.h"
+#include "progressdialog.h"
+#include "copymetadatadialog.h"
+
 #ifdef Q_WS_WIN
-#include <windows.h>
+#   include <windows.h>
 #endif
 
 const QUrl AnalogExif::helpUrl("http://analogexif.sourceforge.net/help/");
 
-AnalogExif::AnalogExif(QWidget *parent)
-    : QMainWindow(parent), progressBox(QMessageBox::NoIcon, tr("New program version"), tr("Checking for the new version..."), QMessageBox::Cancel, this)
+AnalogExif::AnalogExif(DPlugin* const tool)
+    : QMainWindow(nullptr),
+      m_tool(tool),
+      progressBox(QMessageBox::NoIcon, tr("New program version"), tr("Checking for the new version..."), QMessageBox::Cancel, this)
 {
     ui.setupUi(this);
 
@@ -59,7 +69,7 @@ AnalogExif::AnalogExif(QWidget *parent)
     // resize Name and Size column
     ui.dirView->setColumnWidth(0, 150);
     ui.dirView->setColumnWidth(1, 50);
-    // sort by filename 
+    // sort by filename
     ui.dirView->setSortingEnabled(true);
     ui.dirView->sortByColumn(0, Qt::AscendingOrder);
 
@@ -1923,8 +1933,9 @@ void AnalogExif::on_action_Copy_metadata_triggered(bool)
 
 void AnalogExif::on_action_About_triggered(bool)
 {
-    AboutDialog a(this);
-    a.exec();
+    QPointer<DPluginAboutDlg> dlg = new DPluginAboutDlg(m_tool);
+    dlg->exec();
+    delete dlg;
 }
 
 void AnalogExif::newVersionAvailable(QString selfTag, QString newTag, QDateTime newTime, QString newSummary)

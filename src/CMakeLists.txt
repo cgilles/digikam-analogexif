@@ -39,12 +39,13 @@ set_package_properties(DigikamCore PROPERTIES
                        DESCRIPTION "digiKam core library"
 )
 
-include_directories($<TARGET_PROPERTY:Digikam::digikamcore,INTERFACE_INCLUDE_DIRECTORIES>/digikam)
-include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+include_directories($<TARGET_PROPERTY:Digikam::digikamcore,INTERFACE_INCLUDE_DIRECTORIES>/digikam
+                    ${CMAKE_CURRENT_BINARY_DIR}
+                    ${CMAKE_CURRENT_SOURCE_DIR}
+)
 
 set(analogexif_generic_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/analogexifgenericplugin.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/analogexif.cpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/aboutdialog.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/analogexifoptions.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/autofillexpnum.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/copymetadatadialog.cpp
@@ -71,7 +72,6 @@ set(analogexif_generic_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/analogexifgenericplugin.
                             ${CMAKE_CURRENT_SOURCE_DIR}/geartreemodel.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/exiftreemodel.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/emptyspinbox.h
-                            ${CMAKE_CURRENT_SOURCE_DIR}/aboutdialog.h
                             ${CMAKE_CURRENT_SOURCE_DIR}/checkedgeartreeview.h
                             ${CMAKE_CURRENT_SOURCE_DIR}/gearlistview.h
                             ${CMAKE_CURRENT_SOURCE_DIR}/geartableview.h
@@ -86,7 +86,6 @@ qt5_wrap_ui(analogexif_generic_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/analogexifoption
                                     ${CMAKE_CURRENT_SOURCE_DIR}/multitagvaluesdialog.ui
                                     ${CMAKE_CURRENT_SOURCE_DIR}/progressdialog.ui
                                     ${CMAKE_CURRENT_SOURCE_DIR}/tagnameeditdialog.ui
-                                    ${CMAKE_CURRENT_SOURCE_DIR}/aboutdialog.ui
                                     ${CMAKE_CURRENT_SOURCE_DIR}/analogexif.ui
                                     ${CMAKE_CURRENT_SOURCE_DIR}/editgear.ui
                                     ${CMAKE_CURRENT_SOURCE_DIR}/asciistringdialog.ui
