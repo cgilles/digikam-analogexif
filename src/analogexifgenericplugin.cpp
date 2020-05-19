@@ -62,7 +62,7 @@ QString AnalogExifPlugin::iid() const
 
 QIcon AnalogExifPlugin::icon() const
 {
-    return QIcon(QLatin1String(":/icons/analogexif.png"));
+    return QIcon(QLatin1String(":/images/icons/analogexif.png"));
 }
 
 QString AnalogExifPlugin::description() const
