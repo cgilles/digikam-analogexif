@@ -18,34 +18,45 @@
 */
 
 #include "dirsortfilterproxymodel.h"
+
+// Qt includes
+
 #include <QFileSystemModel>
 
-bool DirSortFilterProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
+bool DirSortFilterProxyModel::lessThan(const QModelIndex& left, const QModelIndex& right) const
 {
-    QFileSystemModel* srcModel = dynamic_cast<QFileSystemModel*>(sourceModel());
+    QFileSystemModel* const srcModel = dynamic_cast<QFileSystemModel*>(sourceModel());
 
-    if(!left.isValid() || !right.isValid())
+    if (!left.isValid() || !right.isValid())
+    {
         return false;
+    }
 
     // if compared to directory file is always less than
-    if(srcModel->isDir(left) && !srcModel->isDir(right))
+    if (srcModel->isDir(left) && !srcModel->isDir(right))
+    {
         return true;
+    }
 
-    if(!srcModel->isDir(left) && srcModel->isDir(right))
+    if (!srcModel->isDir(left) && srcModel->isDir(right))
+    {
         return false;
+    }
 
     // else compare by name
-    return QString::compare(srcModel->fileName(left), srcModel->fileName(right), Qt::CaseInsensitive) < 0;
+    return (QString::compare(srcModel->fileName(left), srcModel->fileName(right), Qt::CaseInsensitive) < 0);
 }
 
 QVariant DirSortFilterProxyModel::data(const QModelIndex& index, int role) const
 {
-    QFileSystemModel* srcModel = dynamic_cast<QFileSystemModel*>(sourceModel());
+    QFileSystemModel* const srcModel = dynamic_cast<QFileSystemModel*>(sourceModel());
 
-    if(!index.isValid())
+    if (!index.isValid())
+    {
         return QVariant();
+    }
 
-    if(role == Qt::ToolTipRole)
+    if (role == Qt::ToolTipRole)
     {
         return srcModel->fileName(index);
     }

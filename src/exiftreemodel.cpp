@@ -57,7 +57,7 @@ ExifTreeModel::ExifTreeModel(QObject* const parent)
     }
     catch(Exiv2::AnyError& exc)
     {
-        QMessageBox::critical(NULL, tr("Error registering AnalogExif XMP schema"), tr("Unable to register AnalogExif XMP schema.\n\n%1.").arg(exc.what()), QMessageBox::Ok);
+        QMessageBox::critical(nullptr, tr("Error registering AnalogExif XMP schema"), tr("Unable to register AnalogExif XMP schema.\n\n%1.").arg(exc.what()), QMessageBox::Ok);
     }
 
     // create and read the values of the used metatags
@@ -572,7 +572,7 @@ void ExifTreeModel::populateModel()
     QSqlQuery query("SELECT a.GearType, b.TagName, b.TagText, b.PrintFormat, b.TagType, b.Flags, b.AltTag FROM GearTemplate a, MetaTags b WHERE b.id=a.TagId ORDER BY a.GearType, a.OrderBy");
 
     int curCategoryId = -1, nRows = 0;
-    ExifItem* headerItem = NULL;
+    ExifItem* headerItem = nullptr;
 
     while(query.next())
     {
@@ -646,7 +646,7 @@ QString ExifTreeModel::getGPSfromXmp()
 
             double minVal = latStrs.at(1).left(latStrs.at(1).length() - 1).toDouble();
 
-            double secVal = modf(minVal, NULL);
+            double secVal = modf(minVal, nullptr);
 
             gpsPosition += QString("%1\u00B0 %2' %3\" ").arg(latStrs.at(0)).arg((int)minVal, 2, 10, QChar('0')).arg(secVal, 2, 'f', 3, QChar('0'));
         }
@@ -677,7 +677,7 @@ QString ExifTreeModel::getGPSfromXmp()
 
                 double minVal = longStrs.at(1).left(longStrs.at(1).length() - 1).toDouble();
 
-                double secVal = modf(minVal, NULL);
+                double secVal = modf(minVal, nullptr);
 
                 gpsPosition += QString("%1\u00B0 %2' %3\" ").arg(longStrs.at(0)).arg((int)minVal, 2, 10, QChar('0')).arg(secVal, 2, 'f', 3, QChar('0'));
             }

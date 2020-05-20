@@ -103,7 +103,7 @@ ExifItem* ExifItem::findTagByName(const QString& name)
             return tag;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 bool ExifItem::findSetTagValueFromString(const QString& tagName, const QVariant& value, bool setDirty)

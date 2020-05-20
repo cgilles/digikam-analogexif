@@ -397,7 +397,7 @@ void EditGear::on_actionDuplicate_triggered(bool)
     QItemSelectionModel* selModel;
 
     EditGearTreeModel* treemodel = static_cast<EditGearTreeModel*>((QAbstractItemModel*)contextIndex.model());
-    if(treemodel == NULL)
+    if(treemodel == nullptr)
         return;
 
     int gearType = treemodel->getGearType();
@@ -483,7 +483,7 @@ void EditGear::on_actionDelete_triggered(bool)
     QString title, gearTitle;
 
     EditGearTreeModel* treemodel = static_cast<EditGearTreeModel*>((QAbstractItemModel*)contextIndex.model());
-    if(treemodel == NULL)
+    if(treemodel == nullptr)
         return;
 
     int gearType = treemodel->getGearType();
@@ -574,7 +574,7 @@ void EditGear::gearView_clicked(const QModelIndex& index)
     // clear selection from other views
     // could be done with pointer comparison, but non-illustrative
     EditGearTreeModel* treemodel = static_cast<EditGearTreeModel*>((QAbstractItemModel*)index.model());
-    if(treemodel == NULL)
+    if(treemodel == nullptr)
         return;
 
     int gearType = treemodel->getGearType();

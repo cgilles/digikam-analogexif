@@ -76,7 +76,7 @@ public:
 
     ExifItem(const QString& tag, TagType type, const QString& tagValue, TagFlags flags = None, const QString& altTag = "")
     {
-        parentItem = NULL;
+        parentItem = nullptr;
         this->type = type;
         this->flags = flags;
         metaTag = tag;
@@ -89,7 +89,7 @@ public:
 
     ExifItem(const ExifItem& item)
     {
-        parentItem = NULL;
+        parentItem = nullptr;
         type = item.type;
         flags = item.flags;
         metaTag = item.metaTag;

@@ -27,7 +27,7 @@
 #include <QRegExpValidator>
 
 TagNameEditDialog::TagNameEditDialog(QWidget *parent, const QString& tagNames, ExifItem::TagFlags, const QString& altTags)
-    : QDialog(parent), altTagNames(NULL)
+    : QDialog(parent), altTagNames(nullptr)
 {
     ui.setupUi(this);
 

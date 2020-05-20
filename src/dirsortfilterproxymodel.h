@@ -20,16 +20,25 @@
 #ifndef DIRSORTFILTERPROXYMODEL_H
 #define DIRSORTFILTERPROXYMODEL_H
 
+// Qt includes
+
 #include <QSortFilterProxyModel>
 
-// sorts the files/directory view
+/**
+ * sorts the files/directory view
+ */
 class DirSortFilterProxyModel : public QSortFilterProxyModel 
 {
     Q_OBJECT
 
 public:
-    DirSortFilterProxyModel(QObject* parent) : QSortFilterProxyModel(parent) {}
-    bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
+
+    DirSortFilterProxyModel(QObject* parent)
+        : QSortFilterProxyModel(parent)
+    {
+    }
+
+    bool lessThan(const QModelIndex &left, const QModelIndex &right)            const;
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 };
 

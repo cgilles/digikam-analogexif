@@ -27,7 +27,7 @@
 const QUrl OnlineVersionChecker::versionCheckUrl("http://analogexif.svn.sourceforge.net/viewvc/analogexif/current-version.xml");
 const QUrl OnlineVersionChecker::downloadUrl("http://sourceforge.net/projects/analogexif/files/");
 
-OnlineVersionChecker::OnlineVersionChecker(QObject *parent) : QObject(parent), curRequest(NULL)
+OnlineVersionChecker::OnlineVersionChecker(QObject *parent) : QObject(parent), curRequest(nullptr)
 {
     connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(downloadFinished(QNetworkReply*)));
 }
@@ -111,7 +111,7 @@ void OnlineVersionChecker::downloadFinished(QNetworkReply *reply)
 {
     // mark for deletion
     reply->deleteLater();
-    curRequest = NULL;
+    curRequest = nullptr;
 
     QNetworkReply::NetworkError error = reply->error();
     if(error)
@@ -154,7 +154,7 @@ void OnlineVersionChecker::openDownloadPage()
 
 VersionFileParser::VersionFileParser(QObject *parent) : QObject(parent), version(QString()), releaseNumber(QString()), platform(QString()), details(QString()), date(QString())
 {
-    xmlParser = XML_ParserCreate(NULL);
+    xmlParser = XML_ParserCreate(nullptr);
 }
 
 VersionFileParser::~VersionFileParser()
@@ -171,7 +171,7 @@ bool VersionFileParser::parse(const QString& xmlData)
         return false;
 
     // reset and restart parser
-    XML_ParserReset(xmlParser, NULL);
+    XML_ParserReset(xmlParser, nullptr);
     // set element start/end handlers
     XML_SetElementHandler(xmlParser,
         (XML_StartElementHandler)&VersionFileParser::xmlStartElementHandler,
@@ -208,7 +208,7 @@ bool VersionFileParser::parse(const QString& ver, const QString& xmlData)
         return false;
     
     // reset and restart parser
-    XML_ParserReset(xmlParser, NULL);
+    XML_ParserReset(xmlParser, nullptr);
     // set element start/end handlers
     XML_SetElementHandler(xmlParser,
         (XML_StartElementHandler)&VersionFileParser::xmlStartElementHandler,

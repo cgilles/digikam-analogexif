@@ -30,7 +30,7 @@ void EditGearTreeModel::reload()
 
 QModelIndex EditGearTreeModel::reload(int id)
 {
-    QStandardItem* resultIndex = NULL;
+    QStandardItem* resultIndex = nullptr;
     clear();
 
     invisibleRootItem()->setFlags(Qt::ItemIsDropEnabled);
