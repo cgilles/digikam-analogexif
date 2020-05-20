@@ -728,7 +728,7 @@
  </tabstops>
  <resources>
   <include location="../analogexif.qrc"/>
-  <include location="analogexif.qrc"/>
+  <include location="../analogexif.qrc"/>
  </resources>
  <connections>
   <connection>
