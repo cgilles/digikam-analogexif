@@ -31,7 +31,7 @@ class GearTableView : public QTableView
 public:
     GearTableView(QWidget *parent) : QTableView(parent) { }
 
-signals:
+Q_SIGNALS:
     void focused();
 
 protected:

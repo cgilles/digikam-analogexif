@@ -61,7 +61,7 @@ private:
     CheckedExifTreeModel* exifTreeModel;
     ExifItemDelegate* exifItemDelegate;
 
-private slots:
+private Q_SLOTS:
     // on edit double click
     void on_metadataView_doubleClicked(const QModelIndex &);
     // check/uncheck/check not null checkbox state change

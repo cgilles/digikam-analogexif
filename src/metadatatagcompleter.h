@@ -34,7 +34,7 @@ public:
     MetadataTagCompleter(const QStringList& list, QObject* parent = 0) : QCompleter(list, parent) { }
 
     QString separator() const;
-public slots:
+public Q_SLOTS:
     void setSeparator(const QString &separator);
 
 protected:

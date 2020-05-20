@@ -107,11 +107,11 @@ private:
     QDateTime selfDate;
     QNetworkReply *curRequest;
 
-private slots:
+private Q_SLOTS:
     void downloadFinished(QNetworkReply *reply);
     void error(QNetworkReply::NetworkError code);
 
-signals:
+Q_SIGNALS:
     void newVersionAvailable(QString selfTag, QString newTag, QDateTime newTime, QString newSummary);
     void newVersionCheckError(QNetworkReply::NetworkError error);
 };

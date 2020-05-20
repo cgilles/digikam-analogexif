@@ -59,7 +59,7 @@ public:
     bool addNewTag(int tagId, int orderBy = 0);
     bool deleteTag(int tagId);
 
-signals:
+Q_SIGNALS:
     void cleared();
 
 private:

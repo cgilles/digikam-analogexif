@@ -183,11 +183,11 @@ private:
 
     static const QUrl helpUrl;
 
-signals:
+Q_SIGNALS:
 
     void updatePreview();
 
-private slots:
+private Q_SLOTS:
 
     // Apply changes clicked
     void on_applyChangesBtn_clicked();

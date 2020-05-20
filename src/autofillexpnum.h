@@ -39,7 +39,7 @@ private:
     Ui::AutoFillExpNumClass ui;
     QStandardItemModel* files;
 
-private slots:
+private Q_SLOTS:
     // changed data in the model
     void files_dataChanged(const QModelIndex&, const QModelIndex&);
     // changed first exposure number

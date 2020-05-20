@@ -29,7 +29,7 @@ class CheckedGearTreeView : public QTreeView
 public:
     CheckedGearTreeView(QWidget *parent) : QTreeView(parent) { }
 
-public slots:
+public Q_SLOTS:
     void edit(const QModelIndex& index)
     {
         QTreeView::edit(index);

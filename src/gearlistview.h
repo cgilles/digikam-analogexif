@@ -30,7 +30,7 @@ class GearListView : public QListView
 public:
     GearListView(QWidget *parent): QListView(parent) { }
 
-signals:
+Q_SIGNALS:
     void focused();
 
 protected:

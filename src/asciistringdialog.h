@@ -60,10 +60,10 @@ private:
     QString unicodeValue;
     Ui::AsciiStringDialogClass ui;
 
-public slots:
+public Q_SLOTS:
     virtual void reject();
 
-private slots:
+private Q_SLOTS:
     void on_copyBtn_clicked();
     void on_buttonBox_clicked(QAbstractButton* button);
 };

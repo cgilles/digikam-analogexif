@@ -75,10 +75,10 @@ private:
 
     void saveAndClose();
 
-public slots:
+public Q_SLOTS:
     virtual void reject();
 
-private slots:
+private Q_SLOTS:
     // close button
     void on_buttonBox_rejected();
     // ok button

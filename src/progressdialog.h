@@ -50,7 +50,7 @@ public:
         ui.progressBar->setRange(min, max);
     }
 
-public slots:
+public Q_SLOTS:
     void setValue(int i)
     {
         ui.progressBar->setValue(i);
@@ -73,7 +73,7 @@ private:
 
     bool cancelled;
 
-private slots:
+private Q_SLOTS:
     // on cancel button clicked
     void on_cancelBtn_clicked(bool)
     {

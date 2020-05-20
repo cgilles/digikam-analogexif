@@ -93,10 +93,10 @@ private:
 
     void saveAndExit();
 
-public slots:
+public Q_SLOTS:
     virtual void reject();
 
-private slots:
+private Q_SLOTS:
     // on gear clicked
     void on_gearTypesList_itemClicked(QListWidgetItem* item);
     // on template context menu

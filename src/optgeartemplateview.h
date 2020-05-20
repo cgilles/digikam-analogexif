@@ -30,7 +30,7 @@ class OptGearTemplateView : public QTableView
 public:
     OptGearTemplateView(QWidget *parent): QTableView(parent) { }
 
-public slots:
+public Q_SLOTS:
     virtual void edit(const QModelIndex& index)
     {
         if(index.isValid() && (index.column() == 1))

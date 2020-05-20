@@ -31,7 +31,7 @@ class GearTreeView : public QTreeView
 public:
     GearTreeView(QWidget *parent) : QTreeView(parent) { }
 
-signals:
+Q_SIGNALS:
     void focused();
 
 protected:

@@ -72,7 +72,7 @@ private:
     // Exif item edit delegate
     ExifItemDelegate* exifItemDelegate;
 
-private slots:
+private Q_SLOTS:
     // ok button
     void on_buttonBox_accepted();
     // cancel button

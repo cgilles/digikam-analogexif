@@ -68,10 +68,10 @@ public:
     void setValues(const QVariantList& values);
     QVariantList getValues();
 
-public slots:
+public Q_SLOTS:
     virtual void reject();
 
-private slots:
+private Q_SLOTS:
     // changes in the selection
     void list_selectionChanged(const QItemSelection&, const QItemSelection&);
     // ok/cancel
