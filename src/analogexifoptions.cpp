@@ -29,8 +29,7 @@
 
 AnalogExifOptions::AnalogExifOptions(QWidget* const parent)
     : QDialog(parent),
-      dirty(false),
-      progressBox(QMessageBox::NoIcon, tr("New program version"), tr("Checking for the new version..."), QMessageBox::Cancel, this)
+      dirty(false)
 {
     ui.setupUi(this);
 

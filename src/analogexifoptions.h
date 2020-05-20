@@ -89,8 +89,6 @@ private:
 
     QString originalNs;
     QString originalNsPrefix;
-
-    QMessageBox progressBox;
     
     void saveAndExit();
 

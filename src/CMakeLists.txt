@@ -59,7 +59,6 @@ set(analogexif_generic_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/analogexifgenericplugin.
                             ${CMAKE_CURRENT_SOURCE_DIR}/exifutils.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/metadatatagcompleter.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/multitagvaluesdialog.cpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/onlineversionchecker.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/optgeartemplatemodel.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/progressdialog.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/tagnameitemdelegate.cpp

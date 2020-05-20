@@ -45,7 +45,6 @@
 #include "exifitemdelegate.h"
 #include "gearlistmodel.h"
 #include "geartreemodel.h"
-#include "onlineversionchecker.h"
 
 using namespace Digikam;
 
@@ -70,11 +69,14 @@ private:
     // directory model
     QFileSystemModel* fileViewModel;
     QFileSystemModel* dirViewModel;
+
     // pixmap to hold file preview
     QPixmap filePreviewPixmap;
+
     // custom directory sorter
     DirSortFilterProxyModel* fileSorter;
     DirSortFilterProxyModel* dirSorter;
+
     // current filename
     QString curFileName;
 
@@ -117,7 +119,7 @@ private:
     // data is dirty
     void setDirty(bool isDirty)
     {
-        if(previewIndex != QModelIndex())
+        if( previewIndex != QModelIndex())
         {
             dirty = isDirty;
             setWindowModified(isDirty);
@@ -177,9 +179,6 @@ private:
     void addFileNames(QStringList& fileNames, const QString& path, bool includeDirs = false);
     QStringList scanSubfolders(QModelIndexList selIdx, bool includeDirs = false);
     int filesFound;
-
-    OnlineVersionChecker* verChecker;
-    QMessageBox progressBox;
 
     static const QUrl helpUrl;
 
@@ -250,13 +249,6 @@ private Q_SLOTS:
 
     // on update preview
     void previewUpdate();
-
-    // new version available
-    void newVersionAvailable(QString selfTag, QString newTag, QDateTime newTime, QString newSummary);
-    void newVersionCheckError(QNetworkReply::NetworkError error);
-
-    // cancel version check
-    void cancelVersionCheck();
 
     // scroll to the selected directory
     void scrollToSelectedDir();

@@ -54,8 +54,7 @@ const QUrl AnalogExif::helpUrl("http://analogexif.sourceforge.net/help/");
 
 AnalogExif::AnalogExif(DPlugin* const tool)
     : QMainWindow(nullptr),
-      m_tool(tool),
-      progressBox(QMessageBox::NoIcon, tr("New program version"), tr("Checking for the new version..."), QMessageBox::Cancel, this)
+      m_tool(tool)
 {
     ui.setupUi(this);
 
@@ -135,10 +134,6 @@ AnalogExif::AnalogExif(DPlugin* const tool)
     ui.fileView->addActions(contextMenus);
     ui.dirView->addActions(contextMenus);
 
-    verChecker = new OnlineVersionChecker(this);
-    connect(verChecker, SIGNAL(newVersionAvailable(QString, QString, QDateTime, QString)), this, SLOT(newVersionAvailable(QString, QString, QDateTime, QString)));
-    connect(verChecker, SIGNAL(newVersionCheckError(QNetworkReply::NetworkError)), this, SLOT(newVersionCheckError(QNetworkReply::NetworkError)));
-
 #ifdef Q_WS_WIN
     if(QSysInfo::windowsVersion() >= QSysInfo::WV_VISTA)
     {
@@ -158,19 +153,23 @@ AnalogExif::~AnalogExif()
 {
     if(exifTreeModel)
         delete exifTreeModel;
+
     if(filmsList)
         delete filmsList;
+
     if(gearList)
         delete gearList;
+
     if(authorsList)
         delete authorsList;
+
     if(developersList)
         delete developersList;
+
     delete dirSorter;
     delete dirViewModel;
     delete fileSorter;
     delete fileViewModel;
-    delete verChecker;
     // delete filePreviewPixmap;
 }
 
@@ -305,13 +304,6 @@ bool AnalogExif::initialize()
 
         fileSorter->setSourceModel(fileViewModel);
         ui.fileView->setRootIndex(fileSorter->mapFromSource(fileViewModel->index(lastFolder)));
-    }
-
-    // check for the new version
-    if(verChecker->needToCheckVersion())
-    {
-        progressBox.open(this, SLOT(cancelVersionCheck()));
-        verChecker->checkForNewVersion();
     }
 
     return true;
@@ -1936,36 +1928,6 @@ void AnalogExif::on_action_About_triggered(bool)
     QPointer<DPluginAboutDlg> dlg = new DPluginAboutDlg(m_tool);
     dlg->exec();
     delete dlg;
-}
-
-void AnalogExif::newVersionAvailable(QString selfTag, QString newTag, QDateTime newTime, QString newSummary)
-{
-    progressBox.close();
-
-    QMessageBox info(QMessageBox::Question, tr("New program version available"), tr("New version of AnalogExif is available.\n"
-               "Current version is %1, new version is %2 from %3.\n\n"
-               "Do you want to open the program website?").arg(selfTag).arg(newTag).arg(newTime.toString("dd.MM.yyyy")), QMessageBox::Yes | QMessageBox::No, this);
-    info.setDetailedText(newSummary);
-
-    if(info.exec() == QMessageBox::Yes)
-    {
-            OnlineVersionChecker::openDownloadPage();
-    }
-}
-
-void AnalogExif::cancelVersionCheck()
-{
-    verChecker->cancelCheck();
-}
-
-void AnalogExif::newVersionCheckError(QNetworkReply::NetworkError error)
-{
-    progressBox.close();
-
-    if(error != QNetworkReply::NoError)
-    {
-        QMessageBox::critical(this, tr("New program version"), tr("Error checking for the new program version."));
-    }
 }
 
 void AnalogExif::on_actionHelp_triggered(bool)
