@@ -20,6 +20,8 @@
 #ifndef ANALOGEXIF_H
 #define ANALOGEXIF_H
 
+// Qt includes
+
 #include <QMainWindow>
 #include <QFileSystemModel>
 #include <QPixmap>
@@ -32,7 +34,10 @@
 
 // digiKam includes
 
-#include "dplugin.h"
+#include "dplugingeneric.h"
+#include "dinfointerface.h"
+
+// Local includes
 
 #ifdef Q_WS_MAC
 #include "ui_analogexif_mac.h"
@@ -54,14 +59,15 @@ class AnalogExif : public QMainWindow
 
 public:
 
-    explicit AnalogExif(DPlugin* const tool);
+    explicit AnalogExif(DPluginGeneric* const tool, DInfoInterface* const iface);
     ~AnalogExif();
 
     bool initialize();
 
 private:
 
-    DPlugin* m_tool;
+    DPluginGeneric* m_tool;
+    DInfoInterface* m_iface;
 
     Ui::AnalogExifClass ui;
     QSettings settings;

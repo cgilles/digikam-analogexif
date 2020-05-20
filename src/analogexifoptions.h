@@ -45,9 +45,6 @@ public:
     explicit AnalogExifOptions(QWidget* const parent = nullptr);
     ~AnalogExifOptions();
 
-    // setup proxy from settings
-    static void setupProxy();
-
 private:
 
     Ui::AnalogExifOptionsClass ui;

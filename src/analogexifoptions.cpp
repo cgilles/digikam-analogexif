@@ -412,8 +412,6 @@ bool AnalogExifOptions::saveOptions()
     //query.exec("COMMIT TRANSACTION");
     query.exec("RELEASE EditOptionsStart");
 
-    setupProxy();
-
     return true;
 }
 
@@ -597,65 +595,6 @@ void AnalogExifOptions::on_updCheckInterval_currentIndexChanged(int newValue)
 {
     if(newValue != initialState_updCheck)
         setDirty();
-}
-
-void AnalogExifOptions::setupProxy()
-{
-    QSettings settings;
-
-    if(settings.value("UseProxy", false).toBool())
-    {
-        // get proxy parameters
-        QNetworkProxy::ProxyType proxyType = (QNetworkProxy::ProxyType)settings.value("ProxyType", QNetworkProxy::HttpProxy).toInt();
-
-        // host name
-        QString hostName = settings.value("ProxyHostName", QString()).toString();
-
-        // check for valid hostname
-        if(hostName == QString())
-            return;
-
-        // proxy port
-        int proxyPort = settings.value("ProxyPort", 0).toInt();
-
-        // authentication
-        QString userName = settings.value("ProxyUsername", QString()).toString();
-        QString userPassword;
-
-#ifdef Q_WS_WIN32
-        QByteArray userPwd = settings.value("ProxyPassword", QByteArray()).toByteArray();
-
-        // decode password using CryptoAPI under Windows
-        if(userPwd != QByteArray())
-        {
-            DATA_BLOB DataIn;
-            DATA_BLOB DataOut;
-
-            DataIn.cbData = userPwd.length();
-            DataIn.pbData = (BYTE*)userPwd.data();
-
-            if(!CryptUnprotectData(&DataIn, NULL, NULL, NULL, NULL, 0, &DataOut))
-                return;
-
-            userPwd.clear();
-            userPwd.append((const char*)DataOut.pbData, DataOut.cbData);
-
-            LocalFree(DataOut.pbData);
-
-            userPassword = userPwd;
-        }
-#else
-        userPassword = settings.value("ProxyPassword", QString()).toString();
-#endif  // Q_WS_WIN32
-
-        // set application-wide proxy
-        QNetworkProxy::setApplicationProxy(QNetworkProxy(proxyType, hostName, proxyPort, userName, userPassword));
-    }
-    else
-    {
-        // set no proxy
-        QNetworkProxy::setApplicationProxy(QNetworkProxy(QNetworkProxy::NoProxy));
-    }
 }
 
 void AnalogExifOptions::on_actionMove_up_triggered(bool)

@@ -127,7 +127,7 @@ void AnalogExifPlugin::slotAnalogExif()
             items << url.url();
         }
 
-        AnalogExif* const dlg = new AnalogExif(this);
+        AnalogExif* const dlg = new AnalogExif(this, iface);
         dlg->initialize();
         dlg->show();
     }

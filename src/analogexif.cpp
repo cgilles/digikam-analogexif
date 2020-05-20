@@ -46,15 +46,12 @@
 #include "progressdialog.h"
 #include "copymetadatadialog.h"
 
-#ifdef Q_WS_WIN
-#   include <windows.h>
-#endif
-
 const QUrl AnalogExif::helpUrl("http://analogexif.sourceforge.net/help/");
 
-AnalogExif::AnalogExif(DPlugin* const tool)
+AnalogExif::AnalogExif(DPluginGeneric* const tool, DInfoInterface* const iface)
     : QMainWindow(nullptr),
-      m_tool(tool)
+      m_tool(tool),
+      m_iface(iface)
 {
     ui.setupUi(this);
 
@@ -145,8 +142,6 @@ AnalogExif::AnalogExif(DPlugin* const tool)
     }
 #endif
 
-    // set application proxy
-    AnalogExifOptions::setupProxy();
 }
 
 AnalogExif::~AnalogExif()
@@ -185,7 +180,7 @@ bool AnalogExif::initialize()
         QMessageBox msgBox(QMessageBox::Critical, tr("Open library error"),
             tr("Unable to find previously used library file:\n\n") + dbName +
             tr("\n\nDo you want to open existing library file or create new library?"));
-        
+
         if(dbName.isNull())
         {
             msgBox.setText(tr("Unable to find previously used library file") +
@@ -231,7 +226,7 @@ bool AnalogExif::initialize()
     connect(exifTreeModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(modelDataChanged(const QModelIndex&, const QModelIndex&)));
 
     connect(ui.metadataView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(metadataView_selectionChanged(const QItemSelection&, const QItemSelection&)));
-    
+
     // span the categories to full row
     setupTreeView();
 
@@ -269,6 +264,7 @@ bool AnalogExif::initialize()
 
     if(gearList->bodyCount() == 0)
         ui.gearView->setRootIsDecorated(false);
+
     ui.gearView->expandAll();
 
     // start scan
@@ -277,33 +273,48 @@ bool AnalogExif::initialize()
     QApplication::restoreOverrideCursor();
 
     dirSorter->setSourceModel(dirViewModel);
+
     for(int i = 0; i < dirSorter->columnCount(); i++)
         ui.dirView->hideColumn(i);
 
     ui.dirView->showColumn(0);
 
-    connect(ui.dirView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(dirView_selectionChanged(const QItemSelection&, const QItemSelection&)));
-    connect(ui.fileView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(fileView_selectionChanged(const QItemSelection&, const QItemSelection&)));
+    connect(ui.dirView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+            this, SLOT(dirView_selectionChanged(const QItemSelection&, const QItemSelection&)));
 
-    QString lastFolder = settings.value("lastFolder", QDir::homePath()).toString();
-    if(lastFolder == "")
-        lastFolder = QDir::homePath();
-    curDirIndex = dirSorter->mapFromSource(dirViewModel->index(lastFolder));
-    if(curDirIndex != QModelIndex())
+    connect(ui.fileView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+            this, SLOT(fileView_selectionChanged(const QItemSelection&, const QItemSelection&)));
+
+    QString currFolder = QDir::homePath();
+
+    if (m_iface)
     {
-        ui.directoryLine->setText(QDir::toNativeSeparators(lastFolder));
+        QList<QUrl> urls = m_iface->currentAlbumItems();
+
+        if (!urls.isEmpty())
+        {
+            currFolder = urls.first().adjusted(QUrl::RemoveFilename).toLocalFile();
+        }
+    }
+
+    curDirIndex = dirSorter->mapFromSource(dirViewModel->index(currFolder));
+
+    if (curDirIndex != QModelIndex())
+    {
+        ui.directoryLine->setText(QDir::toNativeSeparators(currFolder));
         ui.dirView->setCurrentIndex(curDirIndex);
         ui.dirView->setExpanded(curDirIndex, true);
+
 #ifndef Q_WS_MAC
         QTimer::singleShot(200, this, SLOT(scrollToSelectedDir()));
 #endif
 
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-        fileViewModel->setRootPath(lastFolder);
+        fileViewModel->setRootPath(currFolder);
         QApplication::restoreOverrideCursor();
 
         fileSorter->setSourceModel(fileViewModel);
-        ui.fileView->setRootIndex(fileSorter->mapFromSource(fileViewModel->index(lastFolder)));
+        ui.fileView->setRootIndex(fileSorter->mapFromSource(fileViewModel->index(currFolder)));
     }
 
     return true;
@@ -332,7 +343,7 @@ void AnalogExif::dirView_selectionChanged(const QItemSelection& selected, const 
             }
         }
     }
-    
+
     // selIdx = ui.dirView->selectionModel()->selectedRows();
 
     if(selIdx.count() == 0)
@@ -934,15 +945,6 @@ void AnalogExif::closeEvent(QCloseEvent *event)
 
     // save required settings
     settings.setValue("dbName", db.databaseName());
-
-    QModelIndex curFolder = ui.dirView->selectionModel()->currentIndex();
-    if(curFolder != QModelIndex())
-    {
-        if(!dirViewModel->isDir(dirSorter->mapToSource(curFolder)))
-            settings.setValue("lastFolder", QDir::toNativeSeparators(dirViewModel->fileInfo(dirSorter->mapToSource(curFolder)).canonicalPath()));
-        else
-            settings.setValue("lastFolder", QDir::toNativeSeparators(dirViewModel->filePath(dirSorter->mapToSource(curFolder))));
-    }
 
     // save window state and geometry
     settings.setValue("WindowState", saveState());
