@@ -27,17 +27,10 @@
 
 #include "exiftreemodel.h"
 
-#ifdef Q_WS_WIN32
-
-// use Windows CryptoAPI
-#pragma comment(lib, "crypt32.lib")
-#include <windows.h>
-#include <Wincrypt.h>
-
-#endif
-
-AnalogExifOptions::AnalogExifOptions(QWidget *parent)
-: QDialog(parent), dirty(false), progressBox(QMessageBox::NoIcon, tr("New program version"), tr("Checking for the new version..."), QMessageBox::Cancel, this)
+AnalogExifOptions::AnalogExifOptions(QWidget* const parent)
+    : QDialog(parent),
+      dirty(false),
+      progressBox(QMessageBox::NoIcon, tr("New program version"), tr("Checking for the new version..."), QMessageBox::Cancel, this)
 {
     ui.setupUi(this);
 
@@ -86,12 +79,6 @@ AnalogExifOptions::AnalogExifOptions(QWidget *parent)
 
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint);
 
-    verChecker = new OnlineVersionChecker(this);
-    connect(verChecker, SIGNAL(newVersionAvailable(QString, QString, QDateTime, QString)), this, SLOT(newVersionAvailable(QString, QString, QDateTime, QString)));
-    connect(verChecker, SIGNAL(newVersionCheckError(QNetworkReply::NetworkError)), this, SLOT(newVersionCheckError(QNetworkReply::NetworkError)));
-
-    ui.proxyAddress->setValidator(new QRegExpValidator(QRegExp("[a-zA-Z0-9$-_@\\.&+!*\"'(),=;/#?: %\\\\]*"), this));
-
     ui.buttonBox->button(QDialogButtonBox::Apply)->setEnabled(false);
 }
 
@@ -101,7 +88,6 @@ AnalogExifOptions::~AnalogExifOptions()
     delete tagNameEditor;
     delete tagFormatEditor;
     delete gearTempList;
-    delete verChecker;
 }
 
 void AnalogExifOptions::on_gearTypesList_itemClicked(QListWidgetItem*)
@@ -320,56 +306,6 @@ void AnalogExifOptions::loadOptions()
         ui.createBkpCbox->setChecked(false);
     }
 
-    // load update period
-    initialState_updCheck = settings.value("CheckForUpdatePeriod", 2).toInt();
-    ui.updCheckInterval->setCurrentIndex(initialState_updCheck);
-
-    // load network proxy settings
-    ui.updProxyGBox->setChecked(settings.value("UseProxy", false).toBool());
-    initialState_updProxyGBox = ui.updProxyGBox->isChecked();
-
-    if(settings.value("ProxyType", QNetworkProxy::HttpProxy).toInt() == QNetworkProxy::HttpProxy)
-        initialState_proxyType = 0;
-    else
-        initialState_proxyType = 1; // SOCKS5
-
-    ui.proxyTypeCBox->setCurrentIndex(initialState_proxyType);
-
-    ui.proxyAddress->setText(settings.value("ProxyHostName", QString()).toString());
-    initialState_proxyPort = settings.value("ProxyPort", 0).toInt();
-    ui.proxyPort->setValue(initialState_proxyPort);
-    ui.proxyUsername->setText(settings.value("ProxyUsername", QString()).toString());
-
-    QString userPassword;
-
-#ifdef Q_WS_WIN32
-    QByteArray userPwd = settings.value("ProxyPassword", QByteArray()).toByteArray();
-
-    // decode password using CryptoAPI under Windows
-    if(userPwd != QByteArray())
-    {
-        DATA_BLOB DataIn;
-        DATA_BLOB DataOut;
-
-        DataIn.cbData = userPwd.length();
-        DataIn.pbData = (BYTE*)userPwd.data();
-
-        if(!CryptUnprotectData(&DataIn, NULL, NULL, NULL, NULL, 0, &DataOut))
-            return;
-
-        userPwd.clear();
-        userPwd.append((const char*)DataOut.pbData, DataOut.cbData);
-
-        LocalFree(DataOut.pbData);
-
-        userPassword = userPwd;
-    }
-#else
-    userPassword = settings.value("ProxyPassword", QString()).toString();
-#endif  // Q_WS_WIN32
-
-    ui.proxyPassword->setText(userPassword);
-
     // load user NS options
     originalNs = "";
     originalNsPrefix = "";
@@ -467,71 +403,12 @@ bool AnalogExifOptions::saveOptions()
         }
     }
 
-    // save update options
-    settings.setValue("CheckForUpdatePeriod", ui.updCheckInterval->currentIndex());
-
-    // save network proxy settings
-    settings.setValue("UseProxy", ui.updProxyGBox->isChecked());
-
-    if(ui.updProxyGBox->isChecked())
-    {
-        if(ui.proxyTypeCBox->currentIndex() == 0)
-            settings.setValue("ProxyType", QNetworkProxy::HttpProxy);
-        else
-            settings.setValue("ProxyType", QNetworkProxy::Socks5Proxy);
-
-        settings.setValue("ProxyHostName", ui.proxyAddress->text());
-        settings.setValue("ProxyPort", ui.proxyPort->value());
-        settings.setValue("ProxyUsername", ui.proxyUsername->text());
-
-#ifdef Q_WS_WIN32
-        QByteArray userPassword;
-        userPassword.append(ui.proxyPassword->text());
-
-        // encode password using CryptoAPI under Windows
-        if(userPassword != QByteArray())
-        {
-            DATA_BLOB DataIn;
-            DATA_BLOB DataOut;
-
-            DataIn.cbData = userPassword.length();
-            DataIn.pbData = (BYTE*)userPassword.data();
-
-            if(!CryptProtectData(&DataIn, L"Proxy authentication", NULL, NULL, NULL, 0, &DataOut))
-                return false;
-
-            userPassword.clear();
-            userPassword.append((const char*)DataOut.pbData, DataOut.cbData);
-
-            settings.setValue("ProxyPassword", userPassword);
-
-            LocalFree(DataOut.pbData);
-        }
-#else
-        settings.setValue("ProxyPassword", ui.proxyPassword->text());
-#endif  // Q_WS_WIN32
-    }
-    else
-    {
-        // clear proxy settings
-        settings.remove("ProxyType");
-        settings.remove("ProxyHostName");
-        settings.remove("ProxyPort");
-        settings.remove("ProxyUsername");
-        settings.remove("ProxyPassword");
-    }
-
     settings.sync();
 
     initialState_userNsGBox = ui.userNsGBox->isChecked();
     initialState_createBkpCbox = ui.createBkpCbox->isChecked();
     initialState_etagsCboxStorageXp = ui.etagsCboxStorageXp->isChecked();
     initialState_etagsCboxStorageUser = ui.etagsCboxStorageUser->isChecked();
-    initialState_updProxyGBox = ui.updProxyGBox->isChecked();
-
-    initialState_proxyPort = ui.proxyPort->value();
-    initialState_proxyType = ui.proxyTypeCBox->currentIndex();
-    initialState_updCheck = ui.updCheckInterval->currentIndex();
 
     //query.exec("COMMIT TRANSACTION");
     query.exec("RELEASE EditOptionsStart");
@@ -780,46 +657,6 @@ void AnalogExifOptions::setupProxy()
         // set no proxy
         QNetworkProxy::setApplicationProxy(QNetworkProxy(QNetworkProxy::NoProxy));
     }
-}
-
-void AnalogExifOptions::on_updCheckBtn_clicked()
-{
-    progressBox.open(this, SLOT(cancelVersionCheck()));
-    verChecker->checkForNewVersion(true);
-}
-
-void AnalogExifOptions::newVersionAvailable(QString selfTag, QString newTag, QDateTime newTime, QString newSummary)
-{
-    progressBox.close();
-
-    QMessageBox info(QMessageBox::Question, tr("New program version available"), tr("New version of AnalogExif is available.\n"
-           "Current version is %1, new version is %2 from %3.\n\n"
-           "Do you want to open the program website?").arg(selfTag).arg(newTag).arg(newTime.toString("dd.MM.yyyy")), QMessageBox::Yes | QMessageBox::No, this);
-    info.setDetailedText(newSummary);
-
-    if(info.exec() == QMessageBox::Yes)
-    {
-        OnlineVersionChecker::openDownloadPage();
-    }
-}
-
-void AnalogExifOptions::newVersionCheckError(QNetworkReply::NetworkError error)
-{
-    progressBox.close();
-
-    if(error == QNetworkReply::NoError)
-    {
-        QMessageBox::information(this, tr("New program version"), tr("No new version of the program is available."));
-    }
-    else
-    {
-        QMessageBox::critical(this, tr("New program version"), tr("Error checking for the new program version."));
-    }
-}
-
-void AnalogExifOptions::cancelVersionCheck()
-{
-    verChecker->cancelCheck();
 }
 
 void AnalogExifOptions::on_actionMove_up_triggered(bool)

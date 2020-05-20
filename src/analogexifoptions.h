@@ -27,6 +27,7 @@
 #include <QNetworkReply>
 #include <QDateTime>
 #include <QMessageBox>
+#include <QPushButton>
 
 #include "ui_analogexifoptions.h"
 
@@ -34,20 +35,21 @@
 #include "tagtypeitemdelegate.h"
 #include "tagnameitemdelegate.h"
 #include "tagselectvalsitemdelegate.h"
-#include "onlineversionchecker.h"
 
 class AnalogExifOptions : public QDialog
 {
     Q_OBJECT
 
 public:
-    AnalogExifOptions(QWidget *parent = 0);
+
+    explicit AnalogExifOptions(QWidget* const parent = nullptr);
     ~AnalogExifOptions();
 
     // setup proxy from settings
     static void setupProxy();
 
 private:
+
     Ui::AnalogExifOptionsClass ui;
 
     OptGearTemplateModel* gearTempList;
@@ -89,14 +91,15 @@ private:
     QString originalNsPrefix;
 
     QMessageBox progressBox;
-    OnlineVersionChecker* verChecker;
-
+    
     void saveAndExit();
 
 public Q_SLOTS:
+
     virtual void reject();
 
 private Q_SLOTS:
+
     // on gear clicked
     void on_gearTypesList_itemClicked(QListWidgetItem* item);
     // on template context menu
@@ -121,14 +124,6 @@ private Q_SLOTS:
     void gearList_selectionChanged(const QItemSelection&, const QItemSelection&);
     // user ns schema changed
     void on_userNsPrefix_textEdited(const QString &);
-    // check for new verison button
-    void on_updCheckBtn_clicked();
-    // new version available
-    void newVersionAvailable(QString, QString, QDateTime, QString);
-    // new version check error
-    void newVersionCheckError(QNetworkReply::NetworkError);
-    // cancel version check
-    void cancelVersionCheck();
 
     // dirtying signals
     void on_userNsEdit_textEdited(const QString &);
