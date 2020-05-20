@@ -23,6 +23,11 @@
 // Qt includes
 
 #include <QSortFilterProxyModel>
+#include <QFileIconProvider>
+#include <QFileInfo>
+#include <QIcon>
+
+class ExifTreeModel;
 
 /**
  * sorts the files/directory view
@@ -40,6 +45,21 @@ public:
 
     bool lessThan(const QModelIndex &left, const QModelIndex &right)            const;
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+};
+
+// -------------------------------------------------------------------------------------
+
+class FileIconProvider : public QFileIconProvider
+{
+public:
+
+    FileIconProvider(ExifTreeModel* const model);
+    
+    QIcon icon(const QFileInfo& info) const;
+    
+private:
+    
+    ExifTreeModel* m_model;
 };
 
 #endif // DIRSORTFILTERPROXYMODEL_H

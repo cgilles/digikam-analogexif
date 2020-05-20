@@ -22,6 +22,11 @@
 // Qt includes
 
 #include <QFileSystemModel>
+#include <QPixmap>
+
+// Local includes
+
+#include "exiftreemodel.h"
 
 bool DirSortFilterProxyModel::lessThan(const QModelIndex& left, const QModelIndex& right) const
 {
@@ -62,4 +67,28 @@ QVariant DirSortFilterProxyModel::data(const QModelIndex& index, int role) const
     }
 
     return QSortFilterProxyModel::data(index, role);
+}
+
+// -----------------------------------------------------------------------------------------------------------
+
+FileIconProvider::FileIconProvider(ExifTreeModel* const model)
+{
+    m_model = model;
+}
+    
+QIcon FileIconProvider::icon(const QFileInfo& info) const
+{
+    if (!QFileInfo(info.filePath()).isDir())
+    {
+        // if the file is image
+
+        QImage preview = m_model->getPreview(info.filePath());
+        QIcon myIcon(QPixmap::fromImage(preview));
+
+        return myIcon;
+    }
+
+    // if the file is not image, return default icon
+
+    return QFileIconProvider::icon(info);
 }

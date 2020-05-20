@@ -68,6 +68,7 @@ private:
 
     DPluginGeneric*             m_tool;
     DInfoInterface*             m_iface;
+    FileIconProvider*           m_fileIconProvider;
     
     Ui::AnalogExifClass         ui;
     QSettings                   settings;

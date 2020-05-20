@@ -51,7 +51,8 @@ const QUrl AnalogExif::helpUrl("http://analogexif.sourceforge.net/help/");
 AnalogExif::AnalogExif(DPluginGeneric* const tool, DInfoInterface* const iface)
     : QMainWindow(nullptr),
       m_tool(tool),
-      m_iface(iface)
+      m_iface(iface),
+      m_fileIconProvider(nullptr)
 {
     ui.setupUi(this);
 
@@ -84,15 +85,15 @@ AnalogExif::AnalogExif(DPluginGeneric* const tool, DInfoInterface* const iface)
     // filePreviewPixmap = new QPixmap();
     ui.filePreview->setPixmap(filePreviewPixmap);
 
-    exifTreeModel = nullptr;
-    filmsList = nullptr;
-    gearList = nullptr;
-    authorsList = nullptr;
+    exifTreeModel  = nullptr;
+    filmsList      = nullptr;
+    gearList       = nullptr;
+    authorsList    = nullptr;
     developersList = nullptr;
 
     // set context menus
     QList<QAction*> contextMenus;
-    QAction* separator = new QAction(this);
+    QAction* const separator = new QAction(this);
     separator->setSeparator(true);
 
     contextMenus << ui.actionApply_gear << separator << ui.action_Undo << ui.action_Save << separator << ui.actionEdit_gear;
@@ -121,8 +122,11 @@ AnalogExif::AnalogExif(DPluginGeneric* const tool, DInfoInterface* const iface)
     setWindowTitle(QCoreApplication::applicationName());
 
 #ifndef Q_WS_MAC
+
     // connect preview updates
-    connect(this, SIGNAL(updatePreview()), this, SLOT(previewUpdate()), Qt::BlockingQueuedConnection);
+    connect(this, SIGNAL(updatePreview()), this,
+            SLOT(previewUpdate()), Qt::BlockingQueuedConnection);
+
 #endif
 
     contextMenus.clear();
@@ -132,7 +136,8 @@ AnalogExif::AnalogExif(DPluginGeneric* const tool, DInfoInterface* const iface)
     ui.dirView->addActions(contextMenus);
 
 #ifdef Q_WS_WIN
-    if(QSysInfo::windowsVersion() >= QSysInfo::WV_VISTA)
+
+    if (QSysInfo::windowsVersion() >= QSysInfo::WV_VISTA)
     {
         // For Vista/W7 style - disable alternating row colors on equipment views for better visibility
         ui.gearView->setAlternatingRowColors(false);
@@ -140,6 +145,7 @@ AnalogExif::AnalogExif(DPluginGeneric* const tool, DInfoInterface* const iface)
         ui.developerView->setAlternatingRowColors(false);
         ui.authorView->setAlternatingRowColors(false);
     }
+
 #endif
 
 }
@@ -165,7 +171,9 @@ AnalogExif::~AnalogExif()
     delete dirViewModel;
     delete fileSorter;
     delete fileViewModel;
-    // delete filePreviewPixmap;
+    delete m_fileIconProvider;
+
+    // delete filePreviewPixmap;exifTreeModel
 }
 
 // perform all initialization
@@ -196,15 +204,15 @@ bool AnalogExif::initialize()
 
         msgBox.exec();
 
-        if(msgBox.clickedButton() == cancelBtn)
+        if      (msgBox.clickedButton() == cancelBtn)
         {
             return false;
         }
-        else if(msgBox.clickedButton() == openBtn)
+        else if (msgBox.clickedButton() == openBtn)
         {
             dbName = QFileDialog::getOpenFileName(nullptr, tr("Open equipment library"), QString(), tr("AnalogExif library files (*.ael);;All files (*.*)"));
         }
-        else if(msgBox.clickedButton() == newBtn)
+        else if (msgBox.clickedButton() == newBtn)
         {
             dbName = createLibrary();
         }
@@ -216,16 +224,20 @@ bool AnalogExif::initialize()
         return false;
 
     // set exif metadata model
-    exifTreeModel = new ExifTreeModel(this);
-    exifItemDelegate = new ExifItemDelegate(this);
-
+    exifTreeModel      = new ExifTreeModel(this);
+    exifItemDelegate   = new ExifItemDelegate(this);
+    m_fileIconProvider = new FileIconProvider(exifTreeModel);
+    fileViewModel->setIconProvider(m_fileIconProvider);
+    
     ui.metadataView->setModel(exifTreeModel);
     ui.metadataView->setItemDelegateForColumn(1, exifItemDelegate);
 
     // connect to data changed signal
-    connect(exifTreeModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(modelDataChanged(const QModelIndex&, const QModelIndex&)));
+    connect(exifTreeModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
+            this, SLOT(modelDataChanged(const QModelIndex&, const QModelIndex&)));
 
-    connect(ui.metadataView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(metadataView_selectionChanged(const QItemSelection&, const QItemSelection&)));
+    connect(ui.metadataView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+            this, SLOT(metadataView_selectionChanged(const QItemSelection&, const QItemSelection&)));
 
     // span the categories to full row
     setupTreeView();
@@ -235,34 +247,38 @@ bool AnalogExif::initialize()
     filmsList->reload();
 
     ui.filmView->setModel(filmsList);
-    connect(ui.filmView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(filmAndGearView_selectionChanged(const QItemSelection&, const QItemSelection&)));
+    connect(ui.filmView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+            this, SLOT(filmAndGearView_selectionChanged(const QItemSelection&, const QItemSelection&)));
 
     // authors view
     authorsList = new GearListModel(this, 4, tr("No authors defined"));
     authorsList->reload();
 
     ui.authorView->setModel(authorsList);
-    connect(ui.authorView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(filmAndGearView_selectionChanged(const QItemSelection&, const QItemSelection&)));
+    connect(ui.authorView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+            this, SLOT(filmAndGearView_selectionChanged(const QItemSelection&, const QItemSelection&)));
 
     // developers view
     developersList = new GearListModel(this, 3, tr("No developers defined"));
     developersList->reload();
 
     ui.developerView->setModel(developersList);
-    connect(ui.developerView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(filmAndGearView_selectionChanged(const QItemSelection&, const QItemSelection&)));
+    connect(ui.developerView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+            this, SLOT(filmAndGearView_selectionChanged(const QItemSelection&, const QItemSelection&)));
 
     // gear view
     gearList = new GearTreeModel(this);
     gearList->reload();
     ui.gearView->setModel(gearList);
-    connect(ui.gearView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(filmAndGearView_selectionChanged(const QItemSelection&, const QItemSelection&)));
+    connect(ui.gearView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+            this, SLOT(filmAndGearView_selectionChanged(const QItemSelection&, const QItemSelection&)));
 
     filmsList->setApplicable(true);
     gearList->setApplicable(true);
     developersList->setApplicable(true);
     authorsList->setApplicable(true);
 
-    if(gearList->bodyCount() == 0)
+    if (gearList->bodyCount() == 0)
         ui.gearView->setRootIsDecorated(false);
 
     ui.gearView->expandAll();
