@@ -7,14 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>909</width>
-    <height>633</height>
+    <height>639</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string/>
   </property>
   <property name="windowIcon">
-   <iconset resource="analogexif.qrc">
+   <iconset resource="../analogexif.qrc">
     <normaloff>:/images/icons/film_edit.png</normaloff>:/images/icons/film_edit.png</iconset>
   </property>
   <property name="statusTip">
@@ -129,9 +129,6 @@ QTreeView::item:selected:!active{
           <property name="animated">
            <bool>false</bool>
           </property>
-          <attribute name="headerVisible">
-           <bool>false</bool>
-          </attribute>
           <attribute name="headerVisible">
            <bool>false</bool>
           </attribute>
@@ -284,12 +281,6 @@ QTreeView::item:selected:!active{
             </attribute>
             <attribute name="headerCascadingSectionResizes">
              <bool>true</bool>
-            </attribute>
-            <attribute name="headerCascadingSectionResizes">
-             <bool>true</bool>
-            </attribute>
-            <attribute name="headerVisible">
-             <bool>false</bool>
             </attribute>
            </widget>
           </item>
@@ -572,7 +563,7 @@ QListView::item:selected:!active{
      <x>0</x>
      <y>0</y>
      <width>909</width>
-     <height>21</height>
+     <height>34</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -669,7 +660,7 @@ QListView::item:selected:!active{
   </action>
   <action name="actionPreferences">
    <property name="icon">
-    <iconset resource="analogexif.qrc">
+    <iconset resource="../analogexif.qrc">
      <normaloff>:/images/icons/cog.png</normaloff>:/images/icons/cog.png</iconset>
    </property>
    <property name="text">
@@ -681,7 +672,7 @@ QListView::item:selected:!active{
   </action>
   <action name="actionEdit_gear">
    <property name="icon">
-    <iconset resource="analogexif.qrc">
+    <iconset resource="../analogexif.qrc">
      <normaloff>:/images/icons/camera_edit.png</normaloff>:/images/icons/camera_edit.png</iconset>
    </property>
    <property name="text">
@@ -696,7 +687,7 @@ QListView::item:selected:!active{
   </action>
   <action name="actionOpen">
    <property name="icon">
-    <iconset resource="analogexif.qrc">
+    <iconset resource="../analogexif.qrc">
      <normaloff>:/images/icons/folder_camera.png</normaloff>:/images/icons/folder_camera.png</iconset>
    </property>
    <property name="text">
@@ -717,7 +708,7 @@ QListView::item:selected:!active{
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="analogexif.qrc">
+    <iconset resource="../analogexif.qrc">
      <normaloff>:/images/icons/camera_go.png</normaloff>:/images/icons/camera_go.png</iconset>
    </property>
    <property name="text">
@@ -735,7 +726,7 @@ QListView::item:selected:!active{
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="analogexif.qrc">
+    <iconset resource="../analogexif.qrc">
      <normaloff>:/images/icons/arrow_rotate_anticlockwise.png</normaloff>:/images/icons/arrow_rotate_anticlockwise.png</iconset>
    </property>
    <property name="text">
@@ -753,7 +744,7 @@ QListView::item:selected:!active{
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="analogexif.qrc">
+    <iconset resource="../analogexif.qrc">
      <normaloff>:/images/icons/disk.png</normaloff>:/images/icons/disk.png</iconset>
    </property>
    <property name="text">
@@ -806,7 +797,7 @@ QListView::item:selected:!active{
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="analogexif.qrc">
+    <iconset resource="../analogexif.qrc">
      <normaloff>:/images/icons/film_edit.png</normaloff>:/images/icons/film_edit.png</iconset>
    </property>
    <property name="text">
@@ -824,7 +815,7 @@ QListView::item:selected:!active{
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="analogexif.qrc">
+    <iconset resource="../analogexif.qrc">
      <normaloff>:/images/icons/film_go.png</normaloff>:/images/icons/film_go.png</iconset>
    </property>
    <property name="text">
@@ -903,7 +894,7 @@ QListView::item:selected:!active{
   <tabstop>authorView</tabstop>
  </tabstops>
  <resources>
-  <include location="analogexif.qrc"/>
+  <include location="../analogexif.qrc"/>
  </resources>
  <connections>
   <connection>

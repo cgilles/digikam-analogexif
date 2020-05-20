@@ -17,7 +17,7 @@
    <string>Metadata tag name and options</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="analogexif.qrc">
+   <iconset resource="../analogexif.qrc">
     <normaloff>:/images/icons/film_edit.png</normaloff>:/images/icons/film_edit.png</iconset>
   </property>
   <property name="modal">
@@ -74,7 +74,7 @@
   <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources>
-  <include location="analogexif.qrc"/>
+  <include location="../analogexif.qrc"/>
  </resources>
  <connections/>
 </ui>

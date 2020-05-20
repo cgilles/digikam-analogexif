@@ -10,14 +10,14 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>62</height>
+    <height>80</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Calculating files...</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="analogexif.qrc">
+   <iconset resource="../analogexif.qrc">
     <normaloff>:/images/icons/film_edit.png</normaloff>:/images/icons/film_edit.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -59,7 +59,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="analogexif.qrc"/>
+  <include location="../analogexif.qrc"/>
  </resources>
  <connections/>
 </ui>

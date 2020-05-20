@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>628</width>
+    <width>1007</width>
     <height>428</height>
    </rect>
   </property>
@@ -17,7 +17,7 @@
    <string>Options[*]</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="analogexif.qrc">
+   <iconset resource="../analogexif.qrc">
     <normaloff>:/images/icons/cog.png</normaloff>:/images/icons/cog.png</iconset>
   </property>
   <property name="modal">
@@ -160,7 +160,7 @@
                <string/>
               </property>
               <property name="pixmap">
-               <pixmap resource="analogexif.qrc">:/images/icons/information.png</pixmap>
+               <pixmap resource="../analogexif.qrc">:/images/icons/information.png</pixmap>
               </property>
              </widget>
             </item>
@@ -384,7 +384,7 @@
                </size>
               </property>
               <property name="inputMethodHints">
-               <set>Qt::ImhNone</set>
+               <set>Qt::ImhNoAutoUppercase|Qt::ImhNoPredictiveText|Qt::ImhSensitiveData</set>
               </property>
               <property name="echoMode">
                <enum>QLineEdit::PasswordEchoOnEdit</enum>
@@ -499,7 +499,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="analogexif.qrc">
+            <iconset resource="../analogexif.qrc">
              <normaloff>:/images/icons/add.png</normaloff>:/images/icons/add.png</iconset>
            </property>
            <property name="autoRaise">
@@ -519,7 +519,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="analogexif.qrc">
+            <iconset resource="../analogexif.qrc">
              <normaloff>:/images/icons/delete.png</normaloff>:/images/icons/delete.png</iconset>
            </property>
            <property name="autoRaise">
@@ -539,7 +539,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="analogexif.qrc">
+            <iconset resource="../analogexif.qrc">
              <normaloff>:/images/icons/bullet_arrow_up.png</normaloff>:/images/icons/bullet_arrow_up.png</iconset>
            </property>
            <property name="autoRaise">
@@ -559,7 +559,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="analogexif.qrc">
+            <iconset resource="../analogexif.qrc">
              <normaloff>:/images/icons/bullet_arrow_down.png</normaloff>:/images/icons/bullet_arrow_down.png</iconset>
            </property>
            <property name="autoRaise">
@@ -626,35 +626,20 @@
            <property name="wordWrap">
             <bool>false</bool>
            </property>
-           <attribute name="horizontalHeaderHighlightSections">
-            <bool>false</bool>
-           </attribute>
            <attribute name="horizontalHeaderMinimumSectionSize">
-            <number>15</number>
-           </attribute>
-           <attribute name="verticalHeaderVisible">
-            <bool>false</bool>
-           </attribute>
-           <attribute name="verticalHeaderDefaultSectionSize">
-            <number>15</number>
-           </attribute>
-           <attribute name="verticalHeaderMinimumSectionSize">
-            <number>15</number>
-           </attribute>
-           <attribute name="verticalHeaderVisible">
-            <bool>false</bool>
-           </attribute>
-           <attribute name="verticalHeaderDefaultSectionSize">
-            <number>15</number>
-           </attribute>
-           <attribute name="horizontalHeaderMinimumSectionSize">
-            <number>15</number>
-           </attribute>
-           <attribute name="verticalHeaderMinimumSectionSize">
             <number>15</number>
            </attribute>
            <attribute name="horizontalHeaderHighlightSections">
             <bool>false</bool>
+           </attribute>
+           <attribute name="verticalHeaderVisible">
+            <bool>false</bool>
+           </attribute>
+           <attribute name="verticalHeaderMinimumSectionSize">
+            <number>15</number>
+           </attribute>
+           <attribute name="verticalHeaderDefaultSectionSize">
+            <number>15</number>
            </attribute>
           </widget>
          </item>
@@ -742,6 +727,7 @@
   <tabstop>gearTemplateView</tabstop>
  </tabstops>
  <resources>
+  <include location="../analogexif.qrc"/>
   <include location="analogexif.qrc"/>
  </resources>
  <connections>

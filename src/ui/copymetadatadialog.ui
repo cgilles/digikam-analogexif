@@ -14,7 +14,7 @@
    <string>Copy metadata</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="analogexif.qrc">
+   <iconset resource="../analogexif.qrc">
     <normaloff>:/images/icons/film_go.png</normaloff>:/images/icons/film_go.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -47,9 +47,6 @@
      <property name="uniformRowHeights">
       <bool>true</bool>
      </property>
-     <attribute name="headerVisible">
-      <bool>false</bool>
-     </attribute>
      <attribute name="headerVisible">
       <bool>false</bool>
      </attribute>
@@ -100,7 +97,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="analogexif.qrc"/>
+  <include location="../analogexif.qrc"/>
  </resources>
  <connections>
   <connection>

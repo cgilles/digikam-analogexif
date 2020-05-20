@@ -10,14 +10,14 @@
     <x>0</x>
     <y>0</y>
     <width>480</width>
-    <height>248</height>
+    <height>268</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Edit non-unicode text</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="analogexif.qrc">
+   <iconset resource="../analogexif.qrc">
     <normaloff>:/images/icons/film_edit.png</normaloff>:/images/icons/film_edit.png</iconset>
   </property>
   <property name="modal">
@@ -75,7 +75,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="analogexif.qrc">
+        <iconset resource="../analogexif.qrc">
          <normaloff>:/images/icons/arrow_undo.png</normaloff>:/images/icons/arrow_undo.png</iconset>
        </property>
        <property name="autoRaise">
@@ -96,7 +96,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="analogexif.qrc"/>
+  <include location="../analogexif.qrc"/>
  </resources>
  <connections/>
 </ui>

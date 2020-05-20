@@ -17,7 +17,7 @@
    <string>Edit selection values</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="analogexif.qrc">
+   <iconset resource="../analogexif.qrc">
     <normaloff>:/images/icons/cog.png</normaloff>:/images/icons/cog.png</iconset>
   </property>
   <property name="modal">
@@ -58,7 +58,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="analogexif.qrc">
+        <iconset resource="../analogexif.qrc">
          <normaloff>:/images/icons/add.png</normaloff>:/images/icons/add.png</iconset>
        </property>
        <property name="autoRaise">
@@ -78,7 +78,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="analogexif.qrc">
+        <iconset resource="../analogexif.qrc">
          <normaloff>:/images/icons/delete.png</normaloff>:/images/icons/delete.png</iconset>
        </property>
        <property name="autoRaise">
@@ -98,7 +98,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="analogexif.qrc">
+        <iconset resource="../analogexif.qrc">
          <normaloff>:/images/icons/bullet_arrow_up.png</normaloff>:/images/icons/bullet_arrow_up.png</iconset>
        </property>
        <property name="autoRaise">
@@ -118,7 +118,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="analogexif.qrc">
+        <iconset resource="../analogexif.qrc">
          <normaloff>:/images/icons/bullet_arrow_down.png</normaloff>:/images/icons/bullet_arrow_down.png</iconset>
        </property>
        <property name="iconSize">
@@ -178,22 +178,7 @@
       <bool>false</bool>
      </attribute>
      <attribute name="verticalHeaderDefaultSectionSize">
-      <number>16</number>
-     </attribute>
-     <attribute name="verticalHeaderVisible">
-      <bool>false</bool>
-     </attribute>
-     <attribute name="verticalHeaderDefaultSectionSize">
-      <number>16</number>
-     </attribute>
-     <attribute name="horizontalHeaderStretchLastSection">
-      <bool>true</bool>
-     </attribute>
-     <attribute name="horizontalHeaderVisible">
-      <bool>false</bool>
-     </attribute>
-     <attribute name="horizontalHeaderDefaultSectionSize">
-      <number>175</number>
+      <number>34</number>
      </attribute>
     </widget>
    </item>
@@ -249,7 +234,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="analogexif.qrc"/>
+  <include location="../analogexif.qrc"/>
  </resources>
  <connections>
   <connection>
