@@ -20,17 +20,28 @@
 #ifndef EXIFTREEMODEL_H
 #define EXIFTREEMODEL_H
 
+// Qt includes
+
 #include <QAbstractItemModel>
 #include <QSqlDatabase>
 #include <QSettings>
 #include <QStringList>
+#include <QImage>
 
 // Exiv2 includes
+
 #include <exiv2/image.hpp>
 #include <exiv2/preview.hpp>
 
-// metadata items
+// digiKam includes
+
+#include "thumbnailloadthread.h"
+
+// Local includes
+
 #include "exifitem.h"
+
+using namespace Digikam;
 
 // Exif data tree model
 class ExifTreeModel : public QAbstractItemModel
@@ -38,7 +49,8 @@ class ExifTreeModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-    ExifTreeModel(QObject *parent);
+
+    explicit ExifTreeModel(QObject* const parent);
     ~ExifTreeModel();
 
     // open file for metadata manipulation
@@ -68,7 +80,7 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const
     {
-                Q_UNUSED(parent);
+        Q_UNUSED(parent);
 
         // tag and its value
         return 2;
@@ -99,7 +111,7 @@ public:
         editable = !ro;
     }
 
-     QByteArray* getPreview() const;
+    QImage getPreview(const QString& filename) const;
 
     // Exif UTF-QString conversion
     static Exiv2::Value::AutoPtr QStringToExifUtf(QString qstr, bool addUnicodeMarker = false, bool isUtf8 = false, Exiv2::TypeId typeId = Exiv2::unsignedByte);
@@ -112,6 +124,7 @@ public:
     static bool unregisterUserNs();
 
 protected:
+
     // return item by index
     ExifItem* getItem(const QModelIndex &index) const;
 
@@ -155,7 +168,11 @@ protected:
 
     QVariant readTagValue(QString tagNames, int& srcTagType, ExifItem::TagType tagType, ExifItem::TagFlags tagFlags, Exiv2::ExifData& exifData, Exiv2::IptcData& iptcData, Exiv2::XmpData& xmpData);
     void writeTagValue(QString tagNames, const QVariant& tagValue, ExifItem::TagType type, ExifItem::TagFlags tagFlags, Exiv2::ExifData& exifData, Exiv2::IptcData& iptcData, Exiv2::XmpData& xmpData);
+    
+    void fillNotSupportedTags();
 
+protected:
+    
     bool editable;
     // extra tags string
     QString etagsString;
@@ -169,10 +186,8 @@ protected:
     ExifItem* rootItem;
 
     QSettings settings;
-
-    void fillNotSupportedTags();
+    
+    ThumbnailImageCatcher* m_catcher;
 };
-
-
 
 #endif // EXIFTREEMODEL_H

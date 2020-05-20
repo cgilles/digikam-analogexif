@@ -66,58 +66,66 @@ public:
 
 private:
 
-    DPluginGeneric* m_tool;
-    DInfoInterface* m_iface;
-
-    Ui::AnalogExifClass ui;
-    QSettings settings;
+    DPluginGeneric*             m_tool;
+    DInfoInterface*             m_iface;
+    
+    Ui::AnalogExifClass         ui;
+    QSettings                   settings;
 
     // directory model
-    QFileSystemModel* fileViewModel;
-    QFileSystemModel* dirViewModel;
+    QFileSystemModel*           fileViewModel;
+    QFileSystemModel*           dirViewModel;
 
     // pixmap to hold file preview
-    QPixmap filePreviewPixmap;
+    QPixmap                     filePreviewPixmap;
 
     // custom directory sorter
-    DirSortFilterProxyModel* fileSorter;
-    DirSortFilterProxyModel* dirSorter;
+    DirSortFilterProxyModel*    fileSorter;
+    DirSortFilterProxyModel*    dirSorter;
 
     // current filename
-    QString curFileName;
+    QString                     curFileName;
 
-    QCompleter dirCompleter;
+    QCompleter                  dirCompleter;
 
     // Exif metadata tree model
-    ExifTreeModel* exifTreeModel;
+    ExifTreeModel*              exifTreeModel;
 
     // custom item editor
-    ExifItemDelegate* exifItemDelegate;
+    ExifItemDelegate*           exifItemDelegate;
 
     // film list model
-    GearListModel* filmsList;
+    GearListModel*              filmsList;
 
     // authors list model
-    GearListModel* authorsList;
+    GearListModel*              authorsList;
 
     // developers list model
-    GearListModel* developersList;
+    GearListModel*              developersList;
 
     // equipment list model
-    GearTreeModel* gearList;
+    GearTreeModel*              gearList;
 
     // database
-    QSqlDatabase db;
+    QSqlDatabase                db;
+
+    bool dirty;
+
+    // preview file index
+    QModelIndex                 previewIndex;
+    QModelIndex                 curDirIndex;
+
+    int filesFound;
 
     // current version of the database
-    static const int dbVersion = 1;
+    static const int            dbVersion = 1;
+
+    static const QUrl           helpUrl;
+    
+private:
 
     // onResize
     virtual void resizeEvent(QResizeEvent * event);
-
-    // preview file index
-    QModelIndex previewIndex;
-    QModelIndex curDirIndex;
 
     // setup tree view
     void setupTreeView();
@@ -144,8 +152,6 @@ private:
         ui.applyChangesBtn->setEnabled(isDirty);
     }
 
-    bool dirty;
-
     // create backup
     bool createBackup(QString filename, bool singleFile, QMessageBox::StandardButton& prevResult);
 
@@ -159,7 +165,7 @@ private:
     QString createLibrary(QWidget* parent = 0, QString dir = QString());
 
     // background preview loader
-    void loadPreview(QString filename);
+    void loadPreview(const QString& filename);
 
     // open specified location
     void openLocation(QString path);
@@ -184,9 +190,6 @@ private:
 
     void addFileNames(QStringList& fileNames, const QString& path, bool includeDirs = false);
     QStringList scanSubfolders(QModelIndexList selIdx, bool includeDirs = false);
-    int filesFound;
-
-    static const QUrl helpUrl;
 
 Q_SIGNALS:
 

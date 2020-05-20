@@ -44,7 +44,8 @@
 #define ETAGS_START_MARKER_IN_COMMENTS  (QT_TR_NOOP("Photo information: \n"))
 #define ETAGS_DELIMETER_IN_COMMENTS     (" \n\n")
 
-ExifTreeModel::ExifTreeModel(QObject *parent) : QAbstractItemModel(parent)
+ExifTreeModel::ExifTreeModel(QObject* const parent)
+    : QAbstractItemModel(parent)
 {
     // create empty root item
     rootItem = new ExifItem("", "", QVariant());
@@ -64,11 +65,23 @@ ExifTreeModel::ExifTreeModel(QObject *parent) : QAbstractItemModel(parent)
     editable = false;
 
     fillNotSupportedTags();
+    
+    ThumbnailLoadThread* const thread = new ThumbnailLoadThread;
+    thread->setThumbnailSize(256);
+    thread->setPixmapRequested(false);
+    m_catcher                         = new ThumbnailImageCatcher(thread, this);
+
 }
 
 ExifTreeModel::~ExifTreeModel()
 {
     delete rootItem;
+    
+    m_catcher->thread()->stopAllTasks();
+    m_catcher->cancel();
+
+    delete m_catcher->thread();
+    delete m_catcher; 
 }
 
 // clear data
@@ -1775,29 +1788,22 @@ bool ExifTreeModel::saveFile(QString filename, bool overwrite)
     return true;
 }
 
-QByteArray* ExifTreeModel::getPreview() const
+QImage ExifTreeModel::getPreview(const QString& filename) const
 {
-    if(!exifHandle->good())
-        return NULL;
+    m_catcher->setActive(true);
 
-    // load preview
-    Exiv2::PreviewManager preview(*exifHandle);
+    m_catcher->thread()->find(ThumbnailIdentifier(filename));
+    m_catcher->enqueue();
+    QList<QImage> images = m_catcher->waitForThumbnails();
 
-    Exiv2::PreviewPropertiesList previews = preview.getPreviewProperties();
+    m_catcher->setActive(false);
 
-    if(previews.empty())
-        return NULL;
-
-    // choose the smallest supported required preview
-    QList<QByteArray> supportedImgs = QImageReader::supportedImageFormats();
-
-    for(Exiv2::PreviewPropertiesList::iterator i = previews.begin(); i < previews.end(); i++)
+    if (!images.isEmpty())
     {
-        if(supportedImgs.contains(QString::fromStdString(i->extension_).remove(".").toLatin1()))
-            return new QByteArray((const char*)preview.getPreviewImage(*i).pData(), i->size_);
+        return (images.first().scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     }
 
-    return NULL;
+    return QImage();
 }
 
 // clears dirty flag from all tags

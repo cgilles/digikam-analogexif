@@ -662,16 +662,16 @@ void AnalogExif::openLocation(QString path)
 }
 
 // background preview loader
-void AnalogExif::loadPreview(QString filename)
+void AnalogExif::loadPreview(const QString& filename)
 {
     // show file preview and details
 
     // try to load preview
-    QByteArray* preview = exifTreeModel->getPreview();
-    if(preview)
+    QImage preview = exifTreeModel->getPreview(filename);
+
+    if (!preview.isNull())
     {
-        filePreviewPixmap.loadFromData(*preview);
-        delete preview;
+        filePreviewPixmap = QPixmap::fromImage(preview);
     }
     else
     {
@@ -692,10 +692,14 @@ void AnalogExif::loadPreview(QString filename)
     filePreviewPixmap = filePreviewPixmap.scaled(previewSize.width()-30, previewSize.height()-30, Qt::KeepAspectRatio);
 
 #ifdef Q_WS_MAC
-        // preview is loaded on the same thread under Mac
-        previewUpdate();
+
+    // preview is loaded on the same thread under Mac
+    previewUpdate();
+
 #else
+
     emit updatePreview();
+
 #endif
 }
 
