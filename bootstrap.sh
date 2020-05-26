@@ -11,6 +11,7 @@ cd build
 
 cmake . \
       -DCMAKE_BUILD_TYPE=Debug \
+      -DCMAKE_INSTALL_PREFIX=/usr \
       -G"Unix Makefiles" \
       -Wno-dev \
       ..
